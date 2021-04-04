@@ -71,28 +71,6 @@ In order to delete the CloudFormation stack deployed in the last step:
 python env_destroy.py
 ```
 
-### Logging
-Use infra-logging library for logging - see example in `app.py and deploy.py`.
-For a complete guide, please visit the [infra-logging repository](https://github.com/cyberark-everest/infra-logging).
-
-### Tracing
-Use infra-tracing library for tracing - see example in `app.py`.
-For a complete guide, please visit the [infra-tracing repository](https://github.com/cyberark-everest/infra-tracing).
-### Unit tests
-Unit tests can be found under the `tests` folder.
-You can run the tests by using the following command:
-```shell script
-pytest -v
-```
-To run with remove API:
-```shell script
-USE_REMOTE_API=true pytest -v
-```
-To calculate test code coverage us the command:
-```shell script
-pytest --cov
-```
-
 ### Pylint
 Execute lint on your code:
 ```shell script

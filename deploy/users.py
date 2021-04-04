@@ -2,15 +2,15 @@ import argparse
 import getpass
 import boto3
 from jobli_service_cdk.service_stack.constants import BASE_NAME
+from jobli_service_cdk.service_stack.jobli_construct import get_stack_name
 
 from mypy_boto3_cognito_idp import Client
-from stack_utils.stack_name import get_stack_name
 
 
 def create_user(name: str, password: str, user_pool_id: str, group_name: str = "admins", email: str = None):
     client: Client = boto3.client('cognito-idp')
     if email is None:
-        email = f"{name}@cyberark.com"
+        email = f"{name}@jobli.com"
     existing_users = client.list_users(UserPoolId=user_pool_id, Limit=1, Filter=f"username = \"{name}\"")
     if len(existing_users['Users']) > 0:
         client.admin_delete_user(UserPoolId=user_pool_id, Username=name)

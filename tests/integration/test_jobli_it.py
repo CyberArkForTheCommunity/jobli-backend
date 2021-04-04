@@ -8,14 +8,16 @@ import pytest
 from tests.helpers.environment_handler import load_env_vars
 from tests.helpers.random_utils import random_string
 
-from cdk.jobli_service_cdk.service_stack.jobli_construct import get_stack_name
+# from cdk.jobli_service_cdk.service_stack.jobli_construct import get_stack_name
+# from jobli_service_cdk.service_stack.constants import BASE_NAME
 from service.dtos.jobli_dto import JobliDto
-from jobli_service_cdk.service_stack.constants import BASE_NAME
 
 
 @pytest.fixture(scope="module")
 def endpoint_url():
-    load_env_vars(get_stack_name(BASE_NAME))
+    stack_name = "Jobli"
+    # load_env_vars(get_stack_name(BASE_NAME))
+    load_env_vars(stack_name)
     endpoint_url = os.environ['JOBLI_API_GW']
     return endpoint_url[:-1]
 
@@ -23,7 +25,7 @@ def endpoint_url():
 def test_create_jobli(endpoint_url):
     # when create entity
     jobli_dto: JobliDto = JobliDto(name=random_string())
-    response = requests.api.post(url=f"{endpoint_url}/jobli", headers={"Content-Type": "application/json"}, body=jobli_dto.json())
+    response = requests.api.post(url=f"{endpoint_url}/jobli", headers={"Content-Type": "application/json"}, json=jobli_dto.json())
 
     # then assert created
     assert response.status_code == HTTPStatus.CREATED
@@ -61,10 +63,10 @@ def test_get_jobli(endpoint_url):
 def test_update_jobli(endpoint_url):
     # when create entity
     jobli_dto: JobliDto = JobliDto(name=random_string())
-    requests.api.post(url=f"{endpoint_url}/jobli", headers={"Content-Type": "application/json"}, body=jobli_dto.json())
+    requests.api.post(url=f"{endpoint_url}/jobli", headers={"Content-Type": "application/json"}, json=jobli_dto.json())
 
     # then update the entity
-    response = requests.api.put(url=f"{endpoint_url}/jobli/{jobli_dto.name}", headers={"Content-Type": "application/json"}, body=jobli_dto.json())
+    response = requests.api.put(url=f"{endpoint_url}/jobli/{jobli_dto.name}", headers={"Content-Type": "application/json"}, json=jobli_dto.json())
 
     # then assert
     assert response.status_code == HTTPStatus.OK

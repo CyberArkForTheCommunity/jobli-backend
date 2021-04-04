@@ -24,9 +24,9 @@ def create_jobli(event: dict, context: LambdaContext) -> dict:
         jobli: Jobli = Jobli(name=jobli_dto.name, created_date=now, updated_date=now)
         return _build_response(http_status=HTTPStatus.CREATED, body=jobli.json())
     except (ValidationError, TypeError) as err:
-        return _build_error_response(err, logger, HTTPStatus.BAD_REQUEST)
+        return _build_error_response(err, HTTPStatus.BAD_REQUEST)
     except Exception as err:
-        return _build_error_response(err, logger)
+        return _build_error_response(err)
 
 
 # PUT /jobli/{name}
@@ -46,9 +46,9 @@ def update_jobli(event: dict, context: LambdaContext) -> dict:
             updated_date=now)
         return _build_response(HTTPStatus.OK, jobli.json())
     except (ValidationError, TypeError) as err:
-        return _build_error_response(err, logger, HTTPStatus.BAD_REQUEST)
+        return _build_error_response(err, HTTPStatus.BAD_REQUEST)
     except Exception as err:
-        return _build_error_response(err, logger)
+        return _build_error_response(err)
 
 
 # GET /jobli/{name}
@@ -67,9 +67,9 @@ def get_jobli(event: dict, context: LambdaContext) -> dict:
         body = item.json()
         return _build_response(HTTPStatus.OK, body)
     except (ValidationError, TypeError) as err:
-        return _build_error_response(err, logger, HTTPStatus.BAD_REQUEST)
+        return _build_error_response(err, HTTPStatus.BAD_REQUEST)
     except Exception as err:
-        return _build_error_response(err, logger)
+        return _build_error_response(err)
 
 
 def _build_response(http_status: HTTPStatus, body: str) -> dict:

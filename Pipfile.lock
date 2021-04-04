@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "976ef891e3d2af3ecff45aa424842b4436110995c7f63d0b775c869c641fba60"
+            "sha256": "7eafc7457af7230368f02ba08919625e944e952da5a3759e7d396dc0bd67f1a4"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -16,6 +16,29 @@
         ]
     },
     "default": {
+        "aws-lambda-context": {
+            "hashes": [
+                "sha256:b6a6d3360671b25bb171335c7e6510b22e60c6fd5db99803f478c986d3230220",
+                "sha256:d03b16aaf8abac30b71bc5d66ed8edadd8805e0d581f73f1e9b4b171635c817d"
+            ],
+            "index": "pypi",
+            "version": "==1.1.0"
+        },
+        "aws-lambda-powertools": {
+            "hashes": [
+                "sha256:4451c88a3eb47b9ddebe04d493d1b1058260e1637dca402224705a912bad37f7",
+                "sha256:5378087948286a0d5233977a96e8dadf0be2e3fac269a7f7e758e7c399b228e7"
+            ],
+            "index": "pypi",
+            "version": "==1.13.0"
+        },
+        "aws-xray-sdk": {
+            "hashes": [
+                "sha256:697c9068e84dd5d2c1456def3fd0865f226046b5db4db56d738050e425960adf",
+                "sha256:e7b72959436471f0eb7b6757ffef289ecf16409954f1be7be7f49d57070e5994"
+            ],
+            "version": "==2.7.0"
+        },
         "boto3": {
             "hashes": [
                 "sha256:e74da1da74fbefbe2db7a9c53082018d862433f35e2ecd4c173632efc5742f40",
@@ -30,6 +53,19 @@
                 "sha256:8a7f85bf05ad62551b0e6dfeeec471147b330cb2b5c7f48795057e811e6a2e77"
             ],
             "version": "==1.20.44"
+        },
+        "fastjsonschema": {
+            "hashes": [
+                "sha256:b3da206676f8b4906debf6a17b650b858c92cb304cbe0c8aa81799bde6a6b858",
+                "sha256:e1ecba260bcffb7de0dda6aee74261da1e6dccde5ee04c1170b2dd97d2b87676"
+            ],
+            "version": "==2.15.0"
+        },
+        "future": {
+            "hashes": [
+                "sha256:b1bead90b70cf6ec3f0710ae53a525360fa360d306a86583adc6bf83a4db537d"
+            ],
+            "version": "==0.18.2"
         },
         "jmespath": {
             "hashes": [
@@ -101,6 +137,12 @@
                 "sha256:e7b021f7241115872f92f43c6508082facffbd1c048e3c6e2bb9c2a157e28937"
             ],
             "version": "==1.26.4"
+        },
+        "wrapt": {
+            "hashes": [
+                "sha256:b62ffa81fb85f4332a4f609cab4ac40709470da05643a082ec1eb88e6d9b97d7"
+            ],
+            "version": "==1.12.1"
         }
     },
     "develop": {
@@ -925,9 +967,9 @@
         },
         "wrapt": {
             "hashes": [
-                "sha256:565a021fd19419476b9362b05eeaa094178de64f8361e44468f9e9d7843901e1"
+                "sha256:b62ffa81fb85f4332a4f609cab4ac40709470da05643a082ec1eb88e6d9b97d7"
             ],
-            "version": "==1.11.2"
+            "version": "==1.12.1"
         },
         "xenon": {
             "hashes": [

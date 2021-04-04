@@ -1,0 +1,41 @@
+[[source]]
+name = "pypi"
+url = "https://pypi.org/simple"
+verify_ssl = true
+
+[[source]]
+name = "artifactory"
+url = "https://everest.jfrog.io/artifactory/api/pypi/python-dev/simple"
+verify_ssl = true
+
+[dev-packages]
+tools-configuration = {version = "~=1.1.0",index = "artifactory"}
+infra-automation-utils = {version = "~=1.7.0",index = "artifactory"}
+account-service-cdk = {editable = true,path = "cdk"}
+pytest = "*"
+pytest-mock = "*"
+pycodestyle = "*"
+pylint = "~=2.4.0"
+pytest-cov = "*"
+pytest-html = "*"
+python-dateutil = "*"
+mypy = "*"
+mypy_boto3 = "*"
+boto3-stubs = {extras = ["cognito-idp", "cloudformation"],version = "*"}
+python-dotenv = "*"
+GitPython = "*"
+bandit = "~=1.6.2"
+yapf = "*"
+ptvsd = "*"
+radon = "*"
+xenon = "*"
+
+[packages]
+boto3 = ">=1.12.0"
+pydantic = "*"
+infra-tracing = {version = "~=1.2.0",index = "artifactory"}
+infra-logging = {version = "~=1.1.0",index = "artifactory"}
+everest-env-utils = {version = "~=1.2.0",index = "artifactory"}
+
+[requires]
+python_version = "3.8"

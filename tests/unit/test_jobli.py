@@ -1,8 +1,9 @@
 import json
-from infra_automation_utils.random_utils import random_string
 from aws_lambda_context import LambdaContext
 from service.dtos.jobli_dto import JobliDto
 from service import handler
+
+from tests.unit.test_utils import random_string
 
 
 def test_get_jobli():

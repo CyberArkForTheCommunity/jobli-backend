@@ -3,42 +3,35 @@ from decimal import Decimal
 from http import HTTPStatus
 
 import json
+
+from aws_lambda_powertools.logging import logger
 from aws_lambda_context import LambdaContext
 from pydantic import ValidationError
-
-from infra_logging.infra_logging import Logger, get_infra_logger
-from infra_tracing.infra_tracing import tracing, tracing_native_init
+from aws_lambda_powertools import Logger
 
 from service.dtos.jobli_dto import JobliDto
 from service.models.jobli import Jobli
 
-JOBLI_SERVICE = "jobli-service"
-
-tracing_native_init()
+logger = Logger()
 
 
 # POST /jobli
-@tracing
+@logger.inject_lambda_context(log_event=True)
 def create_jobli(event: dict, context: LambdaContext) -> dict:
-    logger = _get_logger(context)
-    logger.debug('request: {}'.format(json.dumps(event)))
-
     try:
         jobli_dto: JobliDto = JobliDto.parse_raw(event["body"])
         now: Decimal = Decimal(datetime.now().timestamp())
         jobli: Jobli = Jobli(name=jobli_dto.name, created_date=now, updated_date=now)
         return _build_response(http_status=HTTPStatus.CREATED, body=jobli.json())
     except (ValidationError, TypeError) as err:
-        return _build_error_response(err, logger, HTTPStatus.BAD_REQUEST)
+        return _build_error_response(err, HTTPStatus.BAD_REQUEST)
     except Exception as err:
-        return _build_error_response(err, logger)
+        return _build_error_response(err)
 
 
 # PUT /jobli/{name}
-@tracing
+@logger.inject_lambda_context(log_event=True)
 def update_jobli(event: dict, context: LambdaContext) -> dict:
-    logger = _get_logger(context)
-    logger.debug('request: {}'.format(json.dumps(event)))
     if "pathParameters" not in event or "name" not in event["pathParameters"]:
         return _build_response(HTTPStatus.BAD_REQUEST, "")
 
@@ -53,16 +46,14 @@ def update_jobli(event: dict, context: LambdaContext) -> dict:
             updated_date=now)
         return _build_response(HTTPStatus.OK, jobli.json())
     except (ValidationError, TypeError) as err:
-        return _build_error_response(err, logger, HTTPStatus.BAD_REQUEST)
+        return _build_error_response(err, HTTPStatus.BAD_REQUEST)
     except Exception as err:
-        return _build_error_response(err, logger)
+        return _build_error_response(err)
 
 
 # GET /jobli/{name}
-@tracing
+@logger.inject_lambda_context(log_event=True)
 def get_jobli(event: dict, context: LambdaContext) -> dict:
-    logger = _get_logger(context)
-    logger.debug('request: {}'.format(json.dumps(event)))
     if "pathParameters" not in event or "name" not in event["pathParameters"]:
         return _build_response(HTTPStatus.BAD_REQUEST, "")
 
@@ -76,16 +67,16 @@ def get_jobli(event: dict, context: LambdaContext) -> dict:
         body = item.json()
         return _build_response(HTTPStatus.OK, body)
     except (ValidationError, TypeError) as err:
-        return _build_error_response(err, logger, HTTPStatus.BAD_REQUEST)
+        return _build_error_response(err, HTTPStatus.BAD_REQUEST)
     except Exception as err:
-        return _build_error_response(err, logger)
+        return _build_error_response(err)
 
 
 def _build_response(http_status: HTTPStatus, body: str) -> dict:
     return {'statusCode': http_status, 'headers': {'Content-Type': 'application/json'}, 'body': body}
 
 
-def _build_error_response(err, logger, status: HTTPStatus = HTTPStatus.INTERNAL_SERVER_ERROR) -> dict:
+def _build_error_response(err, status: HTTPStatus = HTTPStatus.INTERNAL_SERVER_ERROR) -> dict:
     logger.error(str(err))
     return {
         'statusCode': status,
@@ -94,8 +85,3 @@ def _build_error_response(err, logger, status: HTTPStatus = HTTPStatus.INTERNAL_
         },
         'body': str(err),
     }
-
-
-def _get_logger(context: LambdaContext = None) -> Logger:
-    # when called from tests, app doesn't have current_request
-    return get_infra_logger(JOBLI_SERVICE, context)

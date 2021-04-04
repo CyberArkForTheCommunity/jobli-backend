@@ -1,31 +1,29 @@
 # pylint: disable = print-used
 import json
+import requests
 import os
 from datetime import datetime
 from http import HTTPStatus
 import pytest
-from dotenv import load_dotenv
-from infra_automation_utils.environment_handler import load_env_vars
-from infra_automation_utils.random_utils import random_string
-from infra_automation_utils.api_utils.api_util import ApiUtil
+from tests.helpers.environment_handler import load_env_vars
+from tests.helpers.random_utils import random_string
 
-from stack_utils.stack_name import get_stack_name
+from cdk.jobli_service_cdk.service_stack.jobli_construct import get_stack_name
 from service.dtos.jobli_dto import JobliDto
 from jobli_service_cdk.service_stack.constants import BASE_NAME
 
 
 @pytest.fixture(scope="module")
-def api():
-    if os.environ.get('USER_NAME') is None:
-        load_dotenv()
+def endpoint_url():
     load_env_vars(get_stack_name(BASE_NAME))
-    return ApiUtil(endpoint_url=os.environ['JOBLI_API_GW'])
+    endpoint_url = os.environ['JOBLI_API_GW']
+    return endpoint_url[:-1]
 
 
-def test_create_jobli(api):
+def test_create_jobli(endpoint_url):
     # when create entity
     jobli_dto: JobliDto = JobliDto(name=random_string())
-    response = api.post("/jobli", headers={"Content-Type": "application/json"}, body=jobli_dto.json())
+    response = requests.api.post(url=f"{endpoint_url}/jobli", headers={"Content-Type": "application/json"}, body=jobli_dto.json())
 
     # then assert created
     assert response.status_code == HTTPStatus.CREATED
@@ -38,7 +36,7 @@ def test_create_jobli(api):
     assert resource['created_date'] == resource['updated_date']
 
     # when get the created entity
-    response = api.get(f'/jobli/{jobli_dto.name}', headers={})
+    response = requests.api.get(url=f"{endpoint_url}/jobli/{jobli_dto.name}", headers={})
 
     # then assert all fields saved successfully
     assert response.status_code == HTTPStatus.OK
@@ -48,9 +46,9 @@ def test_create_jobli(api):
     assert resource['created_date'] == resource['updated_date']
 
 
-def test_get_jobli(api):
+def test_get_jobli(endpoint_url):
     # read by name
-    response = api.get('/jobli/Alex', headers={})
+    response = requests.api.get(url=f"{endpoint_url}/jobli/Alex", headers={})
     assert response.status_code == HTTPStatus.OK
     resource = json.loads(response.content)
     assert resource['name'] == "Alex"
@@ -60,13 +58,13 @@ def test_get_jobli(api):
     assert resource['created_date'] == resource['updated_date']
 
 
-def test_update_jobli(api):
+def test_update_jobli(endpoint_url):
     # when create entity
     jobli_dto: JobliDto = JobliDto(name=random_string())
-    api.post("/jobli", headers={"Content-Type": "application/json"}, body=jobli_dto.json())
+    requests.api.post(url=f"{endpoint_url}/jobli", headers={"Content-Type": "application/json"}, body=jobli_dto.json())
 
     # then update the entity
-    response = api.put(f'/jobli/{jobli_dto.name}', headers={"Content-Type": "application/json"}, body=jobli_dto.json())
+    response = requests.api.put(url=f"{endpoint_url}/jobli/{jobli_dto.name}", headers={"Content-Type": "application/json"}, body=jobli_dto.json())
 
     # then assert
     assert response.status_code == HTTPStatus.OK

@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "4acdc6cb2124318311b53ee79f559ff7fbff079aea46f3ef2a80e852fb7c5a6b"
+            "sha256": "51673ef2ebd14564b38af0720e28eb1c7a1dc8ed34f49ddd663bb8e4fcbc42b5"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -342,14 +342,6 @@
             ],
             "version": "==1.96.0"
         },
-        "bandit": {
-            "hashes": [
-                "sha256:2ff3fe35fe3212c0be5fc9c4899bd0108e2b5239c5ff62fb174639e4660fe958",
-                "sha256:d02dfe250f4aa2d166c127ad81d192579e2bfcdb8501717c0e2005e35a6bcf60"
-            ],
-            "index": "pypi",
-            "version": "==1.6.3"
-        },
         "boto3": {
             "hashes": [
                 "sha256:e74da1da74fbefbe2db7a9c53082018d862433f35e2ecd4c173632efc5742f40",
@@ -649,13 +641,6 @@
             ],
             "version": "==20.9"
         },
-        "pbr": {
-            "hashes": [
-                "sha256:5fad80b613c402d5b7df7bd84812548b2a61e9977387a80a5fc5c396492b13c9",
-                "sha256:b236cde0ac9a6aedd5e3c34517b423cd4fd97ef723849da6b0d2231142d89c00"
-            ],
-            "version": "==5.5.1"
-        },
         "pluggy": {
             "hashes": [
                 "sha256:15b2acde666561e1298d71b523007ed7364de07029219b604cf808bfa1c765b0",
@@ -864,13 +849,6 @@
                 "sha256:a9a7479e4c572e2e775c404dcd3080c8dc49f39918c2cf74913d30c4c478e3c2"
             ],
             "version": "==4.0.0"
-        },
-        "stevedore": {
-            "hashes": [
-                "sha256:3a5bbd0652bf552748871eaa73a4a8dc2899786bc497a2aa1fcb4dcdb0debeee",
-                "sha256:50d7b78fbaf0d04cd62411188fa7eedcb03eb7f4c4b37005615ceebe582aa82a"
-            ],
-            "version": "==3.3.0"
         },
         "toml": {
             "hashes": [

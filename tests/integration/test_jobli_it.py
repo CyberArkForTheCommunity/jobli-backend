@@ -6,7 +6,7 @@ from datetime import datetime
 from http import HTTPStatus
 import pytest
 from dotenv import load_dotenv
-from tests.helpers.environment_handler import load_env_vars
+from tests.helpers.environment_handler import load_env_vars, get_stack_name
 from tests.helpers.random_utils import random_string
 from tests.helpers.cognito_auth_util import add_auth_header
 
@@ -18,9 +18,8 @@ from service.dtos.jobli_dto import JobliDto
 @pytest.fixture(scope="module")
 def endpoint_url():
     load_dotenv()
-    stack_name = "Jobli"
     # load_env_vars(get_stack_name(BASE_NAME))
-    load_env_vars(stack_name)
+    load_env_vars()
     endpoint_url = os.environ['JOBLI_API_GW']
     return endpoint_url[:-1]
 

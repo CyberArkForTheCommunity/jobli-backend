@@ -4,7 +4,6 @@ import getpass
 import os
 import random
 import string
-from jobli_service_cdk.service_stack import constants
 from boto3 import session
 from pathlib import Path
 from dotenv import load_dotenv
@@ -13,6 +12,7 @@ from build import do_build
 from deploy import users
 
 PROJECT_DIR_KEY = 'PROJECT_DIR'
+
 
 def init_local_dotenv():
     region = session.Session().region_name
@@ -73,6 +73,7 @@ def main():
     email = os.environ.get('USER_EMAIL')
     users.create_user(getpass.getuser(), password, user_pool_id, email=email)
 
+
 def env_init_local_dotenv(project_path: str, env_vars: dict, override_env_vars: bool = False):
     """
     Init a new .env file if it does not exist and load it into os.environ
@@ -101,9 +102,11 @@ def env_init_local_dotenv(project_path: str, env_vars: dict, override_env_vars: 
 
     load_dotenv(dotenv_path=dot_env_file, override=override_env_vars)
 
+
 def random_password(n=10):
     return ''.join(random.choices(string.digits, k=1)+random.choices(string.ascii_lowercase, k=1) +
                    random.choices(string.ascii_uppercase, k=1)+random.choices(string.ascii_letters + string.digits, k=n-3))
+
 
 if __name__ == '__main__':
     main()

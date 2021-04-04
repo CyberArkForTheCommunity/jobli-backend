@@ -57,6 +57,24 @@ class JobliServiceEnvironment(core.Construct):
         )
         self.table.grant_read_write_data(self.service_role)
 
+        self.employers_table = aws_dynamodb.Table(
+            self,
+            'jobli-employers',
+            partition_key=aws_dynamodb.Attribute(name="id", type=aws_dynamodb.AttributeType.STRING),
+            billing_mode=aws_dynamodb.BillingMode.PAY_PER_REQUEST,
+            removal_policy=core.RemovalPolicy.RETAIN
+        )
+        self.employers_table.grant_read_write_data(self.service_role)
+
+        self.jobs_table = aws_dynamodb.Table(
+            self,
+            'jobli-jobs',
+            partition_key=aws_dynamodb.Attribute(name="id", type=aws_dynamodb.AttributeType.STRING),
+            billing_mode=aws_dynamodb.BillingMode.PAY_PER_REQUEST,
+            removal_policy=core.RemovalPolicy.RETAIN
+        )
+        self.jobs_table.grant_read_write_data(self.service_role)
+
         self.rest_api: apigw.LambdaRestApi = apigw.RestApi(self, "jobli-rest-api", rest_api_name="Jobli Rest API",
                                                            description="This service handles jobli")
         endpoint_output = core.CfnOutput(self, id="JobliApiGw", value=self.rest_api.url)

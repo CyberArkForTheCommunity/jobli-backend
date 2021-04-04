@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 import argparse
 from pathlib import Path
-from stack_utils.build_lambda_asset import BuildLambdaAsset
-from stack_utils.create_requirements_txt import create_requirements_txt
+from build_lambda_asset import BuildLambdaAsset
+from create_requirements_txt import create_requirements_txt
 import pathlib
 
 

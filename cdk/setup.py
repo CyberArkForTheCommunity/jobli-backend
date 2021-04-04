@@ -15,9 +15,9 @@ setup(
     name="jobli-service-cdk",
     version=f"1.0.{get_micro()}",
     description="AWS CDK stack for jobli service",
-    url="https://github.com/cyberark-everest/jobli-service",
-    author="Everest",
-    author_email="everest@cyberark.com",
+    url="https://github.com/CyberArkForTheCommunity/jobli-backend",
+    author="Jobli",
+    author_email="Jobli@jobli.com",
     packages=find_packages(exclude=["contrib", "docs", "tests"]),
     classifiers=[
         "Development Status :: 1 - Beta",
@@ -29,15 +29,13 @@ setup(
         "Typing :: Typed",
     ],
     install_requires=[
-        "aws-cdk.aws-iam>=1.51.0",
-        "aws-cdk.aws-kms>=1.51.0",
-        "aws-cdk.aws-s3>=1.51.0",
-        "aws-cdk.core>=1.51.0",
-        "aws-cdk.aws-cognito>=1.51.0",
-        "aws-cdk.aws_apigateway>=1.51.0",
-        "infra-logging<1.2.0",
-        "infra-tracing<1.3.0",
-        "stack-utils<1.2.0"
+        "aws-cdk.aws-iam>=1.96.0",
+        "aws-cdk.aws-kms>=1.96.0",
+        "aws-cdk.aws-s3>=1.96.0",
+        "aws-cdk.core>=1.96.0",
+        "aws-cdk.aws-cognito>=1.96.0",
+        "aws-cdk.aws_apigateway>=1.96.0",
+        "aws-cdk.aws-dynamodb>=1.96.0"
     ],
     python_requires=">=3.8",
 )

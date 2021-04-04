@@ -21,6 +21,7 @@ yapf = "*"
 ptvsd = "*"
 radon = "*"
 xenon = "*"
+docker = "*"
 
 [packages]
 boto3 = ">=1.12.0"

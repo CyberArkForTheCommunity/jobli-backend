@@ -1,26 +1,38 @@
 from datetime import datetime
 from decimal import Decimal
 from http import HTTPStatus
+from logging import getLogger
 
 import json
 from aws_lambda_context import LambdaContext
 from pydantic import ValidationError
 
-from infra_logging.infra_logging import Logger, get_infra_logger
-from infra_tracing.infra_tracing import tracing, tracing_native_init
 
 from service.dtos.jobli_dto import JobliDto
 from service.models.jobli import Jobli
 
 JOBLI_SERVICE = "jobli-service"
 
-tracing_native_init()
+
+# POST /api/seekers
+def add_seeker(event: dict, context: LambdaContext) -> dict:
+    logger = _get_logger()
+    logger.debug('request: {}'.format(json.dumps(event)))
+
+    try:
+        jobli_dto: JobliDto = JobliDto.parse_raw(event["body"])
+        now: Decimal = Decimal(datetime.now().timestamp())
+        jobli: Jobli = Jobli(name=jobli_dto.name, created_date=now, updated_date=now)
+        return _build_response(http_status=HTTPStatus.CREATED, body=jobli.json())
+    except (ValidationError, TypeError) as err:
+        return _build_error_response(err, logger, HTTPStatus.BAD_REQUEST)
+    except Exception as err:
+        return _build_error_response(err, logger)
 
 
 # POST /jobli
-@tracing
 def create_jobli(event: dict, context: LambdaContext) -> dict:
-    logger = _get_logger(context)
+    logger = _get_logger()
     logger.debug('request: {}'.format(json.dumps(event)))
 
     try:
@@ -35,7 +47,6 @@ def create_jobli(event: dict, context: LambdaContext) -> dict:
 
 
 # PUT /jobli/{name}
-@tracing
 def update_jobli(event: dict, context: LambdaContext) -> dict:
     logger = _get_logger(context)
     logger.debug('request: {}'.format(json.dumps(event)))
@@ -59,7 +70,6 @@ def update_jobli(event: dict, context: LambdaContext) -> dict:
 
 
 # GET /jobli/{name}
-@tracing
 def get_jobli(event: dict, context: LambdaContext) -> dict:
     logger = _get_logger(context)
     logger.debug('request: {}'.format(json.dumps(event)))
@@ -96,6 +106,6 @@ def _build_error_response(err, logger, status: HTTPStatus = HTTPStatus.INTERNAL_
     }
 
 
-def _get_logger(context: LambdaContext = None) -> Logger:
+def _get_logger():
     # when called from tests, app doesn't have current_request
-    return get_infra_logger(JOBLI_SERVICE, context)
+    return getLogger("Jobli")

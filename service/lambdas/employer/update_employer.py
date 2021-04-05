@@ -20,8 +20,8 @@ def update_employer(event: dict, context: LambdaContext) -> dict:
                     'body': "Missing employer id"}
         employer_id = event['querystring']['params']
         employer: Employer = Employer.parse_obj(event['body'])
-        dynamo_client = boto3.client("dynamodb")
-        employers_table = dynamo_client.Table('jobli_employers')
+        dynamo_resource = boto3.resource("dynamodb")
+        employers_table = dynamo_resource.Table('jobli_employers')
         # Get the existing employer to make it exists and get its current details
         stored_employer: Dict = employers_table.get_item(Key={"employer_id": employer_id})['Item']
 

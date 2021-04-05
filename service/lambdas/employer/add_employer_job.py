@@ -15,8 +15,8 @@ def add_employer_job(event: dict, context: LambdaContext) -> dict:
     try:
         job: EmployerJob = EmployerJob.parse_obj(event)
         job.job_id = str(uuid.uuid4())
-        dynamo_client = boto3.client("dynamodb")
-        jobs_table = dynamo_client.Table('jobli-jobs')
+        dynamo_resource = boto3.resource("dynamodb")
+        jobs_table = dynamo_resource.Table('jobli-jobs')
         jobs_table.put_item(Item=job.dict())
         return {'statusCode': HTTPStatus.CREATED,
                 'headers': {'Content-Type': 'application/json'},

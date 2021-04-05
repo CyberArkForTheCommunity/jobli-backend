@@ -14,8 +14,8 @@ logger = Logger()
 @logger.inject_lambda_context(log_event=True)
 def get_employers(event: dict, context: LambdaContext) -> dict:
     try:
-        dynamo_client = boto3.client("dynamodb")
-        employers_table = dynamo_client.Table('jobli_employers')
+        dynamo_resource = boto3.resource("dynamodb")
+        employers_table = dynamo_resource.Table('jobli_employers')
         employer_filter: EmployerFilter = EmployerFilter.parse_obj(event['querystring']['params'])
         filter_expression = None
         result_items = None

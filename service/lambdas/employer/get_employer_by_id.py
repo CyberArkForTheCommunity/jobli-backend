@@ -17,8 +17,8 @@ def get_employer_by_id(event: dict, context: LambdaContext) -> dict:
                     'headers': {'Content-Type': 'application/json'},
                     'body': "Missing employer id"}
         employer_id = event['querystring']['params']
-        dynamo_client = boto3.client("dynamodb")
-        employers_table = dynamo_client.Table('jobli_employers')
+        dynamo_resource = boto3.resource("dynamodb")
+        employers_table = dynamo_resource.Table('jobli_employers')
         employer = employers_table.get_item(Key={"employer_id": employer_id}).get('Item', {})
         return {'statusCode': HTTPStatus.OK,
                 'headers': {'Content-Type': 'application/json'},

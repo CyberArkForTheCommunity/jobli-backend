@@ -49,6 +49,26 @@ def create_or_update_seeker_profile(event: dict, context: LambdaContext) -> dict
     except Exception as err:
         return _build_error_response(err)
 
+# PUT /api/seekers/{id}/profile
+@logger.inject_lambda_context(log_event=True)
+def create_or_update_seeker_profile_with_id(event: dict, context: LambdaContext) -> dict:
+    try:
+        job_seeker_id = event["pathParameters"]["id"]
+
+        profile_dto: JobSeekerProfileDto = JobSeekerProfileDto.parse_raw(event["body"])
+
+        try:
+            # try to update job seeker. If does not exists, create it.
+            job_seeker: JobSeeker = JobSeeker(**job_seeker_repository.get(job_seeker_id))
+            return __update_seeker_profile(profile_dto=profile_dto, job_seeker=job_seeker)
+        except NotFoundError as err:
+            return __create_seeker_profile(user_id=job_seeker_id, profile_dto=profile_dto)
+
+    except (ValidationError, TypeError) as err:
+        return _build_error_response(err, HTTPStatus.BAD_REQUEST)
+    except Exception as err:
+        return _build_error_response(err)
+
 
 def __create_seeker_profile(user_id: str, profile_dto: JobSeekerProfileDto) -> dict:
     # convert to model

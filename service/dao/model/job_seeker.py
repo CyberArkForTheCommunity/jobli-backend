@@ -1,5 +1,5 @@
 from typing import Dict, List
-
+from decimal import Decimal
 # from file_management.jobli.service.single_table_service import SingleTableRecord
 from service.dao.single_table_service import SingleTableRecord, DATA_DELIMITER
 
@@ -11,7 +11,7 @@ FILES_SK1_TYPE_PREFIX = "TYPE" + DATA_DELIMITER
 class JobSeeker(SingleTableRecord):
     id: str = None
     full_name: str = None
-    birth_date: float = None
+    birth_date: Decimal = None
     # city: str = None
     # street: str = None
     # apartment: int = None

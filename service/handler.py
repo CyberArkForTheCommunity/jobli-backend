@@ -75,7 +75,7 @@ def get_jobli(event: dict, context: LambdaContext) -> dict:
     except Exception as err:
         return _build_error_response(err)
 
-# POST /users/type
+# POST /api/users/type
 @logger.inject_lambda_context(log_event=True)
 def set_user_type(event: dict, context: LambdaContext) -> dict:
     try:

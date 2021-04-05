@@ -22,7 +22,7 @@ class _JobSeekerRepository:
     def get(self, job_seeker_id: str) -> Dict:
         job_seeker_record_dict = self.__single_table_service.find_by_pk_and_sk(JobSeeker.build_pk(job_seeker_id), JobSeeker.build_sk())
         if not job_seeker_record_dict:
-            raise NotFoundError()
+            raise NotFoundError(f"JobSeeker with id={job_seeker_id} not found")
 
         return job_seeker_record_dict
 

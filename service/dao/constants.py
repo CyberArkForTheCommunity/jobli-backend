@@ -17,7 +17,6 @@ CORRELATION_ID: Final = "correlationId"
 
 
 class EnvVarNames:
-    APPLICATION_ENVIRONMENT: Final = "APPLICATION_ENVIRONMENT"
 
     STAGE: Final = "STAGE"
     # todo: not for now, but we need to start working with only 1 region env var.
@@ -26,10 +25,6 @@ class EnvVarNames:
     AWS_ACCOUNT_ID: Final = "AWS_ACCOUNT_ID"
 
     DYNAMO_GSI_1: Final = "DYNAMO_GSI_1"
-    TABLE_NAME_SUFFIX: Final = "TABLE_NAME_SUFFIX"
-    TABLE_PK: Final = "TABLE_PK"  # "pk"
-    TABLE_SK: Final = "TABLE_SK"  # "sk"
-    TABLE_GSI_1_PK: Final = "TABLE_GSI_1_PK"  # "gsi1Pk"
-    TABLE_GSI_1_SK: Final = "TABLE_GSI_1_SK"  # "gsi1Sk"
+    TABLE_NAME: Final = "TABLE_NAME"
 
 

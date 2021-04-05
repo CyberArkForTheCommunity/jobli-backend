@@ -1,4 +1,4 @@
-from typing import Dict
+from typing import Dict, List
 
 # from file_management.jobli.service.single_table_service import SingleTableRecord
 from service.dao.single_table_service import SingleTableRecord, DATA_DELIMITER
@@ -12,13 +12,15 @@ class JobSeeker(SingleTableRecord):
     id: str = None
     full_name: str = None
     birth_date: str = None
-    city: str = None
-    street: str = None
-    apartment: int = None
+    # city: str = None
+    # street: str = None
+    # apartment: int = None
+    address: str = None
     email: str = None
+    languages: List[str] = None
 
     # skills: List[Skill] = None
-    # languages: List[Language] = None
+
     # education_institutes: List[EducationInstitute] = None
     # experience: List[Experience] = None
     # summary: str

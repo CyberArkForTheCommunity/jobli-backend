@@ -92,6 +92,8 @@ class JobliServiceEnvironment(core.Construct):
         jobli_resource: apigw.Resource = self.rest_api.root.add_resource("jobli")
         jobli_employers_resource: apigw.Resource = jobli_resource.add_resource("employers")
         jobli_employers_by_id_resource: apigw.Resource = jobli_employers_resource.add_resource("{employer_id}")
+        jobli_jobs_resource: apigw.Resource = jobli_employers_by_id_resource.add_resource("jobs")
+        jobli_job_id_resource: apigw.Resource = jobli_jobs_resource.add_resource("{job_id}")
 
         self.environment = {
             "STACK_NAME": get_stack_name(),
@@ -109,6 +111,16 @@ class JobliServiceEnvironment(core.Construct):
                               resource=jobli_employers_by_id_resource, http_method=HttpMethods.PUT, member_name="update_employer")
         self.__add_lambda_api(lambda_name='GetJobliEmployer', handler_method='service.lambdas.employer.get_employer_by_id.get_employer_by_id',
                               resource=jobli_employers_by_id_resource, http_method=HttpMethods.GET, member_name="get_jobli_employer_by_id")
+        self.__add_lambda_api(lambda_name='AddJobliEmployerJob', handler_method='service.lambdas.employer.add_employer_job.add_employer_job',
+                              resource=jobli_jobs_resource, http_method=HttpMethods.POST, member_name="add_employer_job")
+        self.__add_lambda_api(lambda_name='GetJobliEmployerJobs', handler_method='service.lambdas.employer.get_employer_jobs.get_employer_jobs',
+                              resource=jobli_jobs_resource, http_method=HttpMethods.GET, member_name="get_employer_jobs")
+        self.__add_lambda_api(lambda_name='GetJobliEmployerJob',
+                              handler_method='service.lambdas.employer.get_employer_job_by_id.get_employer_job_by_id',
+                              resource=jobli_job_id_resource, http_method=HttpMethods.GET, member_name="get_employer_jobs")
+        self.__add_lambda_api(lambda_name='UpdateJobliEmployerJobAnswers',
+                              handler_method='service.lambdas.employer.update_employer_job_answers.update_employer_job_answers',
+                              resource=jobli_job_id_resource, http_method=HttpMethods.PUT, member_name="update_employer_job_answers")
         self.__add_lambda_api(lambda_name="SetUserType", handler_method="service.handler.set_user_type",
                               resource=update_type, http_method=HttpMethods.POST, member_name="set_user_type")
 

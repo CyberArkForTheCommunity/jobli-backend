@@ -105,7 +105,7 @@ class JobliServiceEnvironment(core.Construct):
             'CreateJobliEmployer',
             runtime=_lambda.Runtime.PYTHON_3_8,
             code=_lambda.Code.from_asset(self._LAMBDA_ASSET_DIR),
-            handler='service.lambdas.employer.create_employer',
+            handler='service.lambdas.employer.create_employer.create_employer',
             role=self.service_role,
             environment={
                 "JOBLI_USER_POOL_ARN": user_pool_arn
@@ -124,7 +124,7 @@ class JobliServiceEnvironment(core.Construct):
             'GetJobliEmployers',
             runtime=_lambda.Runtime.PYTHON_3_8,
             code=_lambda.Code.from_asset(self._LAMBDA_ASSET_DIR),
-            handler='service.lambdas.employer.get_employers',
+            handler='service.lambdas.employer.get_employers.get_employers',
             role=self.service_role,
             environment={
                 "JOBLI_USER_POOL_ARN": user_pool_arn
@@ -143,7 +143,7 @@ class JobliServiceEnvironment(core.Construct):
             'GetJobliEmployer',
             runtime=_lambda.Runtime.PYTHON_3_8,
             code=_lambda.Code.from_asset(self._LAMBDA_ASSET_DIR),
-            handler='service.lambdas.employer.get_employer_by_id',
+            handler='service.lambdas.employer.get_employer_by_id.get_employer_by_id',
             role=self.service_role,
             environment={
                 "JOBLI_USER_POOL_ARN": user_pool_arn

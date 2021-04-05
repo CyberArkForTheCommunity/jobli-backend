@@ -20,7 +20,7 @@ logger = Logger()
 @logger.inject_lambda_context(log_event=True)
 def create_seeker_profile(event: dict, context: LambdaContext) -> dict:
     try:
-        profile_dto: JobSeekerProfileDto = JobliDto.parse_raw(event["body"])
+        profile_dto: JobSeekerProfileDto = JobSeekerProfileDto.parse_raw(event["body"])
 
         # convert to model
         job_seeker: JobSeeker = JobSeeker()

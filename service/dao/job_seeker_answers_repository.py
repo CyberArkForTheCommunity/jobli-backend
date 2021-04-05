@@ -27,10 +27,16 @@ class _JobSeekerAnswersRepository:
         self.__single_table_service.create_item(job_seeker_answers, user)
 
     def find_best_match_answers(self, answers: List[bool], max_results: int = 100) -> List[SearchResult]:
-        results = self.__single_table_service.find_by_pk_and_sk_begins_with(JOB_SEEKER_ANSWERS_PK,
-                                                                            JOB_SEEKER_ANSWERS_SK_PREFIX)
 
         scores = []
+
+        try:
+            results = self.__single_table_service.find_by_pk_and_sk_begins_with(JOB_SEEKER_ANSWERS_PK,
+                                                                                JOB_SEEKER_ANSWERS_SK_PREFIX)
+        except Exception as err:
+            logger.error(str(err))
+            return scores
+
         for item in results:
             score = 0
             for i in range(1, 10):

@@ -12,7 +12,7 @@ from tests.helpers.cognito_auth_util import add_auth_header
 
 # from cdk.jobli_service_cdk.service_stack.jobli_construct import get_stack_name
 # from jobli_service_cdk.service_stack.constants import BASE_NAME
-from service.dtos.jobli_dto import JobliDto
+from service.dtos.jobli_dto import JobliDto, UpdateUserTypeDto, UserType
 
 
 @pytest.fixture(scope="module")
@@ -88,3 +88,14 @@ def test_update_jobli(endpoint_url, auth_headers):
     assert now - day_seconds < resource['created_date'] < now + day_seconds
     assert now - day_seconds < resource['updated_date'] < now + day_seconds
     assert resource['created_date'] < resource['updated_date']
+
+
+def test_set_user_type(endpoint_url, auth_headers):
+    # when create entity
+    jobli_dto: UpdateUserTypeDto = UpdateUserTypeDto(user_type=UserType.employer)
+    headers = {"Content-Type": "application/json"}
+    headers.update(auth_headers)
+    response = requests.api.post(url=f"{endpoint_url}/api/users/type", headers=headers, json=jobli_dto.dict())
+
+    # then assert
+    assert response.status_code == HTTPStatus.OK

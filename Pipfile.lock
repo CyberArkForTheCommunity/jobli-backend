@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "7eafc7457af7230368f02ba08919625e944e952da5a3759e7d396dc0bd67f1a4"
+            "sha256": "c74b83bf8aa9c6da4f5b6802aecd6d14975418b018c290bff10c49f876670d26"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -47,6 +47,18 @@
             "index": "pypi",
             "version": "==1.17.44"
         },
+        "boto3-stubs": {
+            "extras": [
+                "cloudformation",
+                "cognito-idp"
+            ],
+            "hashes": [
+                "sha256:19d833ecd51bd2a539d68a0dcb714eab818c1caa52b75e703c49a8ea80671f61",
+                "sha256:32df84c1137b7a74b14706c2b7b3e1d7e435b6e66154bc9836943fe6ad29638c"
+            ],
+            "index": "pypi",
+            "version": "==1.17.44.0"
+        },
         "botocore": {
             "hashes": [
                 "sha256:2958e3912939558fd789a64b23a10039d8b0c0c84a23b573f3f2e3154de357ad",
@@ -73,6 +85,20 @@
                 "sha256:cdf6525904cc597730141d61b36f2e4b8ecc257c420fa2f4549bac2c2d0cb72f"
             ],
             "version": "==0.10.0"
+        },
+        "mypy-boto3-cloudformation": {
+            "hashes": [
+                "sha256:2a68bcff761e9811cbf914a8809553fdb112b244d90c44d40a32fcaaae5bbfe2",
+                "sha256:e92f7a82d12695218ca066b1416d2ef1a1da1f378ad893bc586c96c09b812375"
+            ],
+            "version": "==1.17.44.0"
+        },
+        "mypy-boto3-cognito-idp": {
+            "hashes": [
+                "sha256:4ddcc61dd3b6580505f3252e0543b7a58f6fa6284c82a19f9ae36fef39af9681",
+                "sha256:db1857147d7b8e60275ad0e6ab8ed1390337edd04e3de83d00f27af328f8a3d0"
+            ],
+            "version": "==1.17.44.0"
         },
         "pydantic": {
             "hashes": [

@@ -37,7 +37,12 @@ def main():
     parser.add_argument('--synth', nargs='?', const=True, help="Synthesize cloudformation.yml before deploying")
     parser.add_argument('--no-build', nargs='?', const=True, default=False, help="Skip lambda build")
     parser.add_argument('--skip-deps', nargs="?", const=True, default=False, help="Skip lambda dependencies")
+    parser.add_argument('--google-client-id', required=True)
+    parser.add_argument('--google-client-secret', required=True)
     args = parser.parse_args()
+
+    os.environ['GOOGLE_CLIENT_ID'] = args.google_client_id
+    os.environ['GOOGLE_CLIENT_SECRET'] = args.google_client_secret
 
     # environment update with the .env file
     init_local_dotenv()

@@ -31,7 +31,7 @@ def create_seeker_profile(event: dict, context: LambdaContext) -> dict:
         job_seeker.full_name = profile_dto.full_name
 
         birth_date = datetime(year=profile_dto.birth_year, month=profile_dto.birth_month, day=profile_dto.birth_day)
-        job_seeker.birth_date = birth_date.timestamp()
+        job_seeker.birth_date = Decimal(birth_date.timestamp())
         job_seeker.email = profile_dto.email
         job_seeker.address = profile_dto.address
 

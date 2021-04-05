@@ -86,12 +86,98 @@ class JobliServiceEnvironment(core.Construct):
         endpoint_output.override_logical_id("JobliApiGw")
         self.api_authorizer: apigw.CfnAuthorizer = self.__create_api_authorizer(user_pool_arn=user_pool_arn, api=self.rest_api)
         jobli_resource: apigw.Resource = self.rest_api.root.add_resource("jobli")
+        jobli_employers_resource: apigw.Resource = jobli_resource.add_resource("employers")
+
+        # Add the employer lambdas / APIGW's
+        self.__add_create_employer_lambda_integration(jobli_employers_resource, user_pool_arn)
+        self.__add_get_employers_lambda_integration(jobli_employers_resource, user_pool_arn)
+        jobli_employers_by_id_resource: apigw.Resource = jobli_resource.add_resource("{employer_id}")
+        self.__add_update_employer_lambda_integration(jobli_employers_by_id_resource, user_pool_arn)
+        self.__add_get_employer_by_id_lambda_integration(jobli_employers_by_id_resource, user_pool_arn)
+
         self.__add_create_lambda_integration(jobli_resource, user_pool_arn)
         jobli_name_resource = jobli_resource.add_resource("{name}")
         self.__add_update_lambda_integration(jobli_name_resource, user_pool_arn)
         self.__add_get_lambda_integration(jobli_name_resource, user_pool_arn)
 
     # pylint: disable = no-value-for-parameter
+    def __add_create_employer_lambda_integration(self, jobli_employer: Resource, user_pool_arn: str):
+        lambda_function = _lambda.Function(
+            self,
+            'CreateJobliEmployer',
+            runtime=_lambda.Runtime.PYTHON_3_8,
+            code=_lambda.Code.from_asset(self._LAMBDA_ASSET_DIR),
+            handler='service.lambdas.employer.create_employer',
+            role=self.service_role,
+            environment={
+                "JOBLI_USER_POOL_ARN": user_pool_arn
+            },
+        )
+        self.__add_resource_method(
+            resource=jobli_employer,
+            http_method="POST",
+            integration=apigw.LambdaIntegration(handler=lambda_function),  # POST /jobli/employers
+            authorizer=self.api_authorizer,
+        )
+
+    def __add_get_employers_lambda_integration(self, jobli_employer: Resource, user_pool_arn: str):
+        lambda_function = _lambda.Function(
+            self,
+            'GetJobliEmployers',
+            runtime=_lambda.Runtime.PYTHON_3_8,
+            code=_lambda.Code.from_asset(self._LAMBDA_ASSET_DIR),
+            handler='service.lambdas.employer.get_employers',
+            role=self.service_role,
+            environment={
+                "JOBLI_USER_POOL_ARN": user_pool_arn
+            },
+        )
+        self.__add_resource_method(
+            resource=jobli_employer,
+            http_method="GET",
+            integration=apigw.LambdaIntegration(handler=lambda_function),  # POST /jobli/employers
+            authorizer=self.api_authorizer,
+        )
+
+    def __add_get_employer_by_id_lambda_integration(self, jobli_employer_by_id: Resource, user_pool_arn: str):
+        lambda_function = _lambda.Function(
+            self,
+            'GetJobliEmployers',
+            runtime=_lambda.Runtime.PYTHON_3_8,
+            code=_lambda.Code.from_asset(self._LAMBDA_ASSET_DIR),
+            handler='service.lambdas.employer.get_employer_by_id',
+            role=self.service_role,
+            environment={
+                "JOBLI_USER_POOL_ARN": user_pool_arn
+            },
+        )
+        self.__add_resource_method(
+            resource=jobli_employer_by_id,
+            http_method="GET",
+            integration=apigw.LambdaIntegration(handler=lambda_function),  # POST /jobli/employers/{employer_id}
+            authorizer=self.api_authorizer,
+        )
+
+    def __add_update_employer_lambda_integration(self, jobli_employer_by_id: Resource, user_pool_arn: str):
+        lambda_function = _lambda.Function(
+            self,
+            'GetJobliEmployers',
+            runtime=_lambda.Runtime.PYTHON_3_8,
+            code=_lambda.Code.from_asset(self._LAMBDA_ASSET_DIR),
+            handler='service.lambdas.employer.update_employer',
+            role=self.service_role,
+            environment={
+                "JOBLI_USER_POOL_ARN": user_pool_arn
+            },
+        )
+        self.__add_resource_method(
+            resource=jobli_employer_by_id,
+            http_method="PUT",
+            integration=apigw.LambdaIntegration(handler=lambda_function),  # POST /jobli/employers/{employer_id}
+            authorizer=self.api_authorizer,
+        )
+
+
     def __add_create_lambda_integration(self, jobli: Resource, user_pool_arn: str):
         lambda_function = _lambda.Function(
             self,

@@ -54,6 +54,31 @@ def create_seeker_profile(event: dict, context: LambdaContext) -> dict:
     except Exception as err:
         return _build_error_response(err)
 
+# PUT /api/seekers/{id}/profile
+@logger.inject_lambda_context(log_event=True)
+def create_seeker_profile(event: dict, context: LambdaContext) -> dict:
+    try:
+        profile_dto: JobSeekerProfileDto = JobSeekerProfileDto.parse_raw(event["body"])
+
+        job_seeker_id = event["pathParameters"]["id"]
+        # convert to model
+        job_seeker: JobSeeker = JobSeeker(**job_seeker_repository.get(job_seeker_id))
+
+        job_seeker.full_name = profile_dto.full_name
+
+        birth_date = datetime(year=profile_dto.birth_year, month=profile_dto.birth_month, day=profile_dto.birth_day)
+        job_seeker.birth_date = Decimal(birth_date.timestamp() * 1000)
+        job_seeker.email = profile_dto.email
+        job_seeker.address = profile_dto.address
+
+        job_seeker_repository.update(job_seeker)
+
+        # return resource
+        return _build_response(http_status=HTTPStatus.OK, body="")
+    except (ValidationError, TypeError) as err:
+        return _build_error_response(err, HTTPStatus.BAD_REQUEST)
+    except Exception as err:
+        return _build_error_response(err)
 
 # POST /api/seekers/{id}/answers
 @logger.inject_lambda_context(log_event=True)

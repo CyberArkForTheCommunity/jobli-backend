@@ -50,14 +50,22 @@ class JobliServiceEnvironment(core.Construct):
         role_output = core.CfnOutput(self, id="JobliServiceRoleArn", value=self.service_role.role_arn)
         role_output.override_logical_id("JobliServiceRoleArn")
 
-        self.table = aws_dynamodb.Table(
+        self.table_job_seekers = aws_dynamodb.Table(
             self,
-            'jobli-employees',
-            partition_key=aws_dynamodb.Attribute(name="id", type=aws_dynamodb.AttributeType.STRING),
+            'jobli-job-seeker',
+            partition_key=aws_dynamodb.Attribute(name="pk", type=aws_dynamodb.AttributeType.STRING),
+            sort_key=aws_dynamodb.Attribute(name="sk", type=aws_dynamodb.AttributeType.STRING),
             billing_mode=aws_dynamodb.BillingMode.PAY_PER_REQUEST,
             removal_policy=core.RemovalPolicy.RETAIN
         )
-        self.table.grant_read_write_data(self.service_role)
+
+        self.table_job_seekers.add_global_secondary_index(partition_key=aws_dynamodb.Attribute(name='pk1', type=aws_dynamodb.AttributeType.STRING),
+           sort_key=aws_dynamodb.Attribute(name='sk1', type=aws_dynamodb.AttributeType.STRING),
+           index_name='GSI1')
+
+        core.CfnOutput(self, id="JobSeekersTableName", value=self.table_job_seekers.table_name)
+
+        self.table_job_seekers.grant_read_write_data(self.service_role)
 
         self.rest_api: apigw.LambdaRestApi = apigw.RestApi(self, "jobli-rest-api", rest_api_name="Jobli Rest API",
                                                            description="This service handles jobli")
@@ -80,7 +88,8 @@ class JobliServiceEnvironment(core.Construct):
             handler='service.handler.create_jobli',
             role=self.service_role,
             environment={
-                "JOBLI_USER_POOL_ARN": user_pool_arn
+                "JOBLI_USER_POOL_ARN": user_pool_arn,
+                "JOB_SEEKERS_TABLE_NAME": self.table_job_seekers.table_name
             },
         )
         self.__add_resource_method(
@@ -99,7 +108,8 @@ class JobliServiceEnvironment(core.Construct):
             handler='service.handler.update_jobli',
             role=self.service_role,
             environment={
-                "JOBLI_USER_POOL_ARN": user_pool_arn
+                "JOBLI_USER_POOL_ARN": user_pool_arn,
+                "JOB_SEEKERS_TABLE_NAME": self.table_job_seekers.table_name
             },
         )
         self.__add_resource_method(
@@ -118,7 +128,8 @@ class JobliServiceEnvironment(core.Construct):
             handler='service.handler.get_jobli',
             role=self.service_role,
             environment={
-                "JOBLI_USER_POOL_ARN": user_pool_arn
+                "JOBLI_USER_POOL_ARN": user_pool_arn,
+                "JOB_SEEKERS_TABLE_NAME": self.table_job_seekers.table_name
             },
         )
         self.__add_resource_method(

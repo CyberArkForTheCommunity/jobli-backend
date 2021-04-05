@@ -89,11 +89,12 @@ class JobliServiceEnvironment(core.Construct):
         }
 
         api_resource: apigw.Resource = self.rest_api.root.add_resource("api")
-        jobli_resource: apigw.Resource = self.rest_api.root.add_resource("jobli")
-        self.__add_create_lambda_integration(jobli_resource, user_pool_arn)
-        jobli_name_resource = jobli_resource.add_resource("{name}")
-        self.__add_update_lambda_integration(jobli_name_resource, user_pool_arn)
-        self.__add_get_lambda_integration(jobli_name_resource, user_pool_arn)
+        #jobli_resource: apigw.Resource = self.rest_api.root.add_resource("jobli")
+        #self.__add_create_lambda_integration(jobli_resource, user_pool_arn)
+        #jobli_name_resource = jobli_resource.add_resource("{name}")
+        #self.__add_update_lambda_integration(jobli_name_resource, user_pool_arn)
+        #self.__add_get_lambda_integration(jobli_name_resource, user_pool_arn)
+
 
         seeker_resource: apigw.Resource = api_resource.add_resource("seekers")
         seeker_id_resource: apigw.Resource = seeker_resource.add_resource("{id}")
@@ -175,7 +176,8 @@ class JobliServiceEnvironment(core.Construct):
                                           description=description)
 
         self.__add_resource_method(resource=resource, http_method=http_method,
-                                   integration=apigw.LambdaIntegration(handler=new_api_lambda))
+                                   integration=apigw.LambdaIntegration(handler=new_api_lambda),
+                                   authorizer=self.api_authorizer)
 
         cfn_res: CfnResource = new_api_lambda.node.default_child
         cfn_res.override_logical_id(lambda_name)
@@ -189,6 +191,17 @@ class JobliServiceEnvironment(core.Construct):
                                 handler=handler, role=role, retry_attempts=0, environment=environment, timeout=timeout,
                                 memory_size=self._API_HANDLER_LAMBDA_MEMORY_SIZE, description=description)
 
+    # @staticmethod
+    # def __add_resource_method(resource: apigw.Resource, http_method: str, integration: apigw.LambdaIntegration) -> None:
+    #     resource.add_method(http_method=http_method, integration=integration)
+
     @staticmethod
-    def __add_resource_method(resource: apigw.Resource, http_method: str, integration: apigw.LambdaIntegration) -> None:
-        resource.add_method(http_method=http_method, integration=integration)
+    def __add_resource_method(resource: apigw.Resource, http_method: str, integration: apigw.LambdaIntegration,
+                              authorizer: apigw.CfnAuthorizer) -> None:
+        method = resource.add_method(
+            http_method=http_method,
+            integration=integration,
+            authorization_type=apigw.AuthorizationType.COGNITO,
+        )
+        method_resource: apigw.Resource = method.node.find_child("Resource")
+        method_resource.add_property_override("AuthorizerId", {"Ref": authorizer.logical_id})

@@ -5,6 +5,7 @@ from pydantic import ValidationError
 from aws_lambda_powertools import Logger
 from service.models.employer.employer_filter import EmployerFilter
 from boto3.dynamodb.conditions import Key
+from typing import Optional
 import boto3
 
 logger = Logger()
@@ -16,14 +17,14 @@ def get_employers(event: dict, context: LambdaContext) -> dict:
     try:
         dynamo_resource = boto3.resource("dynamodb")
         employers_table = dynamo_resource.Table('jobli_employers')
-        employer_filter: EmployerFilter = EmployerFilter()
+        employer_filter: Optional[EmployerFilter] = None
         if 'queryStringParameters' in event:
-            employer_filter = EmployerFilter.parse_obj(event['queryStringParameters'])
+            employer_filter = EmployerFilter.parse_raw(event['queryStringParameters'])
         filter_expression = None
         result_items = None
-        if employer_filter.employer_id:
+        if employer_filter and employer_filter.employer_id:
             result_items = [employers_table.get_item(Key={"employer_id": employer_filter.employer_id}).get('Item', {})]
-        elif employer_filter.business_name or employer_filter.city:
+        elif employer_filter and employer_filter.business_name or employer_filter.city:
             if employer_filter.business_name:
                 filter_expression = Key('business_name').eq(employer_filter.business_name)
             if employer_filter.city:

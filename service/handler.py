@@ -1,5 +1,5 @@
 import json
-from datetime import datetime, time
+from datetime import datetime
 from decimal import Decimal
 from http import HTTPStatus
 from typing import List
@@ -30,14 +30,12 @@ def create_seeker_profile(event: dict, context: LambdaContext) -> dict:
         job_seeker.id = event["pathParameters"]["id"]
         job_seeker.full_name = profile_dto.full_name
 
-        birth_date = datetime.datetime(year=profile_dto.birth_year, month=profile_dto.birth_month,
-                                       day=profile_dto.birth_day)
-
-        job_seeker.birth_date = time.mktime(birth_date.timetuple())
+        birth_date = datetime(year=profile_dto.birth_year, month=profile_dto.birth_month, day=profile_dto.birth_day)
+        job_seeker.birth_date = birth_date.timestamp()
         job_seeker.email = profile_dto.email
         job_seeker.address = profile_dto.address
 
-        job_seeker_repository.update(job_seeker)
+        job_seeker_repository.create(job_seeker)
 
         # return resource
         return _build_response(http_status=HTTPStatus.CREATED, body="")
@@ -103,19 +101,35 @@ def add_seeker_experience(event: dict, context: LambdaContext) -> dict:
         return _build_error_response(err)
 
 
-# POST /api/seekers
+# POST /api/seekers/{id}/languages
 @logger.inject_lambda_context(log_event=True)
-def create_jobli(event: dict, context: LambdaContext) -> dict:
+def add_seeker_languages(event: dict, context: LambdaContext) -> dict:
     try:
-        jobli_dto: JobliDto = JobliDto.parse_raw(event["body"])
-        now: Decimal = Decimal(datetime.now().timestamp())
-        jobli: Jobli = Jobli(name=jobli_dto.name, created_date=now, updated_date=now)
-        return _build_response(http_status=HTTPStatus.CREATED, body=jobli.json())
+        languages_list: List[str] = json.loads(event["body"])
+
+        # # convert to model
+        # job_seeker: JobSeeker = JobSeeker()
+        # job_seeker.id = event["pathParameters"]["id"]
+        # job_seeker.full_name = profile_dto.full_name
+        #
+        # birth_date = datetime.datetime(year=profile_dto.birth_year, month=profile_dto.birth_month,
+        #                                day=profile_dto.birth_day)
+        #
+        # job_seeker.birth_date = time.mktime(birth_date.timetuple())
+        # job_seeker.email = profile_dto.email
+        # job_seeker.address = profile_dto.address
+        #
+        # job_seeker_repository.update(job_seeker)
+
+        # return resource
+        return _build_response(http_status=HTTPStatus.CREATED, body="")
     except (ValidationError, TypeError) as err:
         return _build_error_response(err, HTTPStatus.BAD_REQUEST)
     except Exception as err:
         return _build_error_response(err)
 
+
+# region template methods
 
 # POST /jobli
 @logger.inject_lambda_context(log_event=True)
@@ -187,3 +201,5 @@ def _build_error_response(err, status: HTTPStatus = HTTPStatus.INTERNAL_SERVER_E
         },
         'body': str(err),
     }
+
+# endregion

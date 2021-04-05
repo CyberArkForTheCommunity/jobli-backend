@@ -76,7 +76,7 @@ class JobliServiceEnvironment(core.Construct):
 
 
         endpoint_output = core.CfnOutput(self, id="JobliApiGw", value=self.rest_api.url)
-        endpoint_output.override_logical_id("JobliApiGwURL")
+        endpoint_output.override_logical_id("JobliApiGw")
 
 
         self.api_authorizer: apigw.CfnAuthorizer = self.__create_api_authorizer(user_pool_arn=user_pool_arn, api=self.rest_api)

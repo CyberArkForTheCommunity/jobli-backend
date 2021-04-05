@@ -1,4 +1,3 @@
-from datetime import datetime
 import json
 from datetime import datetime
 from decimal import Decimal
@@ -29,65 +28,58 @@ from service.models.jobli import Jobli
 logger = Logger()
 
 
-
-
-
-# POST /api/seeker/profile
-@logger.inject_lambda_context(log_event=True)
-def create_seeker_profile(event: dict, context: LambdaContext) -> dict:
-    try:
-        event: APIGatewayProxyEvent = APIGatewayProxyEvent(event)
-        user_id = event.request_context.authorizer.claims["sub"]
-
-        profile_dto: JobSeekerProfileDto = JobSeekerProfileDto.parse_raw(event["body"])
-
-        # convert to model
-        job_seeker: JobSeeker = JobSeeker()
-        job_seeker.id = user_id
-        job_seeker.full_name = profile_dto.full_name
-
-        birth_date = datetime(year=profile_dto.birth_year, month=profile_dto.birth_month, day=profile_dto.birth_day)
-        job_seeker.birth_date = Decimal(birth_date.timestamp() * 1000)
-        job_seeker.email = profile_dto.email
-        job_seeker.address = profile_dto.address
-
-        job_seeker_repository.create(job_seeker)
-
-        # return resource
-        return _build_response(http_status=HTTPStatus.CREATED, body="")
-    except (ValidationError, TypeError) as err:
-        return _build_error_response(err, HTTPStatus.BAD_REQUEST)
-    except Exception as err:
-        return _build_error_response(err)
-
 # PUT /api/seeker/profile
 @logger.inject_lambda_context(log_event=True)
-def update_seeker_profile(event: dict, context: LambdaContext) -> dict:
+def create_or_update_seeker_profile(event: dict, context: LambdaContext) -> dict:
     try:
         event: APIGatewayProxyEvent = APIGatewayProxyEvent(event)
         user_id = event.request_context.authorizer.claims["sub"]
 
         profile_dto: JobSeekerProfileDto = JobSeekerProfileDto.parse_raw(event["body"])
 
-        job_seeker_id = user_id
-        # convert to model
-        job_seeker: JobSeeker = JobSeeker(**job_seeker_repository.get(job_seeker_id))
+        try:
+            # try to update job seeker. If does not exists, create it.
+            job_seeker: JobSeeker = JobSeeker(**job_seeker_repository.get(user_id))
+            return __update_seeker_profile(profile_dto=profile_dto, job_seeker=job_seeker)
+        except NotFoundError as err:
+            return __create_seeker_profile(user_id=user_id, profile_dto=profile_dto)
 
-        job_seeker.full_name = profile_dto.full_name
-
-        birth_date = datetime(year=profile_dto.birth_year, month=profile_dto.birth_month, day=profile_dto.birth_day)
-        job_seeker.birth_date = Decimal(birth_date.timestamp() * 1000)
-        job_seeker.email = profile_dto.email
-        job_seeker.address = profile_dto.address
-
-        job_seeker_repository.update(job_seeker)
-
-        # return resource
-        return _build_response(http_status=HTTPStatus.OK, body="")
     except (ValidationError, TypeError) as err:
         return _build_error_response(err, HTTPStatus.BAD_REQUEST)
     except Exception as err:
         return _build_error_response(err)
+
+
+def __create_seeker_profile(user_id: str, profile_dto: JobSeekerProfileDto) -> dict:
+    # convert to model
+    job_seeker: JobSeeker = JobSeeker()
+    job_seeker.id = user_id
+    job_seeker.full_name = profile_dto.full_name
+
+    birth_date = datetime(year=profile_dto.birth_year, month=profile_dto.birth_month, day=profile_dto.birth_day)
+    job_seeker.birth_date = Decimal(birth_date.timestamp() * 1000)
+    job_seeker.email = profile_dto.email
+    job_seeker.address = profile_dto.address
+
+    job_seeker_repository.create(job_seeker)
+
+    # return resource
+    return _build_response(http_status=HTTPStatus.OK, body="")
+
+
+def __update_seeker_profile(profile_dto: JobSeekerProfileDto, job_seeker: JobSeeker) -> dict:
+    # convert to model
+    job_seeker.full_name = profile_dto.full_name
+
+    birth_date = datetime(year=profile_dto.birth_year, month=profile_dto.birth_month, day=profile_dto.birth_day)
+    job_seeker.birth_date = Decimal(birth_date.timestamp() * 1000)
+    job_seeker.email = profile_dto.email
+    job_seeker.address = profile_dto.address
+
+    job_seeker_repository.update(job_seeker)
+
+    # return resource
+    return _build_response(http_status=HTTPStatus.OK, body="")
 
 
 # GET /api/seeker/profile
@@ -100,7 +92,7 @@ def get_seeker_profile(event: dict, context: LambdaContext) -> dict:
         # convert to model
         job_seeker = job_seeker_repository.get(user_id)
 
-        #TODO convert to resource
+        # TODO convert to resource
 
         # return resource
         return _build_response(http_status=HTTPStatus.OK, body=json.dumps(job_seeker))

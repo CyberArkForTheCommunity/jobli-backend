@@ -15,6 +15,10 @@ logger = Logger()
 @logger.inject_lambda_context(log_event=True)
 def create_employer(event: dict, context: LambdaContext) -> dict:
     try:
+        if 'body' not in event or not event['body']:
+            return {'statusCode': HTTPStatus.BAD_REQUEST,
+                    'headers': {'Content-Type': 'application/json'},
+                    'body': "Missing employer body to create"}
         employer: Employer = Employer.parse_obj(event['body'])
         employer.employer_id = str(uuid.uuid4())
         employer.created_time = datetime.now()

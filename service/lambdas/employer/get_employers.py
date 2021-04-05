@@ -16,7 +16,9 @@ def get_employers(event: dict, context: LambdaContext) -> dict:
     try:
         dynamo_resource = boto3.resource("dynamodb")
         employers_table = dynamo_resource.Table('jobli_employers')
-        employer_filter: EmployerFilter = EmployerFilter.parse_obj(event['querystring']['params'])
+        employer_filter: EmployerFilter = EmployerFilter()
+        if 'queryStringParameters' in event:
+            employer_filter = EmployerFilter.parse_obj(event['queryStringParameters'])
         filter_expression = None
         result_items = None
         if employer_filter.employer_id:

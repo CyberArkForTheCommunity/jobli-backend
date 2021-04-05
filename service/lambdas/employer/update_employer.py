@@ -14,11 +14,15 @@ logger = Logger()
 @logger.inject_lambda_context(log_event=True)
 def update_employer(event: dict, context: LambdaContext) -> dict:
     try:
-        if 'params' not in event or 'querystring' not in event['params'] or 'employer_id' not in event['params']['querystring']:
+        if 'queryStringParameters' not in event or 'employer_id' not in event['queryStringParameters']:
             return {'statusCode': HTTPStatus.BAD_REQUEST,
                     'headers': {'Content-Type': 'application/json'},
                     'body': "Missing employer id"}
-        employer_id = event['querystring']['params']
+        if 'body' not in event or not event['body']:
+            return {'statusCode': HTTPStatus.BAD_REQUEST,
+                    'headers': {'Content-Type': 'application/json'},
+                    'body': "Missing employer body to update"}
+        employer_id = event['queryStringParameters']['employer_id']
         employer: Employer = Employer.parse_obj(event['body'])
         dynamo_resource = boto3.resource("dynamodb")
         employers_table = dynamo_resource.Table('jobli_employers')

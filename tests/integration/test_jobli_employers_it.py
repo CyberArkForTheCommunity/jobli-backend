@@ -1,13 +1,11 @@
 # pylint: disable = print-used
-import json
 import requests
 import os
 from datetime import datetime, timedelta
 from http import HTTPStatus
 import pytest
 from dotenv import load_dotenv
-from tests.helpers.environment_handler import load_env_vars, get_stack_name
-from tests.helpers.random_utils import random_string
+from tests.helpers.environment_handler import load_env_vars
 from tests.helpers.cognito_auth_util import add_auth_header
 from service.models.employer.employer import Employer
 from service.models.common.address import Address
@@ -66,7 +64,8 @@ def test_create_jobli_employer(endpoint_url, auth_headers):
     assert returned_employer.employer_id
     assert returned_employer.created_time < datetime.now() + timedelta(days=1)
 
-def test_update_jobli_employer(endpoint_url, auth_headers)
+
+def test_update_jobli_employer(endpoint_url, auth_headers):
     # Create the employer
     employer = SOME_EMPLOYER
     employer.business_name = "some business updated"
@@ -98,6 +97,7 @@ def test_update_jobli_employer(endpoint_url, auth_headers)
     assert returned_employer.description == employer.description
     assert returned_employer.employer_id
     assert returned_employer.created_time < datetime.now() + timedelta(days=1)
+
 
 def test_get_employers(endpoint_url, auth_headers):
     # Add all the employers

@@ -15,7 +15,7 @@ logger = Logger()
 @logger.inject_lambda_context(log_event=True)
 def create_employer(event: dict, context: LambdaContext) -> dict:
     try:
-        employer: Employer = Employer.parse_obj(event)
+        employer: Employer = Employer.parse_obj(event['body'])
         employer.employer_id = str(uuid.uuid4())
         employer.created_time = datetime.now()
         dynamo_resource = boto3.resource("dynamodb")

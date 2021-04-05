@@ -44,7 +44,8 @@ class JobliServiceEnvironment(core.Construct):
             self, "JobliServiceRole", assumed_by=iam.ServicePrincipal("lambda.amazonaws.com"), inline_policies={
                 "JobliServicePolicy":
                     iam.PolicyDocument(statements=[
-                        iam.PolicyStatement(actions=["logs:CreateLogGroup", "logs:CreateLogStream", "logs:PutLogEvents"],
+                        iam.PolicyStatement(actions=["logs:CreateLogGroup", "logs:CreateLogStream",
+                                                     "logs:PutLogEvents"],
                                             resources=["arn:aws:logs:*:*:*"], effect=iam.Effect.ALLOW)
                     ])
             })

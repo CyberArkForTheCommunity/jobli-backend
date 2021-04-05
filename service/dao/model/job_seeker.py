@@ -11,7 +11,7 @@ FILES_SK1_TYPE_PREFIX = "TYPE" + DATA_DELIMITER
 class JobSeeker(SingleTableRecord):
     id: str = None
     full_name: str = None
-    birth_date: str = None
+    birth_date: float = None
     # city: str = None
     # street: str = None
     # apartment: int = None

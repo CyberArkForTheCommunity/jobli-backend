@@ -1,4 +1,4 @@
-import logging
+from aws_lambda_powertools import Logger
 from typing import List
 
 from pydantic import BaseModel
@@ -6,7 +6,7 @@ from pydantic import BaseModel
 from service.dao.model.job_seeker_answers import JobSeekerAnswers, JOB_SEEKER_ANSWERS_PK, JOB_SEEKER_ANSWERS_SK_PREFIX
 from service.dao.single_table_service import single_table_service
 
-logger = logging.getLogger(__name__)
+logger = Logger()
 
 
 class SearchResult(BaseModel):

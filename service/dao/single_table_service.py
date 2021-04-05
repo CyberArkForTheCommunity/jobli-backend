@@ -3,12 +3,13 @@ from abc import abstractmethod
 from typing import Dict, List, Optional
 
 import boto3
+from aws_lambda_powertools import Logger
 from boto3.dynamodb.conditions import Key, Attr
 
 from service.dao.constants import EnvVarNames
 from service.dao.utils import get_env_or_raise, TimeUtils
 
-logger = logging.getLogger(__name__)
+logger = Logger()
 
 DATA_DELIMITER = "#"
 
@@ -65,11 +66,11 @@ class _SingleTableService:
         self.__SK: str = "sk" # get_env_or_raise(EnvVarNames.TABLE_SK)  # "sk"
         self.__GSI1_PK: str = "gsi1Pk" # get_env_or_raise(EnvVarNames.TABLE_GSI_1_PK)  # "gsi1Pk"
         self.__GSI1_SK: str = "gsi1Sk" # get_env_or_raise(EnvVarNames.TABLE_GSI_1_SK)  # "gsi1Sk"
-        self.__region = get_env_or_raise(EnvVarNames.AWS_REGION)
-        logger.debug(f"Region is: {self.__region}")
+        # self.__region = get_env_or_raise(EnvVarNames.AWS_REGION)
+        # logger.debug(f"Region is: {self.__region}")
 
 
-        self.__dynamodb_resource = boto3.resource('dynamodb', region_name=self.__region)
+        self.__dynamodb_resource = boto3.resource('dynamodb')
         self.__table_name = get_env_or_raise(EnvVarNames.TABLE_NAME)
 
         logger.debug(f"Table name set to: '{self.__table_name}'")
@@ -407,7 +408,7 @@ class _SingleTableService:
         :param add_last_update_time:
         :return: response from dynamo_client.transact_write_items
         """
-        dynamo_client = boto3.client("dynamodb", region_name=self.__region)
+        dynamo_client = boto3.client("dynamodb")
         put_items_lists = []
 
         if add_last_update_time:

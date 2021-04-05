@@ -20,11 +20,11 @@ class EnvVarNames:
 
     STAGE: Final = "STAGE"
     # todo: not for now, but we need to start working with only 1 region env var.
-    AWS_REGION: Final = "AWS_REGION"
+    #AWS_REGION: Final = "AWS_REGION"
     AMAZON_REGION: Final = "AMAZON_REGION"
     AWS_ACCOUNT_ID: Final = "AWS_ACCOUNT_ID"
 
     DYNAMO_GSI_1: Final = "DYNAMO_GSI_1"
-    TABLE_NAME: Final = "TABLE_NAME"
+    TABLE_NAME: Final = "JOB_SEEKER_TABLE_NAME"
 
 

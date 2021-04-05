@@ -9,10 +9,41 @@ from aws_lambda_context import LambdaContext
 from pydantic import ValidationError
 from aws_lambda_powertools import Logger
 
+from service.dtos.job_seeker_profile_dto import JobSeekerProfileDto
 from service.dtos.jobli_dto import JobliDto
 from service.models.jobli import Jobli
 
 logger = Logger()
+
+
+# POST /api/seekers/{id}/profile
+@logger.inject_lambda_context(log_event=True)
+def create_seeker_profile(event: dict, context: LambdaContext) -> dict:
+    try:
+        profile_dto: JobSeekerProfileDto = JobliDto.parse_raw(event["body"])
+
+        # convert to model
+
+        # return resource
+        return _build_response(http_status=HTTPStatus.CREATED, body="")
+    except (ValidationError, TypeError) as err:
+        return _build_error_response(err, HTTPStatus.BAD_REQUEST)
+    except Exception as err:
+        return _build_error_response(err)
+
+
+# POST /api/seekers
+@logger.inject_lambda_context(log_event=True)
+def create_jobli(event: dict, context: LambdaContext) -> dict:
+    try:
+        jobli_dto: JobliDto = JobliDto.parse_raw(event["body"])
+        now: Decimal = Decimal(datetime.now().timestamp())
+        jobli: Jobli = Jobli(name=jobli_dto.name, created_date=now, updated_date=now)
+        return _build_response(http_status=HTTPStatus.CREATED, body=jobli.json())
+    except (ValidationError, TypeError) as err:
+        return _build_error_response(err, HTTPStatus.BAD_REQUEST)
+    except Exception as err:
+        return _build_error_response(err)
 
 
 # POST /jobli

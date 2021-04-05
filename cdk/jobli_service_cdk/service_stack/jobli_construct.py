@@ -66,8 +66,8 @@ class JobliServiceEnvironment(core.Construct):
            sort_key=aws_dynamodb.Attribute(name='gsi1Sk', type=aws_dynamodb.AttributeType.STRING),
            index_name='GSI1')
 
-        seekers_table_output = core.CfnOutput(self, id="JobSeekersTableName", value=self.table_job_seekers.table_name)
-        seekers_table_output.override_logical_id("JobSeekersTableName")
+        job_seekers_table_output = core.CfnOutput(self, id="JobSeekersTableName", value=self.table_job_seekers.table_name)
+        job_seekers_table_output.override_logical_id('JobSeekersTableName')
 
         self.table_job_seekers.grant_read_write_data(self.service_role)
 

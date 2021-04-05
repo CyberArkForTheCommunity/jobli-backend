@@ -1,7 +1,8 @@
+import json
 from datetime import datetime, time
 from decimal import Decimal
 from http import HTTPStatus
-
+from typing import List
 from aws_lambda_context import LambdaContext
 from aws_lambda_powertools import Logger
 from aws_lambda_powertools.logging import logger
@@ -10,6 +11,8 @@ from pydantic import ValidationError
 from service.dao.job_seeker_repository import job_seeker_repository
 from service.dao.model.job_seeker import JobSeeker
 from service.dtos.job_seeker_profile_dto import JobSeekerProfileDto
+from service.dtos.job_seeker_answer_dto import JobSeekerAnswerDto
+from service.dtos.job_seeker_experience_dto import JobSeekerExperienceDto
 from service.dtos.jobli_dto import JobliDto
 from service.models.jobli import Jobli
 
@@ -20,7 +23,7 @@ logger = Logger()
 @logger.inject_lambda_context(log_event=True)
 def create_seeker_profile(event: dict, context: LambdaContext) -> dict:
     try:
-        profile_dto: JobSeekerProfileDto = JobliDto.parse_raw(event["body"])
+        profile_dto: JobSeekerProfileDto = JobSeekerProfileDto.parse_raw(event["body"])
 
         # convert to model
         job_seeker: JobSeeker = JobSeeker()
@@ -35,6 +38,62 @@ def create_seeker_profile(event: dict, context: LambdaContext) -> dict:
         job_seeker.address = profile_dto.address
 
         job_seeker_repository.update(job_seeker)
+
+        # return resource
+        return _build_response(http_status=HTTPStatus.CREATED, body="")
+    except (ValidationError, TypeError) as err:
+        return _build_error_response(err, HTTPStatus.BAD_REQUEST)
+    except Exception as err:
+        return _build_error_response(err)
+
+
+# POST /api/seekers/{id}/answers
+@logger.inject_lambda_context(log_event=True)
+def add_seeker_answers(event: dict, context: LambdaContext) -> dict:
+    try:
+        answer_dto_list: List[JobSeekerAnswerDto] = [JobSeekerAnswerDto.parse_raw(item) for item in json.loads(event["body"])]
+
+        # # convert to model
+        # job_seeker: JobSeeker = JobSeeker()
+        # job_seeker.id = event["pathParameters"]["id"]
+        # job_seeker.full_name = profile_dto.full_name
+        #
+        # birth_date = datetime.datetime(year=profile_dto.birth_year, month=profile_dto.birth_month,
+        #                                day=profile_dto.birth_day)
+        #
+        # job_seeker.birth_date = time.mktime(birth_date.timetuple())
+        # job_seeker.email = profile_dto.email
+        # job_seeker.address = profile_dto.address
+        #
+        # job_seeker_repository.update(job_seeker)
+
+        # return resource
+        return _build_response(http_status=HTTPStatus.CREATED, body="")
+    except (ValidationError, TypeError) as err:
+        return _build_error_response(err, HTTPStatus.BAD_REQUEST)
+    except Exception as err:
+        return _build_error_response(err)
+
+
+# POST /api/seekers/{id}/experience
+@logger.inject_lambda_context(log_event=True)
+def add_seeker_experience(event: dict, context: LambdaContext) -> dict:
+    try:
+        experience_dto: JobSeekerExperienceDto = JobSeekerExperienceDto.parse_raw(event["body"])
+
+        # # convert to model
+        # job_seeker: JobSeeker = JobSeeker()
+        # job_seeker.id = event["pathParameters"]["id"]
+        # job_seeker.full_name = profile_dto.full_name
+        #
+        # birth_date = datetime.datetime(year=profile_dto.birth_year, month=profile_dto.birth_month,
+        #                                day=profile_dto.birth_day)
+        #
+        # job_seeker.birth_date = time.mktime(birth_date.timetuple())
+        # job_seeker.email = profile_dto.email
+        # job_seeker.address = profile_dto.address
+        #
+        # job_seeker_repository.update(job_seeker)
 
         # return resource
         return _build_response(http_status=HTTPStatus.CREATED, body="")

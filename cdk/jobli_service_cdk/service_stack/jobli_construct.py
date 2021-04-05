@@ -66,7 +66,8 @@ class JobliServiceEnvironment(core.Construct):
            sort_key=aws_dynamodb.Attribute(name='gsi1Sk', type=aws_dynamodb.AttributeType.STRING),
            index_name='GSI1')
 
-        core.CfnOutput(self, id="JobSeekersTableName", value=self.table_job_seekers.table_name)
+        seekers_table_output = core.CfnOutput(self, id="JobSeekersTableName", value=self.table_job_seekers.table_name)
+        seekers_table_output.override_logical_id("JobSeekersTableName")
 
         self.table_job_seekers.grant_read_write_data(self.service_role)
 
@@ -90,10 +91,18 @@ class JobliServiceEnvironment(core.Construct):
         api_resource: apigw.Resource = self.rest_api.root.add_resource("api")
         seeker_resource: apigw.Resource = api_resource.add_resource("seekers")
         seeker_id_resource: apigw.Resource = seeker_resource.add_resource("{id}")
-        seeker_id_profile: apigw.Resource = seeker_id_resource.add_resource("profile")
 
+        seeker_id_profile: apigw.Resource = seeker_id_resource.add_resource("profile")
         self.__add_lambda_api(lambda_name='CreateSeekerProfile', handler_method='service.handler.create_seeker_profile',
                               resource=seeker_id_profile, http_method="POST", member_name="add_seeker_profile_api_lambda")
+
+        seeker_id_profile: apigw.Resource = seeker_id_resource.add_resource("answers")
+        self.__add_lambda_api(lambda_name='AddSeekerAnswers', handler_method='service.handler.add_seeker_answers',
+                              resource=seeker_id_profile, http_method="POST", member_name="add_seeker_answers_api_lambda")
+
+        seeker_id_profile: apigw.Resource = seeker_id_resource.add_resource("experience")
+        self.__add_lambda_api(lambda_name='AddSeekerExperience', handler_method='service.handler.add_seeker_experience',
+                              resource=seeker_id_profile, http_method="POST", member_name="add_seeker_experience_api_lambda")
 
     def __create_api_authorizer(self, user_pool_arn: str, api: apigw.RestApi) -> apigw.CfnAuthorizer:
         authorizer = apigw.CfnAuthorizer(scope=self, name="JobliApiAuth", id="JobliApiAuth", type="COGNITO_USER_POOLS",

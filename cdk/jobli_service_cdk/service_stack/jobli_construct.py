@@ -79,10 +79,11 @@ class JobliServiceEnvironment(core.Construct):
 
         api_resource: apigw.Resource = self.rest_api.root.add_resource("api")
         seeker_resource: apigw.Resource = api_resource.add_resource("seekers")
-        seeker_id_resource: apigw.Resource = seeker_resource.add_resource("{seeker_id}")
+        seeker_id_resource: apigw.Resource = seeker_resource.add_resource("{id}")
+        seeker_id_profile: apigw.Resource = seeker_id_resource.add_resource("profile")
 
-        self.__add_lambda_api(lambda_name='CreateSeeker', handler_method='service.handler.create_seeker', resource=seeker_resource,
-                              http_method="POST", member_name="add_seeker_api_lambda")
+        self.__add_lambda_api(lambda_name='CreateSeekerProfile', handler_method='service.handler.create_seeker_profile',
+                              resource=seeker_id_profile, http_method="POST", member_name="add_seeker_profile_api_lambda")
 
     def __create_api_authorizer(self, user_pool_arn: str, api: apigw.RestApi) -> apigw.CfnAuthorizer:
         authorizer = apigw.CfnAuthorizer(scope=self, name="JobliApiAuth", id="JobliApiAuth", type="COGNITO_USER_POOLS",
@@ -108,7 +109,7 @@ class JobliServiceEnvironment(core.Construct):
         setattr(self, member_name, new_api_lambda)
 
     def __create_lambda_function(self, lambda_name: str, handler: str, role: Role, environment: dict, description: str = '',
-                                 timeout: Duration = Duration.seconds(self._API_HANDLER_LAMBDA_TIMEOUT)) -> Function:
+                                 timeout: Duration = Duration.seconds(_API_HANDLER_LAMBDA_TIMEOUT)) -> Function:
 
         return _lambda.Function(self, lambda_name, runtime=_lambda.Runtime.PYTHON_3_8, code=_lambda.Code.from_asset(self._LAMBDA_ASSET_DIR),
                                 handler=handler, role=role, retry_attempts=0, environment=environment, timeout=timeout,

@@ -38,8 +38,8 @@ def test_create_seeker_profile(endpoint_url, auth_headers):
                                                            address=random_string(), email=random_string())
     headers = {"Content-Type": "application/json"}
     headers.update(auth_headers)
-    seeker_id = 15
-    response = requests.api.post(url=f"{endpoint_url}/api/seekers/{seeker_id}/profile", headers=headers, json=profile_dto.dict())
+
+    response = requests.api.post(url=f"{endpoint_url}/api/seeker/profile", headers=headers, json=profile_dto.dict())
 
     # then assert created
     assert response.status_code == HTTPStatus.CREATED

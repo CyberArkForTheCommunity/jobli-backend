@@ -29,15 +29,21 @@ from service.models.jobli import Jobli
 logger = Logger()
 
 
-# POST /api/seekers/{id}/profile
+
+
+
+# POST /api/seeker/profile
 @logger.inject_lambda_context(log_event=True)
 def create_seeker_profile(event: dict, context: LambdaContext) -> dict:
     try:
+        event: APIGatewayProxyEvent = APIGatewayProxyEvent(event)
+        user_id = event.request_context.authorizer.claims["sub"]
+
         profile_dto: JobSeekerProfileDto = JobSeekerProfileDto.parse_raw(event["body"])
 
         # convert to model
         job_seeker: JobSeeker = JobSeeker()
-        job_seeker.id = event["pathParameters"]["id"]
+        job_seeker.id = user_id
         job_seeker.full_name = profile_dto.full_name
 
         birth_date = datetime(year=profile_dto.birth_year, month=profile_dto.birth_month, day=profile_dto.birth_day)
@@ -54,13 +60,16 @@ def create_seeker_profile(event: dict, context: LambdaContext) -> dict:
     except Exception as err:
         return _build_error_response(err)
 
-# PUT /api/seekers/{id}/profile
+# PUT /api/seeker/profile
 @logger.inject_lambda_context(log_event=True)
-def create_seeker_profile(event: dict, context: LambdaContext) -> dict:
+def update_seeker_profile(event: dict, context: LambdaContext) -> dict:
     try:
+        event: APIGatewayProxyEvent = APIGatewayProxyEvent(event)
+        user_id = event.request_context.authorizer.claims["sub"]
+
         profile_dto: JobSeekerProfileDto = JobSeekerProfileDto.parse_raw(event["body"])
 
-        job_seeker_id = event["pathParameters"]["id"]
+        job_seeker_id = user_id
         # convert to model
         job_seeker: JobSeeker = JobSeeker(**job_seeker_repository.get(job_seeker_id))
 
@@ -79,6 +88,27 @@ def create_seeker_profile(event: dict, context: LambdaContext) -> dict:
         return _build_error_response(err, HTTPStatus.BAD_REQUEST)
     except Exception as err:
         return _build_error_response(err)
+
+
+# GET /api/seeker/profile
+@logger.inject_lambda_context(log_event=True)
+def get_seeker_profile(event: dict, context: LambdaContext) -> dict:
+    try:
+        event: APIGatewayProxyEvent = APIGatewayProxyEvent(event)
+        user_id = event.request_context.authorizer.claims["sub"]
+
+        # convert to model
+        job_seeker = job_seeker_repository.get(user_id)
+
+        #TODO convert to resource
+
+        # return resource
+        return _build_response(http_status=HTTPStatus.OK, body=json.dumps(job_seeker))
+    except (ValidationError, TypeError) as err:
+        return _build_error_response(err, HTTPStatus.BAD_REQUEST)
+    except Exception as err:
+        return _build_error_response(err)
+
 
 # POST /api/seekers/{id}/answers
 @logger.inject_lambda_context(log_event=True)

@@ -96,18 +96,18 @@ class JobliServiceEnvironment(core.Construct):
         #self.__add_get_lambda_integration(jobli_name_resource, user_pool_arn)
 
 
-        seeker_resource: apigw.Resource = api_resource.add_resource("seekers")
-        seeker_id_resource: apigw.Resource = seeker_resource.add_resource("{id}")
+        seeker_resource: apigw.Resource = api_resource.add_resource("seeker")
+        # seeker_id_resource: apigw.Resource = seeker_resource.add_resource("{id}")
 
-        seeker_id_profile: apigw.Resource = seeker_id_resource.add_resource("profile")
+        seeker_id_profile: apigw.Resource = seeker_resource.add_resource("profile")
         self.__add_lambda_api(lambda_name='CreateSeekerProfile', handler_method='service.handler.create_seeker_profile',
                               resource=seeker_id_profile, http_method="POST", member_name="add_seeker_profile_api_lambda")
 
-        seeker_id_profile: apigw.Resource = seeker_id_resource.add_resource("answers")
+        seeker_id_profile: apigw.Resource = seeker_resource.add_resource("answers")
         self.__add_lambda_api(lambda_name='AddSeekerAnswers', handler_method='service.handler.add_seeker_answers',
                               resource=seeker_id_profile, http_method="POST", member_name="add_seeker_answers_api_lambda")
 
-        seeker_id_profile: apigw.Resource = seeker_id_resource.add_resource("experience")
+        seeker_id_profile: apigw.Resource = seeker_resource.add_resource("experience")
         self.__add_lambda_api(lambda_name='AddSeekerExperience', handler_method='service.handler.add_seeker_experience',
                               resource=seeker_id_profile, http_method="POST", member_name="add_seeker_experience_api_lambda")
 

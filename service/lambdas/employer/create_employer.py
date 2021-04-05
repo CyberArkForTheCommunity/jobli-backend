@@ -19,7 +19,7 @@ def create_employer(event: dict, context: LambdaContext) -> dict:
             return {'statusCode': HTTPStatus.BAD_REQUEST,
                     'headers': {'Content-Type': 'application/json'},
                     'body': "Missing employer body to create"}
-        employer: Employer = Employer.parse_obj(event['body'])
+        employer: Employer = Employer.parse_raw(event['body'])
         employer.employer_id = str(uuid.uuid4())
         employer.created_time = datetime.now()
         dynamo_resource = boto3.resource("dynamodb")

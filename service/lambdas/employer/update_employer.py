@@ -23,7 +23,7 @@ def update_employer(event: dict, context: LambdaContext) -> dict:
                     'headers': {'Content-Type': 'application/json'},
                     'body': "Missing employer body to update"}
         employer_id = event['queryStringParameters']['employer_id']
-        employer: Employer = Employer.parse_obj(event['body'])
+        employer: Employer = Employer.parse_raw(event['body'])
         dynamo_resource = boto3.resource("dynamodb")
         employers_table = dynamo_resource.Table('jobli_employers')
         # Get the existing employer to make it exists and get its current details

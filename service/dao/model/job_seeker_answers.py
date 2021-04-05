@@ -2,8 +2,8 @@ from typing import Dict
 
 from service.dao.single_table_service import DATA_DELIMITER, SingleTableRecord
 
-JOB_SEEKER_ANSWERS_PK_PREFIX = "JOB_SEEKER_ANSWERS" + DATA_DELIMITER
-
+JOB_SEEKER_ANSWERS_PK = "JOB_SEEKER_ANSWER"
+JOB_SEEKER_ANSWERS_SK_PREFIX = "JOB_SEEKER_ID"
 
 class JobSeekerAnswers(SingleTableRecord):
     job_seeker_id: str
@@ -20,18 +20,18 @@ class JobSeekerAnswers(SingleTableRecord):
     a10: bool = None
 
     @staticmethod
-    def build_pk(job_seeker_id: str):
-        return JOB_SEEKER_ANSWERS_PK_PREFIX + job_seeker_id
+    def build_pk():
+        return JOB_SEEKER_ANSWERS_PK
 
     @staticmethod
-    def build_sk():
-        return DATA_DELIMITER
+    def build_sk(job_seeker_id: str):
+        return JOB_SEEKER_ANSWERS_SK_PREFIX + DATA_DELIMITER + job_seeker_id
 
     def produce_pk(self) -> str:
-        return self.build_pk(self.job_seeker_id)
+        return self.build_pk()
 
     def produce_sk(self) -> str:
-        return DATA_DELIMITER
+        return self.build_sk(self.job_seeker_id)
 
     def produce_gsi1_pk(self) -> str:
         return None

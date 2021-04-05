@@ -1,7 +1,8 @@
 import logging
+from typing import List
 
+from service.dao.model.job_seeker_answers import JobSeekerAnswers, JOB_SEEKER_ANSWERS_PK, JOB_SEEKER_ANSWERS_SK_PREFIX
 from service.dao.single_table_service import single_table_service
-from service.dao.model.job_seeker import JobSeekerAnswers, JOB_SEEKER_ANSWERS_PK_PREFIX
 
 logger = logging.getLogger(__name__)
 
@@ -17,8 +18,8 @@ class _JobSeekerAnswersRepository:
         logger.debug(f"saving file {job_seeker_answers.__str__()} to db")
         self.__single_table_service.create_item(job_seeker_answers, user)
 
-    def find_best_match_answers(self, answers: [bool], max_results: int) -> dict:
-        results = self.__single_table_service.find_all_by_pk_starts_with(JOB_SEEKER_ANSWERS_PK_PREFIX)
+    def find_best_match_answers(self, answers: List[bool], max_results: int = 100) -> dict:
+        results = self.__single_table_service.find_by_pk_and_sk_begins_with(JOB_SEEKER_ANSWERS_PK, JOB_SEEKER_ANSWERS_SK_PREFIX)
 
         scores = {}
         for item in results:
@@ -27,6 +28,7 @@ class _JobSeekerAnswersRepository:
                 score += (answers[i - 1] == item.get('a' + str(i)))
             scores[item.get('job_seeker_name')] = score
 
+        # in the future it will be better to keep just higher scores up to max_results
         return dict(sorted(scores.items(), key=lambda kv: kv[1], reverse=True)[:max_results])
 
     # def read(self, file_id: str) -> Dict:

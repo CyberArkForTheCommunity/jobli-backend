@@ -67,11 +67,10 @@ class _SingleTableService:
         self.__GSI1_SK: str = "gsi1Sk" # get_env_or_raise(EnvVarNames.TABLE_GSI_1_SK)  # "gsi1Sk"
         self.__region = get_env_or_raise(EnvVarNames.AWS_REGION)
         logger.debug(f"Region is: {self.__region}")
-        application_environment = get_env_or_raise(EnvVarNames.APPLICATION_ENVIRONMENT)
-        table_name_suffix = get_env_or_raise(EnvVarNames.TABLE_NAME_SUFFIX)
+
 
         self.__dynamodb_resource = boto3.resource('dynamodb', region_name=self.__region)
-        self.__table_name = application_environment + "-" + table_name_suffix
+        self.__table_name = get_env_or_raise(EnvVarNames.TABLE_NAME)
 
         logger.debug(f"Table name set to: '{self.__table_name}'")
         self.__table = self.__dynamodb_resource.Table(self.__table_name)

@@ -6,6 +6,7 @@ from aws_lambda_powertools import Logger
 from service.models.employer.employer import Employer
 import uuid
 import boto3
+from datetime import datetime
 
 logger = Logger()
 
@@ -16,6 +17,7 @@ def create_employer(event: dict, context: LambdaContext) -> dict:
     try:
         employer: Employer = Employer.parse_obj(event)
         employer.employer_id = str(uuid.uuid4())
+        employer.created_time = datetime.now()
         dynamo_resource = boto3.resource("dynamodb")
         employers_table = dynamo_resource.Table('jobli_employers')
         employers_table.put_item(Item=employer.dict(exclude_none=True))

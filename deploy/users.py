@@ -44,7 +44,7 @@ def main():
     parser.add_argument('-e', '--email', required=False)
     args = parser.parse_args()
     if args.user_pool_id is None:
-        args.user_pool_id = get_user_pool_id(get_stack_name(BASE_NAME))
+        args.user_pool_id = get_user_pool_id(get_stack_name())
     create_user(args.name, args.password, args.user_pool_id, email=args.email)
 
 

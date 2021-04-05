@@ -4,16 +4,21 @@ from decimal import Decimal
 from http import HTTPStatus
 from typing import List
 from aws_lambda_context import LambdaContext
+import boto3
+from mypy_boto3_cognito_idp import CognitoIdentityProviderClient
+from mypy_boto3_cognito_idp.type_defs import AttributeTypeTypeDef
+from pydantic import ValidationError
 from aws_lambda_powertools import Logger
 from aws_lambda_powertools.logging import logger
 from pydantic import ValidationError
+from aws_lambda_powertools.utilities.data_classes import APIGatewayProxyEvent
 
 from service.dao.job_seeker_repository import job_seeker_repository
 from service.dao.model.job_seeker import JobSeeker
 from service.dtos.job_seeker_profile_dto import JobSeekerProfileDto
 from service.dtos.job_seeker_answer_dto import JobSeekerAnswerDto
 from service.dtos.job_seeker_experience_dto import JobSeekerExperienceDto
-from service.dtos.jobli_dto import JobliDto
+from service.dtos.jobli_dto import JobliDto, UpdateUserTypeDto
 from service.models.jobli import Jobli
 
 logger = Logger()
@@ -182,6 +187,25 @@ def get_jobli(event: dict, context: LambdaContext) -> dict:
             return _build_response(HTTPStatus.NOT_FOUND, body="{ 'message': 'item was not found' }")
         body = item.json()
         return _build_response(HTTPStatus.OK, body)
+    except (ValidationError, TypeError) as err:
+        return _build_error_response(err, HTTPStatus.BAD_REQUEST)
+    except Exception as err:
+        return _build_error_response(err)
+
+# POST /api/users/type
+@logger.inject_lambda_context(log_event=True)
+def set_user_type(event: dict, context: LambdaContext) -> dict:
+    try:
+        event: APIGatewayProxyEvent = APIGatewayProxyEvent(event)
+        user_id = event.request_context.authorizer.claims["sub"]
+        user_name = event.request_context.authorizer.claims["cognito:username"]
+        userpool_id = str(event.request_context.authorizer.claims["iss"]).split("/")[-1]
+        logger.info(f"user id: {user_id}")
+        user_type = UpdateUserTypeDto.parse_raw(event.body)
+
+        client: CognitoIdentityProviderClient = boto3.client("cognito-idp")
+        client.admin_update_user_attributes(UserPoolId=userpool_id, Username=user_name, UserAttributes=[AttributeTypeTypeDef(Name="custom:user_type", Value=user_type.user_type.value)])
+        return _build_response(HTTPStatus.OK, "{}")
     except (ValidationError, TypeError) as err:
         return _build_error_response(err, HTTPStatus.BAD_REQUEST)
     except Exception as err:

@@ -4,8 +4,11 @@ from aws_lambda_context import LambdaContext
 from pydantic import ValidationError
 from aws_lambda_powertools import Logger
 from service.models.employer.employer import Employer
+from service.common.utils import get_env_or_raise
+from service.lambdas.employer.constants import EmployerConstants
 from typing import Dict
 import boto3
+import json
 
 logger = Logger()
 
@@ -14,7 +17,8 @@ logger = Logger()
 @logger.inject_lambda_context(log_event=True)
 def update_employer(event: dict, context: LambdaContext) -> dict:
     try:
-        if 'queryStringParameters' not in event or 'employer_id' not in event['queryStringParameters']:
+        if 'pathParameters' not in event or not event['pathParameters'] \
+                or 'employer_id' not in event['pathParameters']:
             return {'statusCode': HTTPStatus.BAD_REQUEST,
                     'headers': {'Content-Type': 'application/json'},
                     'body': "Missing employer id"}
@@ -22,10 +26,10 @@ def update_employer(event: dict, context: LambdaContext) -> dict:
             return {'statusCode': HTTPStatus.BAD_REQUEST,
                     'headers': {'Content-Type': 'application/json'},
                     'body': "Missing employer body to update"}
-        employer_id = event['queryStringParameters']['employer_id']
+        employer_id = event['pathParameters']['employer_id']
         employer: Employer = Employer.parse_raw(event['body'])
         dynamo_resource = boto3.resource("dynamodb")
-        employers_table = dynamo_resource.Table('jobli_employers')
+        employers_table = dynamo_resource.Table(get_env_or_raise(EmployerConstants.EMPLOYERS_TABLE_NAME))
         # Get the existing employer to make it exists and get its current details
         stored_employer: Dict = employers_table.get_item(Key={"employer_id": employer_id})['Item']
 
@@ -36,11 +40,11 @@ def update_employer(event: dict, context: LambdaContext) -> dict:
         employers_table.update_item(Key={
                 "employer_id": employer_id
             },
-            UpdateExpression="set employer_email=:ee "
-                             "business_name=:bn "
-                             "business_address=:ba "
-                             "business_website=:bw "
-                             "description=:d "
+            UpdateExpression="set employer_email=:ee, "
+                             "business_name=:bn, "
+                             "business_address=:ba, "
+                             "business_website=:bw, "
+                             "description=:d, "
                              "employer_terms=:et",
             ExpressionAttributeValues={
                 ":ee": employer.employer_email,
@@ -55,7 +59,7 @@ def update_employer(event: dict, context: LambdaContext) -> dict:
 
         return {'statusCode': HTTPStatus.CREATED,
                 'headers': {'Content-Type': 'application/json'},
-                'body': stored_employer}
+                'body': Employer.parse_obj(stored_employer).json(exclude_none=True)}
     except (ValidationError, TypeError) as err:
         return {'statusCode': HTTPStatus.BAD_REQUEST,
                 'headers': {'Content-Type': 'application/json'},

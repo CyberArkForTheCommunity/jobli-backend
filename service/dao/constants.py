@@ -25,6 +25,6 @@ class EnvVarNames:
     AWS_ACCOUNT_ID: Final = "AWS_ACCOUNT_ID"
 
     DYNAMO_GSI_1: Final = "DYNAMO_GSI_1"
-    TABLE_NAME: Final = "JOB_SEEKER_TABLE_NAME"
+    TABLE_NAME: Final = "JOB_SEEKERS_TABLE_NAME"
 
 

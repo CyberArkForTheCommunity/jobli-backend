@@ -6,7 +6,7 @@ from datetime import datetime
 from http import HTTPStatus
 import pytest
 from dotenv import load_dotenv
-from tests.helpers.environment_handler import load_env_vars, get_stack_name
+from tests.helpers.environment_handler import get_stack_output, load_env_vars, get_stack_name
 from tests.helpers.random_utils import random_string
 from tests.helpers.cognito_auth_util import add_auth_header
 
@@ -88,3 +88,7 @@ def test_update_jobli(endpoint_url, auth_headers):
     assert now - day_seconds < resource['created_date'] < now + day_seconds
     assert now - day_seconds < resource['updated_date'] < now + day_seconds
     assert resource['created_date'] < resource['updated_date']
+
+def test_amit():
+    seekers_table = get_stack_output(get_stack_name(), 'JobSeekersTableName')
+    pass

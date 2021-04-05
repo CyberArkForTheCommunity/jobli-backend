@@ -9,6 +9,14 @@ FILES_SK1_TYPE_PREFIX = "TYPE" + DATA_DELIMITER
 
 
 class JobSeeker(SingleTableRecord):
+
+    def __init__(self, **kwargs):
+        if 'version' not in kwargs:
+            self.version = 0
+        for attribute, value in kwargs.items():
+            if hasattr(self, attribute):
+                setattr(self, attribute, value)
+
     id: str = None
     full_name: str = None
     birth_date: Decimal = None
@@ -19,6 +27,9 @@ class JobSeeker(SingleTableRecord):
     email: str = None
     languages: List[str] = None
 
+    creationTime: str = None
+    lastUpdatedBy: str = None
+    version: int = 0
     # skills: List[Skill] = None
 
     # education_institutes: List[EducationInstitute] = None

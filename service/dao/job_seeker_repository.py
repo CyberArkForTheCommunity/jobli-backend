@@ -1,11 +1,13 @@
 import logging
 from typing import Dict
 
+from aws_lambda_powertools import Logger
+
 from service.common.exceptions import NotFoundError
 from service.dao.single_table_service import single_table_service
 from service.dao.model.job_seeker import JobSeeker
 
-logger = logging.getLogger(__name__)
+logger = Logger()
 
 
 class _JobSeekerRepository:

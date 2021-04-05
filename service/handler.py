@@ -1,14 +1,14 @@
-from datetime import datetime
+from datetime import datetime, time
 from decimal import Decimal
 from http import HTTPStatus
 
-import json
-
-from aws_lambda_powertools.logging import logger
 from aws_lambda_context import LambdaContext
-from pydantic import ValidationError
 from aws_lambda_powertools import Logger
+from aws_lambda_powertools.logging import logger
+from pydantic import ValidationError
 
+from service.dao.job_seeker_repository import job_seeker_repository
+from service.dao.model.job_seeker import JobSeeker
 from service.dtos.job_seeker_profile_dto import JobSeekerProfileDto
 from service.dtos.jobli_dto import JobliDto
 from service.models.jobli import Jobli
@@ -23,6 +23,18 @@ def create_seeker_profile(event: dict, context: LambdaContext) -> dict:
         profile_dto: JobSeekerProfileDto = JobliDto.parse_raw(event["body"])
 
         # convert to model
+        job_seeker: JobSeeker = JobSeeker()
+        job_seeker.id = event["pathParameters"]["id"]
+        job_seeker.full_name = profile_dto.full_name
+
+        birth_date = datetime.datetime(year=profile_dto.birth_year, month=profile_dto.birth_month,
+                                       day=profile_dto.birth_day)
+
+        job_seeker.birth_date = time.mktime(birth_date.timetuple())
+        job_seeker.email = profile_dto.email
+        job_seeker.address = profile_dto.address
+
+        job_seeker_repository.update(job_seeker)
 
         # return resource
         return _build_response(http_status=HTTPStatus.CREATED, body="")

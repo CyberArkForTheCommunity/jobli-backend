@@ -62,8 +62,8 @@ class JobliServiceEnvironment(core.Construct):
             removal_policy=core.RemovalPolicy.RETAIN
         )
 
-        self.table_job_seekers.add_global_secondary_index(partition_key=aws_dynamodb.Attribute(name='pk1', type=aws_dynamodb.AttributeType.STRING),
-           sort_key=aws_dynamodb.Attribute(name='sk1', type=aws_dynamodb.AttributeType.STRING),
+        self.table_job_seekers.add_global_secondary_index(partition_key=aws_dynamodb.Attribute(name='gsi1Pk', type=aws_dynamodb.AttributeType.STRING),
+           sort_key=aws_dynamodb.Attribute(name='gsi1Sk', type=aws_dynamodb.AttributeType.STRING),
            index_name='GSI1')
 
         core.CfnOutput(self, id="JobSeekersTableName", value=self.table_job_seekers.table_name)

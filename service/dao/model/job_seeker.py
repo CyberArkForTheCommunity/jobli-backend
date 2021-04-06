@@ -19,7 +19,7 @@ class JobSeeker(SingleTableRecord):
 
     id: str = None
     full_name: str = None
-    birth_date: Decimal = None
+    birth_date: int = None
     # city: str = None
     # street: str = None
     # apartment: int = None

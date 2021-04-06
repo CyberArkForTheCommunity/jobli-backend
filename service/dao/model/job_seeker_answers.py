@@ -15,8 +15,8 @@ class JobSeekerAnswers(SingleTableRecord):
             if hasattr(self, attribute):
                 setattr(self, attribute, value)
 
-    job_seeker_id: str
-    job_seeker_name: str
+    job_seeker_id: str = None
+    job_seeker_name: str = None
     a1: bool = None
     a2: bool = None
     a3: bool = None

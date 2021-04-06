@@ -110,7 +110,7 @@ def get_seeker_profile(event: dict, context: LambdaContext) -> dict:
         return _build_error_response(err)
 
 
-# GET /api/seekers/relevant-jobs
+# GET /api/seeker/relevant-jobs
 @logger.inject_lambda_context(log_event=True)
 def search_relevant_jobs(event: dict, context: LambdaContext) -> dict:
     try:
@@ -135,7 +135,7 @@ def search_relevant_jobs(event: dict, context: LambdaContext) -> dict:
         search_results = jobs_repository.get_jobs(answers_arr, 100)
 
         # return resource
-        return _build_response(http_status=HTTPStatus.CREATED, body=json.dumps(search_results))
+        return _build_response(http_status=HTTPStatus.OK, body=json.dumps(search_results))
     except (ValidationError, TypeError) as err:
         return _build_error_response(err, HTTPStatus.BAD_REQUEST)
 

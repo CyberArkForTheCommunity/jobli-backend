@@ -20,7 +20,7 @@ class _JobsRepository:
         for item in results:
             score = 0
             for i in range(1, 10):
-                score += (answers[i - 1] == item.get('a' + str(i)))
+                score += (answers[i - 1] == item.answers[i - 1].answer)
             jobs.append(JobSearchResult(score=score, employer_job=item))
         return sorted(jobs, key=lambda x: x.score, reverse=True)[:max_results]
 

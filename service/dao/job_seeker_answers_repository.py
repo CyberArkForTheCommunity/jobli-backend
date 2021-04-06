@@ -1,8 +1,9 @@
-from aws_lambda_powertools import Logger
-from typing import List
+from typing import List, Dict
 
+from aws_lambda_powertools import Logger
 from pydantic import BaseModel
 
+from service.common.exceptions import NotFoundError
 from service.dao.model.job_seeker_answers import JobSeekerAnswers, JOB_SEEKER_ANSWERS_PK, JOB_SEEKER_ANSWERS_SK_PREFIX
 from service.dao.single_table_service import single_table_service
 
@@ -25,6 +26,14 @@ class _JobSeekerAnswersRepository:
         #     user = SessionContext.get_user_name()
         logger.debug(f"saving file {job_seeker_answers.__str__()} to db")
         self.__single_table_service.create_item(job_seeker_answers, user)
+
+    def get_by_seeker_id(self, job_seeker_id: str) -> Dict:
+        result_dict = self.__single_table_service.find_by_pk_and_sk(JobSeekerAnswers.build_pk(),
+                                                                    JobSeekerAnswers.build_sk(job_seeker_id))
+        if not result_dict:
+            raise NotFoundError(f"JobSeeker with id='{job_seeker_id}' answers not found")
+
+        return result_dict
 
     def find_best_match_answers(self, answers: List[bool], max_results: int = 100) -> List[SearchResult]:
 

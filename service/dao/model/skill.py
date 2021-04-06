@@ -4,6 +4,14 @@ from service.dao.single_table_service import SingleTableRecord
 
 
 class Skill(SingleTableRecord):
+
+    def __init__(self, **kwargs):
+        if 'version' not in kwargs:
+            self.version = 0
+        for attribute, value in kwargs.items():
+            if hasattr(self, attribute):
+                setattr(self, attribute, value)
+
     def produce_pk(self) -> str:
         pass
 
@@ -21,3 +29,7 @@ class Skill(SingleTableRecord):
 
     id: str = None
     name: str = None
+
+    creationTime: str = None
+    lastUpdatedBy: str = None
+    version: int = 0

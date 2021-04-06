@@ -31,18 +31,19 @@ def auth_headers():
     return add_auth_header()
 
 
-def test_create_seeker_profile(endpoint_url, auth_headers):
+def test_create_or_update_seeker_profile(endpoint_url, auth_headers):
     # when create entity
 
-    profile_dto: JobSeekerProfileDto = JobSeekerProfileDto(full_name=random_string(), birth_year=1, birth_month=1, birth_day=1,
+
+    profile_dto: JobSeekerProfileDto = JobSeekerProfileDto(full_name=random_string(), birth_year=1970, birth_month=1, birth_day=1,
                                                            address=random_string(), email=random_string())
     headers = {"Content-Type": "application/json"}
     headers.update(auth_headers)
-    seeker_id = 15
-    response = requests.api.post(url=f"{endpoint_url}/api/{seeker_id}/profile", headers=headers, json=profile_dto.dict())
+
+    response = requests.api.put(url=f"{endpoint_url}/api/seeker/profile", headers=headers, json=profile_dto.dict())
 
     # then assert created
-    assert response.status_code == HTTPStatus.CREATED
+    assert response.status_code == HTTPStatus.OK
     # # assert created_date & updated_date was initialize
     # resource = json.loads(response.content)
     # assert resource['full_name'] == profile_dto.full_name

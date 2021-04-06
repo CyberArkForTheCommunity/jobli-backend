@@ -5,7 +5,16 @@ from service.dao.single_table_service import DATA_DELIMITER, SingleTableRecord
 JOB_SEEKER_ANSWERS_PK = "JOB_SEEKER_ANSWER"
 JOB_SEEKER_ANSWERS_SK_PREFIX = "JOB_SEEKER_ID"
 
+
 class JobSeekerAnswers(SingleTableRecord):
+
+    def __init__(self, **kwargs):
+        if 'version' not in kwargs:
+            self.version = 0
+        for attribute, value in kwargs.items():
+            if hasattr(self, attribute):
+                setattr(self, attribute, value)
+
     job_seeker_id: str
     job_seeker_name: str
     a1: bool = None
@@ -18,6 +27,10 @@ class JobSeekerAnswers(SingleTableRecord):
     a8: bool = None
     a9: bool = None
     a10: bool = None
+
+    creationTime: str = None
+    lastUpdatedBy: str = None
+    version: int = 0
 
     @staticmethod
     def build_pk():

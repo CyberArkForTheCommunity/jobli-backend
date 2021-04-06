@@ -13,9 +13,15 @@ class JobliAuth(core.Construct):
     # pylint: disable=redefined-builtin,invalid-name
     def __init__(self, scope: core.Construct, id: str) -> None:
         super().__init__(scope, id)
+        
+        client_id = os.getenv('GOOGLE_CLIENT_ID')
+        client_secret = os.getenv('GOOGLE_CLIENT_SECRET')
+        if client_id is None or client_secret is None:
+            print('Missing GOOGLE_CLIENT_ID or/and GOOGLE_CLIENT_SECRET environment varibles, please add them to .env file')
+            exit(1)
 
-        google_client_id = CfnParameter(scope, 'GoogleClientId', no_echo=True, default=os.getenv('GOOGLE_CLIENT_ID'))
-        google_client_secret = CfnParameter(scope, 'GoogleClientSecret', no_echo=True, default=os.getenv('GOOGLE_CLIENT_SECRET'))
+        google_client_id = CfnParameter(scope, 'GoogleClientId', no_echo=True, default=client_id)
+        google_client_secret = CfnParameter(scope, 'GoogleClientSecret', no_echo=True, default=client_secret)
 
         self.user_pool = UserPool(self, "UsersPool", sign_in_aliases=aws_cognito.SignInAliases(username=True), custom_attributes={"user_type": StringAttribute(max_len=256, mutable=True)})
         cfn_user_pool: CfnUserPool = self.user_pool.node.default_child

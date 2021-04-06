@@ -26,3 +26,4 @@ class EmployerJob(BaseModel):
     job_salary: Optional[int] = Field(description="Optional job salary")
     job_experience_needed: Optional[str] = Field(description="Experience needed for the job")
     created_time: Optional[Decimal] = Field(description="Creation time of the employer job")
+    job_media: Optional[List[str]] = Field(description="List of media urls")

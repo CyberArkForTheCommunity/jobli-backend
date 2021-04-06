@@ -25,7 +25,11 @@ def get_employer_job_by_id(event: dict, context: LambdaContext) -> dict:
         dynamo_resource = boto3.resource("dynamodb")
         jobs_table = dynamo_resource.Table(get_env_or_raise(EmployerConstants.JOBS_TABLE_NAME))
         job: EmployerJob = EmployerJob.parse_obj(jobs_table.get_item(
-            Key={"employer_id": employer_id, 'job_id': job_id}).get('Item', {}))
+            Key={'job_id': job_id}).get('Item', {}))
+        if job.employer_id != employer_id:
+            return {'statusCode': HTTPStatus.BAD_REQUEST,
+                    'headers': EmployerConstants.HEADERS,
+                    'body': "Invalid employer id"}
         return {'statusCode': HTTPStatus.OK,
                 'headers': EmployerConstants.HEADERS,
                 'body': job.json(exclude_none=True)}

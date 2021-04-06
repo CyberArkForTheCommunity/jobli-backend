@@ -8,7 +8,7 @@ from aws_cdk.aws_apigateway import Resource
 from aws_cdk.core import Duration, CfnResource
 from aws_cdk.aws_iam import Role
 from aws_cdk.aws_lambda import Function
-from aws_cdk import (core, aws_iam as iam, aws_apigateway as apigw, aws_lambda as _lambda, aws_dynamodb)
+from aws_cdk import (core, aws_iam as iam, aws_apigateway as apigw, aws_lambda as _lambda, aws_dynamodb, aws_s3)
 
 sys.path.append(os.getcwd())
 
@@ -62,6 +62,22 @@ class JobliServiceEnvironment(core.Construct):
         )
         self.employers_table.grant_read_write_data(self.service_role)
 
+        self.employers_media_bucket = aws_s3.Bucket(self, "jobli-employers-media",
+                                                    removal_policy=core.RemovalPolicy.DESTROY,
+                                                    versioned=True,
+                                                    auto_delete_objects=True,
+                                                    cors=[
+                                                        aws_s3.CorsRule(
+                                                            allowed_methods=[HttpMethods.GET,
+                                                                             HttpMethods.PUT,
+                                                                             HttpMethods.POST,
+                                                                             HttpMethods.DELETE],
+                                                            allowed_origins=[
+                                                            "*"
+                                                        ])
+                                                    ])
+        self.employers_media_bucket.grant_read_write(self.service_role)
+
         self.jobs_table = aws_dynamodb.Table(
             self,
             'jobli-jobs',
@@ -105,7 +121,8 @@ class JobliServiceEnvironment(core.Construct):
             "JOBLI_USER_POOL_ARN": user_pool_arn,
             "JOB_SEEKERS_TABLE_NAME": self.table_job_seekers.table_name,
             "EMPLOYERS_TABLE_NAME": self.employers_table.table_name,
-            "JOBS_TABLE_NAME": self.jobs_table.table_name
+            "JOBS_TABLE_NAME": self.jobs_table.table_name,
+            "EMPLOYERS_MEDIA_BUCKET_NAME": self.employers_media_bucket.bucket_name
         }
 
         # Base Resources API
@@ -118,6 +135,10 @@ class JobliServiceEnvironment(core.Construct):
         jobli_employers_by_id_resource: apigw.Resource = jobli_employers_resource.add_resource("{employer_id}")
         jobli_jobs_resource: apigw.Resource = jobli_employers_by_id_resource.add_resource("jobs")
         jobli_job_id_resource: apigw.Resource = jobli_jobs_resource.add_resource("{job_id}")
+        jobli_job_id_answers_resource: apigw.Resource = jobli_job_id_resource.add_resource("answers")
+        jobli_job_id_media_resource: apigw.Resource = jobli_job_id_resource.add_resource("media")
+        jobli_job_id_media_start_resource: apigw.Resource = jobli_job_id_media_resource.add_resource("start")
+        jobli_job_id_media_finish_resource: apigw.Resource = jobli_job_id_media_resource.add_resource("finish")
 
         # Seekers API
         seekers_resource: apigw.Resource = api_resource.add_resource("seekers")
@@ -211,7 +232,13 @@ class JobliServiceEnvironment(core.Construct):
                               resource=jobli_job_id_resource, http_method=HttpMethods.GET, member_name="get_employer_jobs")
         self.__add_lambda_api(lambda_name='UpdateJobliEmployerJobAnswers',
                               handler_method='service.lambdas.employer.update_employer_job_answers.update_employer_job_answers',
-                              resource=jobli_job_id_resource, http_method=HttpMethods.PUT, member_name="update_employer_job_answers")
+                              resource=jobli_job_id_answers_resource, http_method=HttpMethods.PUT, member_name="update_employer_job_answers")
+        self.__add_lambda_api(lambda_name='StartJobliEmployerJobMedia',
+                              handler_method='service.lambdas.employer.start_employer_job_upload_media.start_employer_job_upload_media',
+                              resource=jobli_job_id_media_start_resource, http_method=HttpMethods.GET, member_name="start_employer_job_upload_media")
+        self.__add_lambda_api(lambda_name='FinishJobliEmployerJobMedia',
+                              handler_method='service.lambdas.employer.finish_employer_job_upload_media.finish_employer_job_upload_media',
+                              resource=jobli_job_id_media_finish_resource, http_method=HttpMethods.PUT, member_name="finish_employer_job_upload_media")
 
         # User Type REST
         self.__add_lambda_api(lambda_name="SetUserType", handler_method="service.handler.set_user_type",

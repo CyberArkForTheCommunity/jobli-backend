@@ -4,6 +4,10 @@ import time
 from datetime import datetime, timedelta
 import decimal
 
+import boto3
+import botocore
+
+
 from service.common.exceptions import MissingEnvironmentVariableError
 
 
@@ -79,3 +83,19 @@ def timeit(method):
         return result
 
     return timed
+
+
+def s3_exists(bucket_name: str, key: str) -> bool:
+    s3 = boto3.resource('s3')
+    try:
+        s3.Object(bucket_name, key).load()
+    except botocore.exceptions.ClientError as e:
+        return False
+    return True
+
+
+def s3_mkdir(bucket_name: str, directory_name: str) -> None:
+    if directory_name[-1] != "/":
+        directory_name += "/"
+    s3 = boto3.client('s3')
+    s3.put_object(Bucket=bucket_name, Key=directory_name)

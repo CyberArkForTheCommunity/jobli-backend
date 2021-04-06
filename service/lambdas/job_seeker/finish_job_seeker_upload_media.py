@@ -4,21 +4,23 @@ from aws_lambda_context import LambdaContext
 from service.common.utils import get_env_or_raise, s3_exists
 from pydantic import ValidationError
 from service.lambdas.employer.constants import EmployerConstants
-from service.models.employer.employer_job import EmployerJob
+from service.dao.constants import EnvVarNames
+from service.dao.job_seeker_repository import _JobSeekerRepository
 from aws_lambda_powertools import Logger
-import boto3
+from typing import Dict
+from service.models.job_seeker_resource import JobSeeker
 import mimetypes
 mimetypes.init()
 
 logger = Logger()
 
 
-# GET /api/employers/{employer_id}/jobs/{job_id}/media/finish
+# GET /api/seeker/{id}/media/finish
 @logger.inject_lambda_context(log_event=True)
-def finish_employer_job_upload_media(event: dict, context: LambdaContext) -> dict:
+def finish_job_seeker_upload_media(event: dict, context: LambdaContext) -> dict:
     try:
         if 'pathParameters' not in event or not event['pathParameters'] \
-                or 'employer_id' not in event['pathParameters'] or 'job_id' not in event['pathParameters']:
+                or 'id' not in event['pathParameters']:
             return {'statusCode': HTTPStatus.BAD_REQUEST,
                     'headers': EmployerConstants.HEADERS,
                     'body': "Missing employer/job path params"}
@@ -27,45 +29,31 @@ def finish_employer_job_upload_media(event: dict, context: LambdaContext) -> dic
             return {'statusCode': HTTPStatus.BAD_REQUEST,
                     'headers': EmployerConstants.HEADERS,
                     'body': "Missing file_name in query"}
-        employer_id = event['pathParameters']['employer_id']
-        job_id = event['pathParameters']['job_id']
+        job_seeker_id = event['pathParameters']['id']
         file_name = event['queryStringParameters']['file_name']
         mime: str = mimetypes.guess_type(file_name)[0]
         if not mime or mime.split("/")[0] not in ['audio', 'video', 'image']:
             return {'statusCode': HTTPStatus.BAD_REQUEST,
                     'headers': EmployerConstants.HEADERS,
                     'body': "Filename is not of media type"}
-        dynamo_resource = boto3.resource("dynamodb")
-        jobs_table = dynamo_resource.Table(get_env_or_raise(EmployerConstants.JOBS_TABLE_NAME))
-        job: EmployerJob = EmployerJob.parse_obj(jobs_table.get_item(
-            Key={'job_id': job_id}).get('Item', {}))
-        if job.employer_id != employer_id:
-            return {'statusCode': HTTPStatus.BAD_REQUEST,
-                    'headers': EmployerConstants.HEADERS,
-                    'body': "Invalid employer id"}
-        bucket_name = get_env_or_raise(EmployerConstants.EMPLOYERS_MEDIA_BUCKET_NAME)
-        if not s3_exists(bucket_name, f"{employer_id}/{job_id}/{file_name}"):
+        dao: _JobSeekerRepository = _JobSeekerRepository()
+        job_seeker: Dict = dao.get(job_seeker_id)
+        bucket_name = get_env_or_raise(EnvVarNames.JOB_SEEKERS_MEDIA_BUCKET)
+        if not s3_exists(bucket_name, f"{job_seeker_id}/{file_name}"):
             return {'statusCode': HTTPStatus.FAILED_DEPENDENCY,
                     'headers': EmployerConstants.HEADERS,
                     'body': f"File was not uploaded yet "
-                            f"[{employer_id}/{job_id}/{file_name}] on bucket [{bucket_name}]"}
+                            f"{job_seeker_id}/{file_name}] on bucket [{bucket_name}]"}
         # Update the dynamo record for the job
-        if not job.job_media:
-            job.job_media = []
-        job.job_media.append(f"s3://{bucket_name}/"
-                             f"{employer_id}/{job_id}/{file_name}")
-        jobs_table.update_item(Key={
-                "job_id": job_id
-            },
-            UpdateExpression="set job_media=:jm",
-            ExpressionAttributeValues={
-                ":jm": job.job_media,
-            },
-            ReturnValues="UPDATED_NEW"
-        )
+        if 'media' not in job_seeker:
+            job_seeker['media'] = []
+        job_seeker['media'].append(f"s3://{bucket_name}/"
+                                   f"{job_seeker_id}/{file_name}")
+        job_seeker_model = JobSeeker.parse_obj(job_seeker)
+        dao.update(job_seeker_model)
         return {'statusCode': HTTPStatus.OK,
                 'headers': EmployerConstants.HEADERS,
-                'body': job.json(exclude_none=True)}
+                'body': job_seeker_model.json(exclude_none=True)}
     except (ValidationError, TypeError) as err:
         return {'statusCode': HTTPStatus.BAD_REQUEST,
                 'headers': EmployerConstants.HEADERS,

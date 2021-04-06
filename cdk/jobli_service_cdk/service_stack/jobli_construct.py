@@ -145,6 +145,9 @@ class JobliServiceEnvironment(core.Construct):
         seekers_id_resource: apigw.Resource = seekers_resource.add_resource("{id}")
         seekers_id_profile: apigw.Resource = seekers_id_resource.add_resource("profile")
         seekers_id_answers: apigw.Resource = seekers_id_resource.add_resource("answers")
+        seeker_id_media_resource: apigw.Resource = seekers_id_resource.add_resource("media")
+        seeker_id_media_start_resource: apigw.Resource = seeker_id_media_resource.add_resource("start")
+        seeker_id_media_finish_resource: apigw.Resource = seeker_id_media_resource.add_resource("finish")
 
         # Seekers REST's
         self.__add_lambda_api(lambda_name='CreateOrUpdateSeekerProfileWithId',
@@ -161,6 +164,13 @@ class JobliServiceEnvironment(core.Construct):
                               handler_method='service.handler.add_seeker_answers_with_id',
                               resource=seekers_id_answers, http_method=HttpMethods.POST,
                               member_name="add_seeker_answers_with_id_api_lambda")
+        self.__add_lambda_api(lambda_name='StartJobliSeekerMedia',
+                              handler_method='service.lambdas.job_seeker.start_job_seeker_upload_media.start_job_seeker_upload_media',
+                              resource=seeker_id_media_start_resource, http_method=HttpMethods.GET, member_name="start_job_seeker_upload_media")
+        self.__add_lambda_api(lambda_name='FinishJobliSeekerMedia',
+                              handler_method='service.lambdas.job_seeker.finish_job_seeker_upload_media.finish_job_seeker_upload_media',
+                              resource=seeker_id_media_finish_resource, http_method=HttpMethods.PUT, member_name="finish_job_seeker_upload_media")
+
 
 
         #Without id

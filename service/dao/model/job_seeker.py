@@ -32,6 +32,8 @@ class JobSeeker(BaseModel, SingleTableRecord):
     lastUpdatedTime: Optional[str]
     version: int = 0
 
+    media: Optional[List[str]]
+
     # skills: List[Skill] = None
 
     # education_institutes: List[EducationInstitute] = None

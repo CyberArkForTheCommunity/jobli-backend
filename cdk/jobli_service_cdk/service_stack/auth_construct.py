@@ -13,9 +13,15 @@ class JobliAuth(core.Construct):
     # pylint: disable=redefined-builtin,invalid-name
     def __init__(self, scope: core.Construct, id: str) -> None:
         super().__init__(scope, id)
+        
+        client_id = os.getenv('GOOGLE_CLIENT_ID')
+        client_secret = os.getenv('GOOGLE_CLIENT_SECRET')
+        if client_id is None or client_secret is None:
+            print('Missing GOOGLE_CLIENT_ID or/and GOOGLE_CLIENT_SECRET environment varibles, please add them to .env file')
+            exit(1)
 
-        google_client_id = CfnParameter(scope, 'GoogleClientId', no_echo=True, default=os.getenv('GOOGLE_CLIENT_ID'))
-        google_client_secret = CfnParameter(scope, 'GoogleClientSecret', no_echo=True, default=os.getenv('GOOGLE_CLIENT_SECRET'))
+        google_client_id = CfnParameter(scope, 'GoogleClientId', no_echo=True, default=client_id)
+        google_client_secret = CfnParameter(scope, 'GoogleClientSecret', no_echo=True, default=client_secret)
 
         self.user_pool = UserPool(self, "UsersPool", sign_in_aliases=aws_cognito.SignInAliases(username=True), custom_attributes={"user_type": StringAttribute(max_len=256, mutable=True)})
         cfn_user_pool: CfnUserPool = self.user_pool.node.default_child
@@ -32,16 +38,16 @@ class JobliAuth(core.Construct):
         self.user_pool_identity_provider = UserPoolIdentityProviderGoogle(self, "JobliGoogleIdentityProvider", 
                                                                             client_id=google_client_id.value_as_string,
                                                                             client_secret=google_client_secret.value_as_string,
-                                                                            scopes=['profile', 'email', 'openid'], user_pool=self.user_pool,
+                                                                            scopes=['profile', 'email', 'openid', 'phone'], user_pool=self.user_pool,
                                                                             attribute_mapping=AttributeMapping(email=ProviderAttribute.GOOGLE_EMAIL))
         self.user_pool_client = UserPoolClient(
             self,
             "PoolClient",
             user_pool=self.user_pool,
             auth_flows=AuthFlow(admin_user_password=True, user_password=True), 
-            o_auth=OAuthSettings(callback_urls=['https://google.com'], 
+            o_auth=OAuthSettings(callback_urls=['jobli://', 'exp://127.0.0.1:19000/--/', 'http://localhost:19006/'], 
             flows=OAuthFlows(authorization_code_grant=True, implicit_code_grant=True), 
-            scopes=[OAuthScope.PHONE, OAuthScope.EMAIL, OAuthScope.OPENID, OAuthScope.COGNITO_ADMIN]),
+            scopes=[OAuthScope.PHONE, OAuthScope.EMAIL, OAuthScope.OPENID, OAuthScope.COGNITO_ADMIN, OAuthScope.PROFILE]),
             supported_identity_providers=[UserPoolClientIdentityProvider.GOOGLE] 
             )
         

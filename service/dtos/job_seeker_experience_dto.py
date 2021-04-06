@@ -10,6 +10,7 @@ class JobSeekerExperienceDto(BaseModel):
     job_description: str
 
     # pylint: disable=no-self-argument,no-self-use,invalid-name
+    # noinspection PyMethodParameters
     @validator('workplace_name')
     def validate_changes(cls, v):
         if not v:

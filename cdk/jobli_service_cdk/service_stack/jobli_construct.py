@@ -113,31 +113,85 @@ class JobliServiceEnvironment(core.Construct):
         users_resource: apigw.Resource = api_resource.add_resource("users")
         update_type: apigw.Resource = users_resource.add_resource("type")
 
-        # Seekers API
-        seekers_resource: apigw.Resource = api_resource.add_resource("seekers")
-        seekers_id_resource: apigw.Resource = seekers_resource.add_resource("{id}")
-        seeker_resource: apigw.Resource = api_resource.add_resource("seeker")
-        seeker_profile_resource: apigw.Resource = seeker_resource.add_resource("profile")
-        seeker_answers_resource: apigw.Resource = seeker_resource.add_resource("answers")
-        seeker_experience_resource: apigw.Resource = seeker_resource.add_resource("experience")
-
         # Employers API
         jobli_employers_resource: apigw.Resource = api_resource.add_resource("employers")
         jobli_employers_by_id_resource: apigw.Resource = jobli_employers_resource.add_resource("{employer_id}")
         jobli_jobs_resource: apigw.Resource = jobli_employers_by_id_resource.add_resource("jobs")
         jobli_job_id_resource: apigw.Resource = jobli_jobs_resource.add_resource("{job_id}")
 
+        # Seekers API
+        seekers_resource: apigw.Resource = api_resource.add_resource("seekers")
+        seekers_id_resource: apigw.Resource = seekers_resource.add_resource("{id}")
+        seekers_id_profile: apigw.Resource = seekers_id_resource.add_resource("profile")
+        seekers_id_answers: apigw.Resource = seekers_id_resource.add_resource("answers")
+
         # Seekers REST's
         self.__add_lambda_api(lambda_name='CreateOrUpdateSeekerProfileWithId',
                               handler_method='service.handler.create_or_update_seeker_profile_with_id',
-                              resource=seekers_id_resource, http_method=HttpMethods.PUT,
+                              resource=seekers_id_profile, http_method=HttpMethods.PUT,
                               member_name="add_seeker_profile_with_id_api_lambda")
+
+        self.__add_lambda_api(lambda_name='GetSeeekerWithId',
+                              handler_method='service.handler.get_seeker_profile_with_id',
+                              resource=seekers_id_profile, http_method=HttpMethods.GET,
+                              member_name="get_seeker_with_id_api_lambda")
+
+        self.__add_lambda_api(lambda_name='AddSeeekerAnswersWithId',
+                              handler_method='service.handler.add_seeker_answers_with_id',
+                              resource=seekers_id_answers, http_method=HttpMethods.POST,
+                              member_name="add_seeker_answers_with_id_api_lambda")
+
+
+        #Without id
+
+        seeker_resource: apigw.Resource = api_resource.add_resource("seeker")
+
+        seeker_profile: apigw.Resource = seeker_resource.add_resource("profile")
         self.__add_lambda_api(lambda_name='CreateOrUpdateSeekerProfile', handler_method='service.handler.create_or_update_seeker_profile',
-                              resource=seeker_profile_resource, http_method=HttpMethods.PUT, member_name="add_seeker_profile_api_lambda")
+                              resource=seeker_profile, http_method=HttpMethods.PUT, member_name="add_seeker_profile_api_lambda")
+
+        self.__add_lambda_api(lambda_name='GetSeeeker',
+                              handler_method='service.handler.get_seeker_profile',
+                              resource=seeker_profile, http_method=HttpMethods.GET,
+                              member_name="get_seeker_api_lambda")
+
+        seeker_answers: apigw.Resource = seeker_resource.add_resource("answers")
         self.__add_lambda_api(lambda_name='AddSeekerAnswers', handler_method='service.handler.add_seeker_answers',
-                              resource=seeker_answers_resource, http_method=HttpMethods.POST, member_name="add_seeker_answers_api_lambda")
+                              resource=seeker_answers, http_method=HttpMethods.POST, member_name="add_seeker_answers_api_lambda")
+
+        seeker_experience: apigw.Resource = seeker_resource.add_resource("experience")
         self.__add_lambda_api(lambda_name='AddSeekerExperience', handler_method='service.handler.add_seeker_experience',
-                              resource=seeker_experience_resource, http_method=HttpMethods.POST, member_name="add_seeker_experience_api_lambda")
+                              resource=seeker_experience, http_method=HttpMethods.POST, member_name="add_seeker_experience_api_lambda")
+
+        seeker_languages: apigw.Resource = seeker_resource.add_resource("languages")
+        self.__add_lambda_api(lambda_name='AddSeekerLanguages', handler_method='service.handler.add_seeker_languages',
+                              resource=seeker_languages, http_method=HttpMethods.POST, member_name="add_seeker_languages_api_lambda")
+
+        seeker_summary: apigw.Resource = seeker_resource.add_resource("summary")
+        self.__add_lambda_api(lambda_name='GetSeeekerSummary',
+                              handler_method='service.handler.get_seeker_summary',
+                              resource=seeker_summary, http_method=HttpMethods.GET,
+                              member_name="get_seeker_summary_api_lambda")
+
+        self.__add_lambda_api(lambda_name='ListSeeekers',
+                              handler_method='service.handler.list_seekers',
+                              resource=seekers_resource, http_method=HttpMethods.GET,
+                              member_name="list_seekers_api_lambda")
+
+        # seeker_resource: apigw.Resource = api_resource.add_resource("seekers")
+        # seeker_id_resource: apigw.Resource = seeker_resource.add_resource("{id}")
+        #
+        # seeker_id_profile: apigw.Resource = seeker_id_resource.add_resource("profile")
+        # self.__add_lambda_api(lambda_name='CreateSeekerProfile', handler_method='service.handler.create_seeker_profile',
+        #                       resource=seeker_id_profile, http_method="POST", member_name="add_seeker_profile_api_lambda")
+        #
+        # seeker_id_answers: apigw.Resource = seeker_id_resource.add_resource("answers")
+        # self.__add_lambda_api(lambda_name='AddSeekerAnswers', handler_method='service.handler.add_seeker_answers',
+        #                       resource=seeker_id_answers, http_method="POST", member_name="add_seeker_answers_api_lambda")
+        #
+        # seeker_id_experience: apigw.Resource = seeker_id_resource.add_resource("experience")
+        # self.__add_lambda_api(lambda_name='AddSeekerExperience', handler_method='service.handler.add_seeker_experience',
+        #                       resource=seeker_id_experience, http_method="POST", member_name="add_seeker_experience_api_lambda")
 
         # Employers REST's
         self.__add_lambda_api(lambda_name='CreateJobliEmployer', handler_method='service.lambdas.employer.create_employer.create_employer',

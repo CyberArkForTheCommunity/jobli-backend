@@ -1,4 +1,3 @@
-import logging
 from abc import abstractmethod
 from typing import Dict, List, Optional
 
@@ -12,6 +11,7 @@ from service.dao.utils import get_env_or_raise, TimeUtils
 logger = Logger()
 
 DATA_DELIMITER = "#"
+
 
 class SingleTableRecord(object):
     def __init__(self):
@@ -29,11 +29,11 @@ class SingleTableRecord(object):
         pass
 
     @abstractmethod
-    def produce_gsi1_sk(self) -> str:
+    def produce_gsi1_sk(self) -> Optional[str]:
         pass
 
     @abstractmethod
-    def produce_gsi1_pk(self) -> str:
+    def produce_gsi1_pk(self) -> Optional[str]:
         pass
 
     @abstractmethod
@@ -61,14 +61,13 @@ class _SingleTableService:
         if self.__initialized:
             return
 
-        self.__GSI_1_NAME = "GSI1" # get_env_or_raise(EnvVarNames.DYNAMO_GSI_1)
-        self.__PK: str = "pk" # get_env_or_raise(EnvVarNames.TABLE_PK)  # "pk"
-        self.__SK: str = "sk" # get_env_or_raise(EnvVarNames.TABLE_SK)  # "sk"
-        self.__GSI1_PK: str = "gsi1Pk" # get_env_or_raise(EnvVarNames.TABLE_GSI_1_PK)  # "gsi1Pk"
-        self.__GSI1_SK: str = "gsi1Sk" # get_env_or_raise(EnvVarNames.TABLE_GSI_1_SK)  # "gsi1Sk"
+        self.__GSI_1_NAME = "GSI1"  # get_env_or_raise(EnvVarNames.DYNAMO_GSI_1)
+        self.__PK: str = "pk"  # get_env_or_raise(EnvVarNames.TABLE_PK)  # "pk"
+        self.__SK: str = "sk"  # get_env_or_raise(EnvVarNames.TABLE_SK)  # "sk"
+        self.__GSI1_PK: str = "gsi1Pk"  # get_env_or_raise(EnvVarNames.TABLE_GSI_1_PK)  # "gsi1Pk"
+        self.__GSI1_SK: str = "gsi1Sk"  # get_env_or_raise(EnvVarNames.TABLE_GSI_1_SK)  # "gsi1Sk"
         # self.__region = get_env_or_raise(EnvVarNames.AWS_REGION)
         # logger.debug(f"Region is: {self.__region}")
-
 
         self.__dynamodb_resource = boto3.resource('dynamodb')
         self.__table_name = get_env_or_raise(EnvVarNames.TABLE_NAME)

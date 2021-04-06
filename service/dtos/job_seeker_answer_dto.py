@@ -4,10 +4,11 @@ from pydantic import BaseModel, validator
 
 class JobSeekerAnswerDto(BaseModel):
     key: str
-    question: int
+    question: str
     answer: bool
 
     # pylint: disable=no-self-argument,no-self-use,invalid-name
+    # noinspection PyMethodParameters
     @validator('key')
     def validate_changes(cls, v):
         if not v:

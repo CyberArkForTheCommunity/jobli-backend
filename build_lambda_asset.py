@@ -8,6 +8,7 @@ from typing import List
 import docker
 from docker.types import Mount
 
+import platform
 
 # pylint: disable=print-used
 def timeit(method):

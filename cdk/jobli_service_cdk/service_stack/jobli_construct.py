@@ -173,10 +173,11 @@ class JobliServiceEnvironment(core.Construct):
                               resource=seeker_summary, http_method=HttpMethods.GET,
                               member_name="get_seeker_summary_api_lambda")
 
-        self.__add_lambda_api(lambda_name='ListSeeekers',
-                              handler_method='service.handler.list_seekers',
-                              resource=seekers_resource, http_method=HttpMethods.GET,
-                              member_name="list_seekers_api_lambda")
+        relevant_seekers_resource: apigw.Resource = api_resource.add_resource("list-relevant-seekers")
+        self.__add_lambda_api(lambda_name='ListRelevantSeeekers',
+                              handler_method='service.handler.list_relevant_seekers',
+                              resource=relevant_seekers_resource, http_method=HttpMethods.GET,
+                              member_name="list_relevant_seekers_api_lambda")
 
         # seeker_resource: apigw.Resource = api_resource.add_resource("seekers")
         # seeker_id_resource: apigw.Resource = seeker_resource.add_resource("{id}")

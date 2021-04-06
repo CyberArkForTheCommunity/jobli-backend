@@ -14,7 +14,7 @@ from mypy_boto3_cognito_idp.type_defs import AttributeTypeTypeDef
 from pydantic import ValidationError
 
 from service.common.exceptions import NotFoundError
-from service.dao.job_seeker_answers_repository import job_seeker_answers_repository
+from service.dao.job_seeker_answers_repository import job_seeker_answers_repository, SearchResult
 from service.dao.job_seeker_repository import job_seeker_repository
 from service.dao.model.job_seeker import JobSeeker
 from service.dao.model.job_seeker_answers import JobSeekerAnswers
@@ -142,7 +142,6 @@ def add_seeker_answers(event: dict, context: LambdaContext) -> dict:
         return _build_error_response(err)
 
 
-
 # POST /api/seekers/experience
 @logger.inject_lambda_context(log_event=True)
 def add_seeker_experience(event: dict, context: LambdaContext) -> dict:
@@ -218,18 +217,25 @@ def get_seeker_summary(event: dict, context: LambdaContext) -> dict:
         return _build_error_response(err)
 
 
-# GET /api/seekers/
+# GET /api/list-relevant-seekers/
 @logger.inject_lambda_context(log_event=True)
-def list_seekers(event: dict, context: LambdaContext) -> dict:
+def list_relevant_seekers(event: dict, context: LambdaContext) -> dict:
     try:
+        answer_dto_list: List[JobSeekerAnswerDto] = [JobSeekerAnswerDto.parse_obj(item) for item in
+                                                     json.loads(event["body"])]
+
+        employer_answers: List[bool] = [answer_dto_list[0].answer, answer_dto_list[1].answer, answer_dto_list[2].answer,
+                                        answer_dto_list[3].answer, answer_dto_list[4].answer, answer_dto_list[5].answer,
+                                        answer_dto_list[6].answer, answer_dto_list[7].answer, answer_dto_list[8].answer,
+                                        answer_dto_list[9].answer]
+
         # list seekers models
-        job_seekers = []
+        results: List[SearchResult] = job_seeker_answers_repository.find_best_match_answers(employer_answers)
 
         # convert to seekers resources
-        resources_json_list: List[dict] = [JobSeekerResource(**job_seeker.as_dict()).dict() for job_seeker in
-                                           job_seekers]
+        results_json_list: List[dict] = [result.dict() for result in results]
         # return resource
-        return _build_response(http_status=HTTPStatus.OK, body=json.dumps(resources_json_list))
+        return _build_response(http_status=HTTPStatus.OK, body=json.dumps(results_json_list))
     except (ValidationError, TypeError) as err:
         return _build_error_response(err, HTTPStatus.BAD_REQUEST)
     except Exception as err:
@@ -314,7 +320,6 @@ def add_seeker_answers_with_id(event: dict, context: LambdaContext) -> dict:
         return _build_error_response(err, HTTPStatus.NOT_FOUND)
     except Exception as err:
         return _build_error_response(err)
-
 
 
 # endregion

@@ -5,7 +5,7 @@ from git import Repo
 
 from jobli_service_cdk.service_stack.constants import BASE_NAME
 from aws_cdk.aws_apigateway import Resource
-from aws_cdk.core import Duration
+from aws_cdk.core import Duration, CfnResource
 from aws_cdk.aws_iam import Role
 from aws_cdk.aws_lambda import Function
 from aws_cdk import (core, aws_iam as iam, aws_apigateway as apigw, aws_lambda as _lambda, aws_dynamodb)
@@ -53,15 +53,6 @@ class JobliServiceEnvironment(core.Construct):
         role_output = core.CfnOutput(self, id="JobliServiceRoleArn", value=self.service_role.role_arn)
         role_output.override_logical_id("JobliServiceRoleArn")
 
-        self.employees_table = aws_dynamodb.Table(
-            self,
-            'jobli-employees',
-            partition_key=aws_dynamodb.Attribute(name="id", type=aws_dynamodb.AttributeType.STRING),
-            billing_mode=aws_dynamodb.BillingMode.PAY_PER_REQUEST,
-            removal_policy=core.RemovalPolicy.RETAIN
-        )
-        self.employees_table.grant_read_write_data(self.service_role)
-
         self.employers_table = aws_dynamodb.Table(
             self,
             'jobli-employers',
@@ -83,29 +74,72 @@ class JobliServiceEnvironment(core.Construct):
             index_name='second-index')
         self.jobs_table.grant_read_write_data(self.service_role)
 
+        self.table_job_seekers = aws_dynamodb.Table(
+            self,
+            'jobli-job-seeker',
+            partition_key=aws_dynamodb.Attribute(name="pk", type=aws_dynamodb.AttributeType.STRING),
+            sort_key=aws_dynamodb.Attribute(name="sk", type=aws_dynamodb.AttributeType.STRING),
+            billing_mode=aws_dynamodb.BillingMode.PAY_PER_REQUEST,
+            removal_policy=core.RemovalPolicy.RETAIN
+        )
+        self.table_job_seekers.add_global_secondary_index(partition_key=aws_dynamodb.Attribute(name='gsi1Pk', type=aws_dynamodb.AttributeType.STRING),
+           sort_key=aws_dynamodb.Attribute(name='gsi1Sk', type=aws_dynamodb.AttributeType.STRING),
+           index_name='GSI1')
+
+        job_seekers_table_output = core.CfnOutput(self, id="JobSeekersTableName", value=self.table_job_seekers.table_name)
+        job_seekers_table_output.override_logical_id('JobSeekersTableName')
+
+        self.table_job_seekers.grant_read_write_data(self.service_role)
+
         self.rest_api: apigw.LambdaRestApi = apigw.RestApi(self, "jobli-rest-api", rest_api_name="Jobli Rest API",
-                                                           description="This service handles jobli")
+                                                           description="This service handles jobli API for job seekers and employers")
+
+
         endpoint_output = core.CfnOutput(self, id="JobliApiGw", value=self.rest_api.url)
         endpoint_output.override_logical_id("JobliApiGw")
-        self.api_authorizer: apigw.CfnAuthorizer = self.__create_api_authorizer(user_pool_arn=user_pool_arn, api=self.rest_api)
 
-        api_resource: apigw.Resource = self.rest_api.root.add_resource("api")
-        users_resource: apigw.Resource = api_resource.add_resource("users")
-        update_type: apigw.Resource = users_resource.add_resource("type")
-        jobli_resource: apigw.Resource = self.rest_api.root.add_resource("jobli")
-        jobli_employers_resource: apigw.Resource = jobli_resource.add_resource("employers")
-        jobli_employers_by_id_resource: apigw.Resource = jobli_employers_resource.add_resource("{employer_id}")
-        jobli_jobs_resource: apigw.Resource = jobli_employers_by_id_resource.add_resource("jobs")
-        jobli_job_id_resource: apigw.Resource = jobli_jobs_resource.add_resource("{job_id}")
+        self.api_authorizer: apigw.CfnAuthorizer = self.__create_api_authorizer(user_pool_arn=user_pool_arn, api=self.rest_api)
 
         self.environment = {
             "STACK_NAME": get_stack_name(),
             "JOBLI_USER_POOL_ARN": user_pool_arn,
+            "JOB_SEEKERS_TABLE_NAME": self.table_job_seekers.table_name,
             "EMPLOYERS_TABLE_NAME": self.employers_table.table_name,
             "JOBS_TABLE_NAME": self.jobs_table.table_name
         }
 
-        # Add the employer lambdas / APIGW's
+        # Base Resources API
+        api_resource: apigw.Resource = self.rest_api.root.add_resource("api")
+        users_resource: apigw.Resource = api_resource.add_resource("users")
+        update_type: apigw.Resource = users_resource.add_resource("type")
+
+        # Seekers API
+        seekers_resource: apigw.Resource = api_resource.add_resource("seekers")
+        seekers_id_resource: apigw.Resource = seekers_resource.add_resource("{id}")
+        seeker_resource: apigw.Resource = api_resource.add_resource("seeker")
+        seeker_profile_resource: apigw.Resource = seeker_resource.add_resource("profile")
+        seeker_answers_resource: apigw.Resource = seeker_resource.add_resource("answers")
+        seeker_experience_resource: apigw.Resource = seeker_resource.add_resource("experience")
+
+        # Employers API
+        jobli_employers_resource: apigw.Resource = api_resource.add_resource("employers")
+        jobli_employers_by_id_resource: apigw.Resource = jobli_employers_resource.add_resource("{employer_id}")
+        jobli_jobs_resource: apigw.Resource = jobli_employers_by_id_resource.add_resource("jobs")
+        jobli_job_id_resource: apigw.Resource = jobli_jobs_resource.add_resource("{job_id}")
+
+        # Seekers REST's
+        self.__add_lambda_api(lambda_name='CreateOrUpdateSeekerProfileWithId',
+                              handler_method='service.handler.create_or_update_seeker_profile_with_id',
+                              resource=seekers_id_resource, http_method=HttpMethods.PUT,
+                              member_name="add_seeker_profile_with_id_api_lambda")
+        self.__add_lambda_api(lambda_name='CreateOrUpdateSeekerProfile', handler_method='service.handler.create_or_update_seeker_profile',
+                              resource=seeker_profile_resource, http_method=HttpMethods.PUT, member_name="add_seeker_profile_api_lambda")
+        self.__add_lambda_api(lambda_name='AddSeekerAnswers', handler_method='service.handler.add_seeker_answers',
+                              resource=seeker_answers_resource, http_method=HttpMethods.POST, member_name="add_seeker_answers_api_lambda")
+        self.__add_lambda_api(lambda_name='AddSeekerExperience', handler_method='service.handler.add_seeker_experience',
+                              resource=seeker_experience_resource, http_method=HttpMethods.POST, member_name="add_seeker_experience_api_lambda")
+
+        # Employers REST's
         self.__add_lambda_api(lambda_name='CreateJobliEmployer', handler_method='service.lambdas.employer.create_employer.create_employer',
                               resource=jobli_employers_resource, http_method=HttpMethods.POST, member_name="create_jobli_employer")
         self.__add_lambda_api(lambda_name='GetJobliEmployers', handler_method='service.lambdas.employer.get_employers.get_employers',
@@ -124,6 +158,8 @@ class JobliServiceEnvironment(core.Construct):
         self.__add_lambda_api(lambda_name='UpdateJobliEmployerJobAnswers',
                               handler_method='service.lambdas.employer.update_employer_job_answers.update_employer_job_answers',
                               resource=jobli_job_id_resource, http_method=HttpMethods.PUT, member_name="update_employer_job_answers")
+
+        # User Type REST
         self.__add_lambda_api(lambda_name="SetUserType", handler_method="service.handler.set_user_type",
                               resource=update_type, http_method=HttpMethods.POST, member_name="set_user_type")
 
@@ -146,30 +182,34 @@ class JobliServiceEnvironment(core.Construct):
 
         setattr(self, member_name, new_api_lambda)
 
-    def __create_lambda_function(self, lambda_name: str, handler: str, role: Role, environment: dict, description: str = '',
-                                 timeout: Duration = Duration.seconds(_API_HANDLER_LAMBDA_TIMEOUT)) -> Function:
-        return _lambda.Function(self, lambda_name,
-                                runtime=_lambda.Runtime.PYTHON_3_8,
-                                code=_lambda.Code.from_asset(self._LAMBDA_ASSET_DIR),
-                                handler=handler,
-                                role=role, retry_attempts=0,
-                                environment=environment, timeout=timeout,
-                                memory_size=self._API_HANDLER_LAMBDA_MEMORY_SIZE,
-                                description=description)
-
     def __create_api_authorizer(self, user_pool_arn: str, api: apigw.RestApi) -> apigw.CfnAuthorizer:
         authorizer = apigw.CfnAuthorizer(scope=self, name="JobliApiAuth", id="JobliApiAuth", type="COGNITO_USER_POOLS",
                                          provider_arns=[user_pool_arn], rest_api_id=api.rest_api_id,
                                          identity_source="method.request.header.Authorization")
         return authorizer
 
+    def __create_lambda_function(self, lambda_name: str, handler: str, role: Role, environment: dict, description: str = '',
+                                 timeout: Duration = Duration.seconds(_API_HANDLER_LAMBDA_TIMEOUT)) -> Function:
+
+        return _lambda.Function(self, lambda_name, runtime=_lambda.Runtime.PYTHON_3_8, code=_lambda.Code.from_asset(self._LAMBDA_ASSET_DIR),
+                                handler=handler, role=role, retry_attempts=0, environment=environment, timeout=timeout,
+                                memory_size=self._API_HANDLER_LAMBDA_MEMORY_SIZE, description=description)
+
+    # @staticmethod
+    # def __add_resource_method(resource: apigw.Resource, http_method: str, integration: apigw.LambdaIntegration,
+    #                           authorizer: apigw.CfnAuthorizer) -> None:
+    #     method = resource.add_method(
+    #         http_method=http_method,
+    #         integration=integration,
+    #         authorization_type=apigw.AuthorizationType.COGNITO,
+    #     )
+    #     method_resource: apigw.Resource = method.node.find_child("Resource")
+    #     method_resource.add_property_override("AuthorizerId", {"Ref": authorizer.logical_id})
+
     @staticmethod
     def __add_resource_method(resource: apigw.Resource, http_method: str, integration: apigw.LambdaIntegration,
                               authorizer: apigw.CfnAuthorizer) -> None:
         method = resource.add_method(
             http_method=http_method,
-            integration=integration,
-            authorization_type=apigw.AuthorizationType.COGNITO,
+            integration=integration
         )
-        method_resource: apigw.Resource = method.node.find_child("Resource")
-        method_resource.add_property_override("AuthorizerId", {"Ref": authorizer.logical_id})

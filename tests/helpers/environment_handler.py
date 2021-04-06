@@ -1,6 +1,8 @@
 import os
+from typing import Optional
 
 import boto3
+from botocore.exceptions import ClientError
 from botocore import xform_name
 from git import Repo
 
@@ -22,6 +24,19 @@ def get_stack_name() -> str:
     stack_name: str = f"{BASE_NAME}{branch_name}"
     # stack_name: str = f"{getpass.getuser().capitalize().replace('.','')}{BASE_NAME}{branch_name}"
     return stack_name
+
+def get_stack_output(stack_name, output_name) -> Optional[str]:
+    cloudformation = boto3.client('cloudformation')
+    try:
+        response = cloudformation.describe_stacks(StackName=stack_name)
+        if response is None or response['Stacks'] is None:
+            return None
+        outputs = response['Stacks'][0]['Outputs']
+        for output in outputs:
+            if str(output['OutputKey']) == output_name:
+                return output['OutputValue']
+    except ClientError:
+        return None
 
 
 def load_env_vars() -> dict:

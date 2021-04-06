@@ -8,30 +8,29 @@ from service.common.utils import get_env_or_raise
 from service.lambdas.employer.constants import EmployerConstants
 from typing import Dict
 import boto3
-import json
 
 logger = Logger()
 
 
-# PUT /jobli/employers/{employer_id}
+# PUT /api/employers/{employer_id}
 @logger.inject_lambda_context(log_event=True)
 def update_employer(event: dict, context: LambdaContext) -> dict:
     try:
         if 'pathParameters' not in event or not event['pathParameters'] \
                 or 'employer_id' not in event['pathParameters']:
             return {'statusCode': HTTPStatus.BAD_REQUEST,
-                    'headers': {'Content-Type': 'application/json'},
+                    'headers': EmployerConstants.HEADERS,
                     'body': "Missing employer id"}
         if 'body' not in event or not event['body']:
             return {'statusCode': HTTPStatus.BAD_REQUEST,
-                    'headers': {'Content-Type': 'application/json'},
+                    'headers': EmployerConstants.HEADERS,
                     'body': "Missing employer body to update"}
         employer_id = event['pathParameters']['employer_id']
         employer: Employer = Employer.parse_raw(event['body'])
         dynamo_resource = boto3.resource("dynamodb")
         employers_table = dynamo_resource.Table(get_env_or_raise(EmployerConstants.EMPLOYERS_TABLE_NAME))
         # Get the existing employer to make it exists and get its current details
-        stored_employer: Dict = employers_table.get_item(Key={"employer_id": employer_id})['Item']
+        stored_employer: Dict = employers_table.get_item(Key={"employer_id": employer_id}).get('Item', {})
 
         # Update it with the given model
         stored_employer.update(employer.dict(exclude_none=True))
@@ -58,13 +57,13 @@ def update_employer(event: dict, context: LambdaContext) -> dict:
         )
 
         return {'statusCode': HTTPStatus.CREATED,
-                'headers': {'Content-Type': 'application/json'},
+                'headers': EmployerConstants.HEADERS,
                 'body': Employer.parse_obj(stored_employer).json(exclude_none=True)}
     except (ValidationError, TypeError) as err:
         return {'statusCode': HTTPStatus.BAD_REQUEST,
-                'headers': {'Content-Type': 'application/json'},
+                'headers': EmployerConstants.HEADERS,
                 'body': str(err)}
     except Exception as err:
         return {'statusCode': HTTPStatus.INTERNAL_SERVER_ERROR,
-                'headers': {'Content-Type': 'application/json'},
+                'headers': EmployerConstants.HEADERS,
                 'body': str(err)}

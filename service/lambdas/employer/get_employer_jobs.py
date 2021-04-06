@@ -16,14 +16,14 @@ import json
 logger = Logger()
 
 
-# GET /jobli/employers/{employer_id}/jobs
+# GET /api/employers/{employer_id}/jobs
 @logger.inject_lambda_context(log_event=True)
 def get_employer_jobs(event: dict, context: LambdaContext) -> dict:
     try:
         if 'pathParameters' not in event or not event['pathParameters'] \
                 or 'employer_id' not in event['pathParameters']:
             return {'statusCode': HTTPStatus.BAD_REQUEST,
-                    'headers': {'Content-Type': 'application/json'},
+                    'headers': EmployerConstants.HEADERS,
                     'body': "Missing employer id"}
         employer_id = event['pathParameters']['employer_id']
         dynamo_resource = boto3.resource("dynamodb")
@@ -46,13 +46,13 @@ def get_employer_jobs(event: dict, context: LambdaContext) -> dict:
                 args["ExclusiveStartKey"] = jobs_filter.last_pagination_key
             result_items = parse_obj_as(List[EmployerJob], jobs_table.scan(**args).get("Items", []))
         return {'statusCode': HTTPStatus.OK,
-                'headers': {'Content-Type': 'application/json'},
+                'headers': EmployerConstants.HEADERS,
                 'body': json.dumps({"jobs": [e.json(exclude_none=True) for e in result_items]})}
     except (ValidationError, TypeError) as err:
         return {'statusCode': HTTPStatus.BAD_REQUEST,
-                'headers': {'Content-Type': 'application/json'},
+                'headers': EmployerConstants.HEADERS,
                 'body': str(err)}
     except Exception as err:
         return {'statusCode': HTTPStatus.INTERNAL_SERVER_ERROR,
-                'headers': {'Content-Type': 'application/json'},
+                'headers': EmployerConstants.HEADERS,
                 'body': str(err)}

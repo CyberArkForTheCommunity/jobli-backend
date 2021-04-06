@@ -28,6 +28,7 @@ boto3 = "*"
 pydantic = "*"
 aws-lambda-powertools = "*"
 aws-lambda-context = "*"
+s3fs = "*"
 boto3-stubs = {extras = ["cognito-idp", "cloudformation"],version = "*"}
 
 [requires]

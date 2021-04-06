@@ -104,6 +104,41 @@ def get_seeker_profile(event: dict, context: LambdaContext) -> dict:
         return _build_error_response(err)
 
 
+# GET /api/seekers/relevant-jobs
+@logger.inject_lambda_context(log_event=True)
+def search_relevant_jobs(event: dict, context: LambdaContext) -> dict:
+    try:
+        event: APIGatewayProxyEvent = APIGatewayProxyEvent(event)
+        user_id = event.request_context.authorizer.claims["sub"]
+
+        job_seeker_answers: JobSeekerAnswers = JobSeekerAnswers(
+            **job_seeker_answers_repository.get_by_seeker_id(user_id))
+
+        answers_arr = [job_seeker_answers.a1,
+                       job_seeker_answers.a2,
+                       job_seeker_answers.a3,
+                       job_seeker_answers.a4,
+                       job_seeker_answers.a5,
+                       job_seeker_answers.a6,
+                       job_seeker_answers.a7,
+                       job_seeker_answers.a8,
+                       job_seeker_answers.a9,
+                       job_seeker_answers.a10]
+
+        # search_results =
+        # TODO alex.search(answers_arr, 100)
+
+        # return resource
+        return _build_response(http_status=HTTPStatus.CREATED, body="")
+    except (ValidationError, TypeError) as err:
+        return _build_error_response(err, HTTPStatus.BAD_REQUEST)
+
+    except NotFoundError as err:
+        return _build_error_response(err, HTTPStatus.NOT_FOUND)
+    except Exception as err:
+        return _build_error_response(err)
+
+
 # POST /api/seekers/answers
 @logger.inject_lambda_context(log_event=True)
 def add_seeker_answers(event: dict, context: LambdaContext) -> dict:
@@ -170,28 +205,23 @@ def add_seeker_experience(event: dict, context: LambdaContext) -> dict:
         return _build_error_response(err)
 
 
-# POST /api/seekers/languages
+# PUT /api/seekers/languages
 @logger.inject_lambda_context(log_event=True)
 def add_seeker_languages(event: dict, context: LambdaContext) -> dict:
     try:
         languages_list: List[str] = json.loads(event["body"])
 
-        # # convert to model
-        # job_seeker: JobSeeker = JobSeeker()
-        # job_seeker.id = event["pathParameters"]["id"]
-        # job_seeker.full_name = profile_dto.full_name
-        #
-        # birth_date = datetime.datetime(year=profile_dto.birth_year, month=profile_dto.birth_month,
-        #                                day=profile_dto.birth_day)
-        #
-        # job_seeker.birth_date = time.mktime(birth_date.timetuple())
-        # job_seeker.email = profile_dto.email
-        # job_seeker.address = profile_dto.address
-        #
-        # job_seeker_repository.update(job_seeker)
+        event: APIGatewayProxyEvent = APIGatewayProxyEvent(event)
+        user_id = event.request_context.authorizer.claims["sub"]
+
+        job_seeker: JobSeeker = JobSeeker(**job_seeker_repository.get(user_id))
+
+        job_seeker.languages = languages_list
+
+        job_seeker_repository.update(job_seeker)
 
         # return resource
-        return _build_response(http_status=HTTPStatus.CREATED, body="")
+        return _build_response(http_status=HTTPStatus.NO_CONTENT, body="")
     except (ValidationError, TypeError) as err:
         return _build_error_response(err, HTTPStatus.BAD_REQUEST)
     except Exception as err:
@@ -402,6 +432,7 @@ def set_user_type(event: dict, context: LambdaContext) -> dict:
         return _build_error_response(err, HTTPStatus.BAD_REQUEST)
     except Exception as err:
         return _build_error_response(err)
+
 
 # endregion
 

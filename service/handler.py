@@ -51,27 +51,6 @@ def create_or_update_seeker_profile(event: dict, context: LambdaContext) -> dict
         return _build_error_response(err)
 
 
-# PUT /api/seekers/{id}/profile
-@logger.inject_lambda_context(log_event=True)
-def create_or_update_seeker_profile_with_id(event: dict, context: LambdaContext) -> dict:
-    try:
-        job_seeker_id = event["pathParameters"]["id"]
-
-        profile_dto: JobSeekerProfileDto = JobSeekerProfileDto.parse_raw(event["body"])
-
-        try:
-            # try to update job seeker. If does not exists, create it.
-            job_seeker: JobSeeker = JobSeeker(**job_seeker_repository.get(job_seeker_id))
-            return __update_seeker_profile(profile_dto=profile_dto, job_seeker=job_seeker)
-        except NotFoundError as err:
-            return __create_seeker_profile(user_id=job_seeker_id, profile_dto=profile_dto)
-
-    except (ValidationError, TypeError) as err:
-        return _build_error_response(err, HTTPStatus.BAD_REQUEST)
-    except Exception as err:
-        return _build_error_response(err)
-
-
 def __create_seeker_profile(user_id: str, profile_dto: JobSeekerProfileDto) -> dict:
     # convert to model
 
@@ -113,26 +92,6 @@ def get_seeker_profile(event: dict, context: LambdaContext) -> dict:
 
         # convert to model
         job_seeker: JobSeeker = JobSeeker(**job_seeker_repository.get(user_id))
-
-        # TODO convert to resource
-        job_seeker.birth_date = int(job_seeker.birth_date)
-        job_seeker.version = int(job_seeker.version)
-        # return resource
-        return _build_response(http_status=HTTPStatus.OK, body=json.dumps(job_seeker.as_dict()))
-    except (ValidationError, TypeError) as err:
-        return _build_error_response(err, HTTPStatus.BAD_REQUEST)
-    except Exception as err:
-        return _build_error_response(err)
-
-
-# GET /api/seekers/{id}/profile
-@logger.inject_lambda_context(log_event=True)
-def get_seeker_profile_with_id(event: dict, context: LambdaContext) -> dict:
-    try:
-        job_seeker_id = event["pathParameters"]["id"]
-
-        # convert to model
-        job_seeker: JobSeeker = JobSeeker(**job_seeker_repository.get(job_seeker_id))
 
         # TODO convert to resource
         job_seeker.birth_date = int(job_seeker.birth_date)
@@ -218,6 +177,143 @@ def add_seeker_answers(event: dict, context: LambdaContext) -> dict:
         return _build_error_response(err)
 
 
+
+# POST /api/seekers/experience
+@logger.inject_lambda_context(log_event=True)
+def add_seeker_experience(event: dict, context: LambdaContext) -> dict:
+    try:
+        experience_dto: JobSeekerExperienceDto = JobSeekerExperienceDto.parse_raw(event["body"])
+
+        # # convert to model
+        # job_seeker: JobSeeker = JobSeeker()
+        # job_seeker.id = event["pathParameters"]["id"]
+        # job_seeker.full_name = profile_dto.full_name
+        #
+        # birth_date = datetime.datetime(year=profile_dto.birth_year, month=profile_dto.birth_month,
+        #                                day=profile_dto.birth_day)
+        #
+        # job_seeker.birth_date = time.mktime(birth_date.timetuple())
+        # job_seeker.email = profile_dto.email
+        # job_seeker.address = profile_dto.address
+        #
+        # job_seeker_repository.update(job_seeker)
+
+        # return resource
+        return _build_response(http_status=HTTPStatus.CREATED, body="")
+    except (ValidationError, TypeError) as err:
+        return _build_error_response(err, HTTPStatus.BAD_REQUEST)
+    except Exception as err:
+        return _build_error_response(err)
+
+
+# POST /api/seekers/languages
+@logger.inject_lambda_context(log_event=True)
+def add_seeker_languages(event: dict, context: LambdaContext) -> dict:
+    try:
+        languages_list: List[str] = json.loads(event["body"])
+
+        # # convert to model
+        # job_seeker: JobSeeker = JobSeeker()
+        # job_seeker.id = event["pathParameters"]["id"]
+        # job_seeker.full_name = profile_dto.full_name
+        #
+        # birth_date = datetime.datetime(year=profile_dto.birth_year, month=profile_dto.birth_month,
+        #                                day=profile_dto.birth_day)
+        #
+        # job_seeker.birth_date = time.mktime(birth_date.timetuple())
+        # job_seeker.email = profile_dto.email
+        # job_seeker.address = profile_dto.address
+        #
+        # job_seeker_repository.update(job_seeker)
+
+        # return resource
+        return _build_response(http_status=HTTPStatus.CREATED, body="")
+    except (ValidationError, TypeError) as err:
+        return _build_error_response(err, HTTPStatus.BAD_REQUEST)
+    except Exception as err:
+        return _build_error_response(err)
+
+
+# GET /api/seekers/summary
+@logger.inject_lambda_context(log_event=True)
+def get_seeker_summary(event: dict, context: LambdaContext) -> dict:
+    try:
+        job_seeker_id = event["pathParameters"]["id"]
+
+        # convert to model
+        job_seeker: JobSeeker = JobSeeker(**job_seeker_repository.get(job_seeker_id))
+
+        # TODO convert to resource
+        resource: JobSeekerResource = JobSeekerResource(**job_seeker.as_dict())
+        # return resource
+        return _build_response(http_status=HTTPStatus.OK, body=resource.json())
+    except (ValidationError, TypeError) as err:
+        return _build_error_response(err, HTTPStatus.BAD_REQUEST)
+    except Exception as err:
+        return _build_error_response(err)
+
+
+# GET /api/seekers/
+@logger.inject_lambda_context(log_event=True)
+def list_seekers(event: dict, context: LambdaContext) -> dict:
+    try:
+        # list seekers models
+        job_seekers = []
+
+        # convert to seekers resources
+        resources_json_list: List[dict] = [JobSeekerResource(**job_seeker.as_dict()).dict() for job_seeker in
+                                           job_seekers]
+        # return resource
+        return _build_response(http_status=HTTPStatus.OK, body=json.dumps(resources_json_list))
+    except (ValidationError, TypeError) as err:
+        return _build_error_response(err, HTTPStatus.BAD_REQUEST)
+    except Exception as err:
+        return _build_error_response(err)
+
+
+# region api with {id}
+
+# PUT /api/seekers/{id}/profile
+@logger.inject_lambda_context(log_event=True)
+def create_or_update_seeker_profile_with_id(event: dict, context: LambdaContext) -> dict:
+    try:
+        job_seeker_id = event["pathParameters"]["id"]
+
+        profile_dto: JobSeekerProfileDto = JobSeekerProfileDto.parse_raw(event["body"])
+
+        try:
+            # try to update job seeker. If does not exists, create it.
+            job_seeker: JobSeeker = JobSeeker(**job_seeker_repository.get(job_seeker_id))
+            return __update_seeker_profile(profile_dto=profile_dto, job_seeker=job_seeker)
+        except NotFoundError as err:
+            return __create_seeker_profile(user_id=job_seeker_id, profile_dto=profile_dto)
+
+    except (ValidationError, TypeError) as err:
+        return _build_error_response(err, HTTPStatus.BAD_REQUEST)
+    except Exception as err:
+        return _build_error_response(err)
+
+
+# GET /api/seekers/{id}/profile
+@logger.inject_lambda_context(log_event=True)
+def get_seeker_profile_with_id(event: dict, context: LambdaContext) -> dict:
+    try:
+        job_seeker_id = event["pathParameters"]["id"]
+
+        # convert to model
+        job_seeker: JobSeeker = JobSeeker(**job_seeker_repository.get(job_seeker_id))
+
+        # TODO convert to resource
+        job_seeker.birth_date = int(job_seeker.birth_date)
+        job_seeker.version = int(job_seeker.version)
+        # return resource
+        return _build_response(http_status=HTTPStatus.OK, body=json.dumps(job_seeker.as_dict()))
+    except (ValidationError, TypeError) as err:
+        return _build_error_response(err, HTTPStatus.BAD_REQUEST)
+    except Exception as err:
+        return _build_error_response(err)
+
+
 # POST /api/seekers/{id}/answers
 @logger.inject_lambda_context(log_event=True)
 def add_seeker_answers_with_id(event: dict, context: LambdaContext) -> dict:
@@ -255,98 +351,8 @@ def add_seeker_answers_with_id(event: dict, context: LambdaContext) -> dict:
         return _build_error_response(err)
 
 
-# POST /api/seekers/{id}/experience
-@logger.inject_lambda_context(log_event=True)
-def add_seeker_experience(event: dict, context: LambdaContext) -> dict:
-    try:
-        experience_dto: JobSeekerExperienceDto = JobSeekerExperienceDto.parse_raw(event["body"])
 
-        # # convert to model
-        # job_seeker: JobSeeker = JobSeeker()
-        # job_seeker.id = event["pathParameters"]["id"]
-        # job_seeker.full_name = profile_dto.full_name
-        #
-        # birth_date = datetime.datetime(year=profile_dto.birth_year, month=profile_dto.birth_month,
-        #                                day=profile_dto.birth_day)
-        #
-        # job_seeker.birth_date = time.mktime(birth_date.timetuple())
-        # job_seeker.email = profile_dto.email
-        # job_seeker.address = profile_dto.address
-        #
-        # job_seeker_repository.update(job_seeker)
-
-        # return resource
-        return _build_response(http_status=HTTPStatus.CREATED, body="")
-    except (ValidationError, TypeError) as err:
-        return _build_error_response(err, HTTPStatus.BAD_REQUEST)
-    except Exception as err:
-        return _build_error_response(err)
-
-
-# POST /api/seekers/{id}/languages
-@logger.inject_lambda_context(log_event=True)
-def add_seeker_languages(event: dict, context: LambdaContext) -> dict:
-    try:
-        languages_list: List[str] = json.loads(event["body"])
-
-        # # convert to model
-        # job_seeker: JobSeeker = JobSeeker()
-        # job_seeker.id = event["pathParameters"]["id"]
-        # job_seeker.full_name = profile_dto.full_name
-        #
-        # birth_date = datetime.datetime(year=profile_dto.birth_year, month=profile_dto.birth_month,
-        #                                day=profile_dto.birth_day)
-        #
-        # job_seeker.birth_date = time.mktime(birth_date.timetuple())
-        # job_seeker.email = profile_dto.email
-        # job_seeker.address = profile_dto.address
-        #
-        # job_seeker_repository.update(job_seeker)
-
-        # return resource
-        return _build_response(http_status=HTTPStatus.CREATED, body="")
-    except (ValidationError, TypeError) as err:
-        return _build_error_response(err, HTTPStatus.BAD_REQUEST)
-    except Exception as err:
-        return _build_error_response(err)
-
-
-# GET /api/seekers/{id}/summary
-@logger.inject_lambda_context(log_event=True)
-def get_seeker_summary(event: dict, context: LambdaContext) -> dict:
-    try:
-        job_seeker_id = event["pathParameters"]["id"]
-
-        # convert to model
-        job_seeker: JobSeeker = JobSeeker(**job_seeker_repository.get(job_seeker_id))
-
-        # TODO convert to resource
-        resource: JobSeekerResource = JobSeekerResource(**job_seeker.as_dict())
-        # return resource
-        return _build_response(http_status=HTTPStatus.OK, body=resource.json())
-    except (ValidationError, TypeError) as err:
-        return _build_error_response(err, HTTPStatus.BAD_REQUEST)
-    except Exception as err:
-        return _build_error_response(err)
-
-
-# GET /api/seekers/
-@logger.inject_lambda_context(log_event=True)
-def list_seekers(event: dict, context: LambdaContext) -> dict:
-    try:
-        # list seekers models
-        job_seekers = []
-
-        # convert to seekers resources
-        resources_json_list: List[dict] = [JobSeekerResource(**job_seeker.as_dict()).dict() for job_seeker in
-                                           job_seekers]
-        # return resource
-        return _build_response(http_status=HTTPStatus.OK, body=json.dumps(resources_json_list))
-    except (ValidationError, TypeError) as err:
-        return _build_error_response(err, HTTPStatus.BAD_REQUEST)
-    except Exception as err:
-        return _build_error_response(err)
-
+# endregion
 
 # region template methods
 
@@ -427,6 +433,8 @@ def set_user_type(event: dict, context: LambdaContext) -> dict:
     except Exception as err:
         return _build_error_response(err)
 
+# endregion
+
 
 def _build_response(http_status: HTTPStatus, body: str) -> dict:
     return {'statusCode': http_status,
@@ -443,5 +451,3 @@ def _build_error_response(err, status: HTTPStatus = HTTPStatus.INTERNAL_SERVER_E
         },
         'body': str(err),
     }
-
-# endregion

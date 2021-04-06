@@ -18,7 +18,7 @@ def get_employer_job_by_id(event: dict, context: LambdaContext) -> dict:
         if 'pathParameters' not in event or not event['pathParameters'] \
                 or 'employer_id' not in event['pathParameters'] or 'job_id' not in event['pathParameters']:
             return {'statusCode': HTTPStatus.BAD_REQUEST,
-                    'headers': {'Content-Type': 'application/json'},
+                    'headers': EmployerConstants.HEADERS,
                     'body': "Missing employer id"}
         employer_id = event['pathParameters']['employer_id']
         job_id = event['pathParameters']['job_id']
@@ -27,13 +27,13 @@ def get_employer_job_by_id(event: dict, context: LambdaContext) -> dict:
         job: EmployerJob = EmployerJob.parse_obj(jobs_table.get_item(
             Key={"employer_id": employer_id, 'job_id': job_id}).get('Item', {}))
         return {'statusCode': HTTPStatus.OK,
-                'headers': {'Content-Type': 'application/json'},
+                'headers': EmployerConstants.HEADERS,
                 'body': job.json(exclude_none=True)}
     except (ValidationError, TypeError) as err:
         return {'statusCode': HTTPStatus.BAD_REQUEST,
-                'headers': {'Content-Type': 'application/json'},
+                'headers': EmployerConstants.HEADERS,
                 'body': str(err)}
     except Exception as err:
         return {'statusCode': HTTPStatus.INTERNAL_SERVER_ERROR,
-                'headers': {'Content-Type': 'application/json'},
+                'headers': EmployerConstants.HEADERS,
                 'body': str(err)}

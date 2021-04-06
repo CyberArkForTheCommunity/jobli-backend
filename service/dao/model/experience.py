@@ -4,7 +4,7 @@ from pydantic.main import BaseModel
 
 from service.dao.single_table_service import SingleTableRecord, DATA_DELIMITER
 
-_EXPERIENCE_PK_PREFIX = "EXPERIENCE" + DATA_DELIMITER
+_EXPERIENCE_PK_PREFIX = "EXPERIENCE_BY_JOB_SEEKER_ID" + DATA_DELIMITER
 EXPERIENCE_SK_PREFIX = "EXPERIENCE_ID" + DATA_DELIMITER
 
 class Experience(BaseModel, SingleTableRecord):
@@ -28,7 +28,7 @@ class Experience(BaseModel, SingleTableRecord):
 
     @staticmethod
     def build_pk(job_seeker_id: str):
-        return _EXPERIENCE_PK_PREFIX + DATA_DELIMITER + job_seeker_id
+        return _EXPERIENCE_PK_PREFIX + job_seeker_id
 
     @staticmethod
     def build_sk(experience_id: str):

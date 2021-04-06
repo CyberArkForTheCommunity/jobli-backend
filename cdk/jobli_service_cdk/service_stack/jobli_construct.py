@@ -104,11 +104,18 @@ class JobliServiceEnvironment(core.Construct):
                               resource=seekers_id_profile, http_method="PUT",
                               member_name="add_seeker_profile_with_id_api_lambda")
 
+        self.__add_lambda_api(lambda_name='GetSeeekerWithId',
+                              handler_method='service.handler.get_seeker_profile_with_id',
+                              resource=seekers_id_profile, http_method="GET",
+                              member_name="get_seeker_with_id_api_lambda")
+
         self.__add_lambda_api(lambda_name='AddSeeekerAnswersWithId',
                               handler_method='service.handler.add_seeker_answers_with_id',
                               resource=seekers_id_answers, http_method="POST",
                               member_name="add_seeker_answers_with_id_api_lambda")
 
+
+        #Without id
 
         seeker_resource: apigw.Resource = api_resource.add_resource("seeker")
 
@@ -116,6 +123,11 @@ class JobliServiceEnvironment(core.Construct):
         seeker_id_profile: apigw.Resource = seeker_resource.add_resource("profile")
         self.__add_lambda_api(lambda_name='CreateOrUpdateSeekerProfile', handler_method='service.handler.create_or_update_seeker_profile',
                               resource=seeker_id_profile, http_method="PUT", member_name="add_seeker_profile_api_lambda")
+
+        self.__add_lambda_api(lambda_name='GetSeeeker',
+                              handler_method='service.handler.get_seeker_profile',
+                              resource=seeker_id_profile, http_method="GET",
+                              member_name="get_seeker_api_lambda")
 
         seeker_id_profile: apigw.Resource = seeker_resource.add_resource("answers")
         self.__add_lambda_api(lambda_name='AddSeekerAnswers', handler_method='service.handler.add_seeker_answers',

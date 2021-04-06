@@ -92,7 +92,7 @@ def __update_seeker_profile(profile_dto: JobSeekerProfileDto, job_seeker: JobSee
     job_seeker.full_name = profile_dto.full_name
 
     birth_date = datetime(year=profile_dto.birth_year, month=profile_dto.birth_month, day=profile_dto.birth_day)
-    job_seeker.birth_date = Decimal(birth_date.timestamp() * 1000)
+    job_seeker.birth_date = int(birth_date.timestamp()) * 1000
     job_seeker.email = profile_dto.email
     job_seeker.address = profile_dto.address
 
@@ -121,12 +121,30 @@ def get_seeker_profile(event: dict, context: LambdaContext) -> dict:
     except Exception as err:
         return _build_error_response(err)
 
+# GET /api/seekers/{id}/profile
+@logger.inject_lambda_context(log_event=True)
+def get_seeker_profile_with_id(event: dict, context: LambdaContext) -> dict:
+    try:
+        job_seeker_id = event["pathParameters"]["id"]
+
+        # convert to model
+        job_seeker = job_seeker_repository.get(job_seeker_id)
+
+        # TODO convert to resource
+
+        # return resource
+        return _build_response(http_status=HTTPStatus.OK, body=json.dumps(job_seeker))
+    except (ValidationError, TypeError) as err:
+        return _build_error_response(err, HTTPStatus.BAD_REQUEST)
+    except Exception as err:
+        return _build_error_response(err)
+
 
 # POST /api/seekers/answers
 @logger.inject_lambda_context(log_event=True)
 def add_seeker_answers(event: dict, context: LambdaContext) -> dict:
     try:
-        answer_dto_list: List[JobSeekerAnswerDto] = [JobSeekerAnswerDto.parse_raw(item) for item in
+        answer_dto_list: List[JobSeekerAnswerDto] = [JobSeekerAnswerDto.parse_obj(item) for item in
                                                      json.loads(event["body"])]
 
         event: APIGatewayProxyEvent = APIGatewayProxyEvent(event)
@@ -163,7 +181,7 @@ def add_seeker_answers(event: dict, context: LambdaContext) -> dict:
 @logger.inject_lambda_context(log_event=True)
 def add_seeker_answers_with_id(event: dict, context: LambdaContext) -> dict:
     try:
-        answer_dto_list: List[JobSeekerAnswerDto] = [JobSeekerAnswerDto.parse_raw(item) for item in
+        answer_dto_list: List[JobSeekerAnswerDto] = [JobSeekerAnswerDto.parse_obj(item) for item in
                                                      json.loads(event["body"])]
 
         job_seeker_id = event["pathParameters"]["id"]

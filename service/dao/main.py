@@ -1,10 +1,31 @@
 import json
+from typing import List
 
 from service.dao.job_seeker_answers_repository import job_seeker_answers_repository
 from service.dao.job_seeker_repository import job_seeker_repository
+from service.dao.jobs_repository import jobs_repository
 from service.dao.model.job_seeker import JobSeeker
+from service.models.employer.employer_job import JobSearchResult
 
 if __name__ == "__main__":
+
+    answers_arr = [True,
+                   True,
+                   True,
+                   False,
+                   True,
+                   False,
+                   True,
+                   True,
+                   False,
+                   True]
+
+    search_results: List[JobSearchResult] = jobs_repository.get_jobs(answers_arr, 100)
+
+    for item in search_results:
+        item.employer_job.created_time = int(item.employer_job.created_time)
+
+    search_results = [item.dict() for item in search_results]
 
     # job_seeker = JobSeeker()
     # job_seeker.id = "11111" #str(uuid.uuid4())

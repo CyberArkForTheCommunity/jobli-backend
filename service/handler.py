@@ -27,6 +27,7 @@ from service.dtos.job_seeker_experience_dto import JobSeekerExperienceDto
 from service.dtos.job_seeker_profile_dto import JobSeekerProfileDto
 from service.dtos.jobli_dto import JobliDto
 from service.dtos.jobli_dto import UpdateUserTypeDto
+from service.models.employer.employer_job import JobSearchResult
 from service.models.job_seeker_resource import JobSeekerResource
 from service.models.jobli import Jobli
 
@@ -132,7 +133,12 @@ def search_relevant_jobs(event: dict, context: LambdaContext) -> dict:
                        job_seeker_answers.a9,
                        job_seeker_answers.a10]
 
-        search_results = jobs_repository.get_jobs(answers_arr, 100)
+        search_results: List[JobSearchResult] = jobs_repository.get_jobs(answers_arr, 100)
+
+        for item in search_results:
+            item.employer_job.created_time = int(item.employer_job.created_time)
+
+        search_results = [item.dict() for item in search_results]
 
         # return resource
         return _build_response(http_status=HTTPStatus.OK, body=json.dumps(search_results))
@@ -225,7 +231,7 @@ def list_seeker_experience(event: dict, context: LambdaContext) -> dict:
 
         user_id = "11111"
 
-        result_list = [Experience(**item).dict() for item in
+        result_list = [item.dict() for item in
                        job_seeker_experience_repository.get_all(user_id)]
 
         return _build_response(http_status=HTTPStatus.OK, body=json.dumps(result_list))

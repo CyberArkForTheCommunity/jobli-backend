@@ -29,19 +29,18 @@ def get_employers(event: dict, context: LambdaContext) -> dict:
         result_items = None
         if employer_filter and employer_filter.employer_id:
             result_items = [Employer.parse_obj(employers_table.get_item(Key={"employer_id": employer_filter.employer_id}).get('Item', {}))]
-        elif employer_filter and (employer_filter.business_name or employer_filter.full_address):
-            if employer_filter.business_name:
+        else:
+            if employer_filter and employer_filter.business_name:
                 filter_expression = Key('business_name').eq(employer_filter.business_name)
-            if employer_filter.full_address:
+            if employer_filter and employer_filter.full_address:
                 filter_expression = filter_expression & \
                                     Key('business_address.full_address').eq(employer_filter.full_address)
-            result_items = parse_obj_as(List[Employer], employers_table.query(
-                KeyConditionExpression=filter_expression).get('Items', []))
-        else:
             limit_per_page = EmployerConstants.LIMITS_PER_EMPLOYER_PAGE
             if employer_filter and employer_filter.limit_per_page:
                 limit_per_page = employer_filter.limit_per_page
             args = {"Limit": limit_per_page}
+            if filter_expression:
+                args["FilterExpression"] = filter_expression
             if employer_filter and employer_filter.last_pagination_key:
                 args["ExclusiveStartKey"] = employer_filter.last_pagination_key
             result_items = parse_obj_as(List[Employer], employers_table.scan(**args).get("Items", []))

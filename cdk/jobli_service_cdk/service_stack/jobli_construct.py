@@ -78,6 +78,9 @@ class JobliServiceEnvironment(core.Construct):
             billing_mode=aws_dynamodb.BillingMode.PAY_PER_REQUEST,
             removal_policy=core.RemovalPolicy.RETAIN
         )
+        self.jobs_table.add_global_secondary_index(
+            partition_key=aws_dynamodb.Attribute(name='employer_id', type=aws_dynamodb.AttributeType.STRING),
+            index_name='second-index')
         self.jobs_table.grant_read_write_data(self.service_role)
 
         self.rest_api: apigw.LambdaRestApi = apigw.RestApi(self, "jobli-rest-api", rest_api_name="Jobli Rest API",

@@ -18,7 +18,7 @@ class EmployerJob(BaseModel):
     job_fields: Optional[List[str]] = Field(description="List of fields for the job")
     job_name: Optional[str] = Field(description="Name of the job")
     job_description: Optional[str] = Field(description="Description of the job")
-    job_employees_count: Optional[int] = Field(description="Amount of employees needed for the job")
+    job_employees_count: Optional[int] = Field(description="Amount of employees needed for the job", default=1)
     job_scope: Optional[JobScope] = Field(description="Scope of the job in time")
     job_time_scope: Optional[List[timedelta]] = Field(description="Time deltas of the job if TimeBased")
     answers: Optional[List[Answer]] = Field(description="Questions of the employer job")

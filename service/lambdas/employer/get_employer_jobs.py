@@ -35,14 +35,13 @@ def get_employer_jobs(event: dict, context: LambdaContext) -> dict:
         if jobs_filter and jobs_filter.job_id:
             result_items = [EmployerJob.parse_obj(jobs_table.get_item(
                 Key={"job_id": jobs_filter.job_id}).get('Item', {}))]
-        elif employer_id:
-            result_items = parse_obj_as(List[EmployerJob], jobs_table.query(
-                KeyConditionExpression=Key("employer_id").eq(employer_id)).get('Items', []))
         else:
             limit_per_page = EmployerConstants.LIMITS_PER_EMPLOYER_PAGE
             if jobs_filter and jobs_filter.limit_per_page:
                 limit_per_page = jobs_filter.limit_per_page
             args = {"Limit": limit_per_page}
+            if employer_id:
+                args["FilterExpression"] = Key("employer_id").eq(employer_id)
             if jobs_filter and jobs_filter.last_pagination_key:
                 args["ExclusiveStartKey"] = jobs_filter.last_pagination_key
             result_items = parse_obj_as(List[EmployerJob], jobs_table.scan(**args).get("Items", []))

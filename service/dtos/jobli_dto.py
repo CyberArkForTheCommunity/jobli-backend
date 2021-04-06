@@ -7,6 +7,7 @@ class JobliDto(BaseModel):
     name: str
 
     # pylint: disable=no-self-argument,no-self-use,invalid-name
+    # noinspection PyMethodParameters
     @validator('name')
     def validate_changes(cls, v):
         if not v:

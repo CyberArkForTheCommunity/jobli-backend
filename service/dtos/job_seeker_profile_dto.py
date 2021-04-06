@@ -11,6 +11,7 @@ class JobSeekerProfileDto(BaseModel):
     email: str
 
     # pylint: disable=no-self-argument,no-self-use,invalid-name
+    # noinspection PyMethodParameters
     @validator('full_name')
     def validate_changes(cls, v):
         if not v:

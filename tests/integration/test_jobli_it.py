@@ -14,7 +14,7 @@ from service.dtos.job_seeker_profile_dto import JobSeekerProfileDto
 # from jobli_service_cdk.service_stack.constants import BASE_NAME
 from service.dtos.jobli_dto import JobliDto, UpdateUserTypeDto, UserType
 from tests.helpers.cognito_auth_util import add_auth_header
-from tests.helpers.environment_handler import get_stack_output, load_env_vars, get_stack_name
+from tests.helpers.environment_handler import load_env_vars, get_stack_name
 from tests.helpers.random_utils import random_string
 
 # region test fixtures
@@ -160,6 +160,11 @@ def test_set_user_type(endpoint_url, auth_headers):
     assert response.status_code == HTTPStatus.OK
 
 
-def test_amit():
-    seekers_table = get_stack_output(get_stack_name(), 'JobSeekersTableName')
-    pass
+def test_read_job_seekers_table_name():
+    os.environ["PROJECT_DIR"] = "/Users/Amir.Zahavi/Git/jobli-backend"
+    # seekers_table = get_stack_output(get_stack_name(), 'JOB_SEEKERS_TABLE_NAME')
+
+    print("=========")
+    print("get_stack_name(): ", get_stack_name())
+    print("seekers_table: ", os.environ["JOB_SEEKERS_TABLE_NAME"])
+    # print("seekers_table: ", seekers_table)

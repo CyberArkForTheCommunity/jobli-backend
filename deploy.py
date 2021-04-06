@@ -30,7 +30,7 @@ def init_local_dotenv():
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('-d', '--deploy-env', default='dev')
-    parser.add_argument("--region", default="eu-west-1")
+    parser.add_argument("--region", default="us-east-1")
     parser.add_argument('--stack-name')
     parser.add_argument('--require-approval', default='broadening')
     parser.add_argument('--clean', nargs='?', const=True, help="Remove existing environment before deploying")

@@ -14,3 +14,4 @@ def test_get_jobli(mocker: MockerFixture):
     actual_jobli = json.loads(response["body"])
 
     assert actual_jobli['name'] == jobli_dto.name
+

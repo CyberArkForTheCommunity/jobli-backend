@@ -221,8 +221,7 @@ def list_seeker_experience(event: dict, context: LambdaContext) -> dict:
 
         user_id = "11111"
 
-        result_list: List[Experience] = [Experience.parse_obj(item) for item in
-                                         job_seeker_experience_repository.get_all(user_id)]
+        result_list: job_seeker_experience_repository.get_all(user_id)
 
         return _build_response(http_status=HTTPStatus.OK, body=json.dumps(result_list))
     except (ValidationError, TypeError) as err:

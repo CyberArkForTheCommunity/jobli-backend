@@ -121,9 +121,11 @@ class JobliServiceEnvironment(core.Construct):
 
         # Seekers API
         seekers_resource: apigw.Resource = api_resource.add_resource("seekers")
-        seeker_id_resource: apigw.Resource = seekers_resource.add_resource("{id}")
+        seekers_id_resource: apigw.Resource = seekers_resource.add_resource("{id}")
         seekers_id_profile: apigw.Resource = seeker_id_resource.add_resource("profile")
         seekers_id_answers: apigw.Resource = seeker_id_resource.add_resource("answers")
+
+        # Seekers REST's
         self.__add_lambda_api(lambda_name='CreateOrUpdateSeekerProfileWithId',
                               handler_method='service.handler.create_or_update_seeker_profile_with_id',
                               resource=seekers_id_resource, http_method=HttpMethods.PUT,

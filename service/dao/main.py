@@ -63,8 +63,8 @@ if __name__ == "__main__":
     #
     # job_seeker_answers_repository.create(answers)
 
-    # job_seekers = job_seeker_answers_repository.find_best_match_answers(
-    #     [True, False, True, False, False, False, False, False, False, True], 10)
-    #
-    # for result in job_seekers:
-    #     print(result.job_seeker_name, ' - score=', result.score)
+    job_seekers = job_seeker_answers_repository.find_best_match_answers(
+        [True, False, True, False, False, False, False, False, False, True], 100)
+
+    for result in job_seekers:
+        print(result.job_seeker_name, ' - score=', result.score)

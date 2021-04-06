@@ -145,6 +145,41 @@ def get_seeker_profile_with_id(event: dict, context: LambdaContext) -> dict:
         return _build_error_response(err)
 
 
+# GET /api/seekers/relevant-jobs
+@logger.inject_lambda_context(log_event=True)
+def search_relevant_jobs(event: dict, context: LambdaContext) -> dict:
+    try:
+        event: APIGatewayProxyEvent = APIGatewayProxyEvent(event)
+        user_id = event.request_context.authorizer.claims["sub"]
+
+        job_seeker_answers: JobSeekerAnswers = JobSeekerAnswers(
+            **job_seeker_answers_repository.get_by_seeker_id(user_id))
+
+        answers_arr = [job_seeker_answers.a1,
+                       job_seeker_answers.a2,
+                       job_seeker_answers.a3,
+                       job_seeker_answers.a4,
+                       job_seeker_answers.a5,
+                       job_seeker_answers.a6,
+                       job_seeker_answers.a7,
+                       job_seeker_answers.a8,
+                       job_seeker_answers.a9,
+                       job_seeker_answers.a10]
+
+        # search_results =
+        # TODO alex.search(answers_arr, 100)
+
+        # return resource
+        return _build_response(http_status=HTTPStatus.CREATED, body="")
+    except (ValidationError, TypeError) as err:
+        return _build_error_response(err, HTTPStatus.BAD_REQUEST)
+
+    except NotFoundError as err:
+        return _build_error_response(err, HTTPStatus.NOT_FOUND)
+    except Exception as err:
+        return _build_error_response(err)
+
+
 # POST /api/seekers/answers
 @logger.inject_lambda_context(log_event=True)
 def add_seeker_answers(event: dict, context: LambdaContext) -> dict:

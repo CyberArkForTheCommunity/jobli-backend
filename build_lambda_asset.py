@@ -68,10 +68,10 @@ class BuildLambdaAsset:
         shutil.copy(self._requirements_txt.as_posix(), (self._build_dir / 'requirements.txt').as_posix())
 
     def _consume(self) -> None:
-        if platform.system().lower() == 'linux':
+       # if platform.system().lower() == 'linux':
             self._consume_natively()
-        else:
-            self._consume_using_docker()
+       # else:
+       #     self._consume_using_docker()
 
     @timeit
     def _consume_natively(self) -> None:

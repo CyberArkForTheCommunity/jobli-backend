@@ -1,9 +1,11 @@
-from pydantic import BaseModel, Field
-from typing import List, Optional
-from enum import Enum
 from datetime import timedelta
-from service.models.common import Answer
 from decimal import Decimal
+from enum import Enum
+from typing import List, Optional
+
+from pydantic import BaseModel, Field
+
+from service.models.common import Answer
 
 
 class JobScope(str, Enum):
@@ -26,3 +28,8 @@ class EmployerJob(BaseModel):
     job_salary: Optional[int] = Field(description="Optional job salary")
     job_experience_needed: Optional[str] = Field(description="Experience needed for the job")
     created_time: Optional[Decimal] = Field(description="Creation time of the employer job")
+
+
+class JobSearchResult(BaseModel):
+    score: int
+    employer_job: EmployerJob

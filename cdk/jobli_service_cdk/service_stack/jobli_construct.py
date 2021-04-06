@@ -95,7 +95,7 @@ class JobliServiceEnvironment(core.Construct):
         self.__add_update_lambda_integration(jobli_name_resource, user_pool_arn)
         self.__add_get_lambda_integration(jobli_name_resource, user_pool_arn)
 
-    seeker_resource: apigw.Resource = api_resource.add_resource("seekers")
+        seeker_resource: apigw.Resource = api_resource.add_resource("seekers")
         seeker_id_resource: apigw.Resource = seeker_resource.add_resource("{id}")
 
         seeker_id_profile: apigw.Resource = seeker_id_resource.add_resource("profile")

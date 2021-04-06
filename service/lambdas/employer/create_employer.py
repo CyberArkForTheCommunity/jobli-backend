@@ -20,7 +20,7 @@ def create_employer(event: dict, context: LambdaContext) -> dict:
     try:
         if 'body' not in event or not event['body']:
             return {'statusCode': HTTPStatus.BAD_REQUEST,
-                    'headers': {'Content-Type': 'application/json'},
+                    'headers': EmployerConstants.HEADERS,
                     'body': "Missing employer body to create"}
         employer: Employer = Employer.parse_raw(event['body'])
         employer.employer_id = str(uuid.uuid4())
@@ -29,13 +29,13 @@ def create_employer(event: dict, context: LambdaContext) -> dict:
         employers_table = dynamo_resource.Table(get_env_or_raise(EmployerConstants.EMPLOYERS_TABLE_NAME))
         employers_table.put_item(Item=employer.dict(exclude_none=True))
         return {'statusCode': HTTPStatus.CREATED,
-                'headers': {'Content-Type': 'application/json'},
+                'headers': EmployerConstants.HEADERS,
                 'body': employer.json(exclude_none=True)}
     except (ValidationError, TypeError) as err:
         return {'statusCode': HTTPStatus.BAD_REQUEST,
-                'headers': {'Content-Type': 'application/json'},
+                'headers': EmployerConstants.HEADERS,
                 'body': str(err)}
     except Exception as err:
         return {'statusCode': HTTPStatus.INTERNAL_SERVER_ERROR,
-                'headers': {'Content-Type': 'application/json'},
+                'headers': EmployerConstants.HEADERS,
                 'body': str(err)}

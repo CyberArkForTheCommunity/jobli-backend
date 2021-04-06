@@ -22,7 +22,7 @@ def update_employer_job_answers(event: dict, context: LambdaContext) -> dict:
                 or 'employer_id' not in event['pathParameters'] or 'job_id' not in event['pathParameters'] \
                 or 'body' not in event or not event['body']:
             return {'statusCode': HTTPStatus.BAD_REQUEST,
-                    'headers': {'Content-Type': 'application/json'},
+                    'headers': EmployerConstants.HEADERS,
                     'body': "Missing employer job body/path params to create"}
         employer_answers: List[Answer] = parse_raw_as(List[Answer], event['body'])
         employer_id = event['pathParameters']['employer_id']
@@ -34,7 +34,7 @@ def update_employer_job_answers(event: dict, context: LambdaContext) -> dict:
             Key={'job_id': job_id}).get('Item', {}))
         if stored_job.employer_id != employer_id:
             return {'statusCode': HTTPStatus.BAD_REQUEST,
-                    'headers': {'Content-Type': 'application/json'},
+                    'headers': EmployerConstants.HEADERS,
                     'body': "Given employer id does not match job id"}
         stored_job.answers = employer_answers
         jobs_table.update_item(Key={
@@ -47,13 +47,13 @@ def update_employer_job_answers(event: dict, context: LambdaContext) -> dict:
             ReturnValues="UPDATED_NEW"
         )
         return {'statusCode': HTTPStatus.CREATED,
-                'headers': {'Content-Type': 'application/json'},
+                'headers': EmployerConstants.HEADERS,
                 'body': stored_job.json(exclude_none=True)}
     except (ValidationError, TypeError) as err:
         return {'statusCode': HTTPStatus.BAD_REQUEST,
-                'headers': {'Content-Type': 'application/json'},
+                'headers': EmployerConstants.HEADERS,
                 'body': str(err)}
     except Exception as err:
         return {'statusCode': HTTPStatus.INTERNAL_SERVER_ERROR,
-                'headers': {'Content-Type': 'application/json'},
+                'headers': EmployerConstants.HEADERS,
                 'body': str(err)}

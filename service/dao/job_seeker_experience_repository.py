@@ -21,16 +21,21 @@ class _JobSeekerExperienceRepository:
         dict_ret = self.__single_table_service.create_item(experience, user)
         return Experience(**dict_ret)
 
-    def get_all(self, job_seeker_id: str) -> List[dict]:
-        return self.__single_table_service.find_by_pk_and_sk_begins_with(Experience.build_pk(job_seeker_id),
-                                                                         EXPERIENCE_SK_PREFIX)
+    def get_all(self, job_seeker_id: str) -> List[Experience]:
+        dict_list = self.__single_table_service.find_by_pk_and_sk_begins_with(Experience.build_pk(job_seeker_id),
+                                                                              EXPERIENCE_SK_PREFIX)
+        return [Experience(**item) for item in dict_list]
 
-    def get(self, job_seeker_id: str, experience_id) -> Experience:
+    def get(self, job_seeker_id: str, experience_id: str) -> Experience:
         dict_ret = self.__single_table_service.find_by_pk_and_sk(Experience.build_pk(job_seeker_id),
                                                                  Experience.build_sk(experience_id))
         if not dict_ret:
             raise NotFoundError(f"JobSeeker experience with id='{experience_id}' not found")
         return Experience(**dict_ret)
+
+    def delete(self, job_seeker_id: str, experience_id: str) -> None:
+        self.__single_table_service.remove_item(pk=Experience.build_pk(job_seeker_id),
+                                                sk=Experience.build_sk(experience_id))
 
     def update(self, experience: Experience, user: str = None) -> None:
         self.__single_table_service.update_item(experience, user)

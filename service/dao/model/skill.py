@@ -1,4 +1,4 @@
-from typing import Dict
+from typing import Dict, Optional
 
 from service.dao.single_table_service import SingleTableRecord
 

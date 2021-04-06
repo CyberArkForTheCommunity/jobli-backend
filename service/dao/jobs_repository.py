@@ -1,15 +1,15 @@
-from typing import Dict, List
+from typing import List
+
+import boto3
+from aws_lambda_powertools import Logger
 from pydantic import parse_obj_as
 
-from aws_lambda_powertools import Logger
-import boto3
-
-from service.common.exceptions import NotFoundError
 from service.common.utils import get_env_or_raise
 from service.lambdas.employer.constants import EmployerConstants
 from service.models.employer.employer_job import EmployerJob, JobSearchResult
 
 logger = Logger()
+
 
 class _JobsRepository:
     def get_jobs(self, answers: List[bool], max_results: int) -> List[JobSearchResult]:

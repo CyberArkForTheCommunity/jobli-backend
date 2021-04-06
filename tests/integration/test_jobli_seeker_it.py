@@ -1,24 +1,29 @@
 # pylint: disable = print-used
 import json
 import os
-from datetime import datetime
+import uuid
 from http import HTTPStatus
 
 import pytest
 import requests
 from dotenv import load_dotenv
 
+from service.common.exceptions import NotFoundError
+from service.dao.job_seeker_experience_repository import job_seeker_experience_repository
+from service.dao.job_seeker_repository import job_seeker_repository
+from service.dao.model.experience import Experience
+from service.dao.model.job_seeker import JobSeeker
 from service.dtos.job_seeker_answer_dto import JobSeekerAnswerDto
 from service.dtos.job_seeker_profile_dto import JobSeekerProfileDto
 # from cdk.jobli_service_cdk.service_stack.jobli_construct import get_stack_name
 # from jobli_service_cdk.service_stack.constants import BASE_NAME
-from service.dtos.jobli_dto import JobliDto, UpdateUserTypeDto, UserType
+from service.dtos.jobli_dto import UpdateUserTypeDto, UserType
 from tests.helpers.cognito_auth_util import add_auth_header
-from tests.helpers.environment_handler import load_env_vars, get_stack_name
+from tests.helpers.environment_handler import load_env_vars
 from tests.helpers.random_utils import random_string
 
-# region test fixtures
 
+# region test fixtures
 
 @pytest.fixture(scope="module")
 def endpoint_url():
@@ -96,11 +101,78 @@ def test_set_user_type(endpoint_url, auth_headers):
     assert response.status_code == HTTPStatus.OK
 
 
-def test_read_job_seekers_table_name():
-    os.environ["PROJECT_DIR"] = "/Users/Amir.Zahavi/Git/jobli-backend"
-    # seekers_table = get_stack_output(get_stack_name(), 'JOB_SEEKERS_TABLE_NAME')
+# noinspection PyPep8Naming
+def test_job_seekers_CRUD(endpoint_url):
+    assert os.environ["JOB_SEEKERS_TABLE_NAME"] is not None
+    print("\nseekers_table: ", os.environ["JOB_SEEKERS_TABLE_NAME"])
 
-    print("=========")
-    print("get_stack_name(): ", get_stack_name())
-    print("seekers_table: ", os.environ["JOB_SEEKERS_TABLE_NAME"])
-    # print("seekers_table: ", seekers_table)
+    job_seeker_id = str(uuid.uuid4())
+    full_name = str(uuid.uuid4())
+    address = str(uuid.uuid4())
+    job_seeker_dict = {
+        "id": job_seeker_id,
+        "full_name": full_name,
+        "birth_date": 11003484,
+        "address": address,
+        "email": "dummy@company.com"}
+    job_seeker = JobSeeker(**job_seeker_dict)
+    job_seeker_repository.create(job_seeker=job_seeker, user="11111")
+
+    job_seeker_read = JobSeeker(**job_seeker_repository.get(job_seeker_id=job_seeker_id))
+
+    assert job_seeker_read.creationTime is not None
+    assert job_seeker_read.version == 0
+    assert job_seeker_read.id == job_seeker_id
+    assert job_seeker_read.address == address
+
+    # job_seeker_dict = job_seeker_repository.get(job_seeker_id)
+
+    job_seeker_read.address = "new address"
+    job_seeker_repository.update(job_seeker_read, user="11111")
+
+    job_seeker_read = JobSeeker(**job_seeker_repository.get(job_seeker_id=job_seeker_id))
+    assert job_seeker_read.address == "new address"
+    assert job_seeker_read.version == 1
+
+    # delete and validate it does not exist
+    job_seeker_repository.delete(job_seeker_id)
+    try:
+        JobSeeker(**job_seeker_repository.get(job_seeker_id=job_seeker_id))
+        raise Exception("Expected NotFoundError")
+    except NotFoundError:
+        # all good
+        pass
+
+
+def test_create_delete_read_experience(endpoint_url):
+    assert os.environ["JOB_SEEKERS_TABLE_NAME"] is not None
+    print("\nseekers_table: ", os.environ["JOB_SEEKERS_TABLE_NAME"])
+
+    new_experience_id = str(uuid.uuid4())
+    job_seeker_id = "11111"
+    experience_dict = {
+        "end_year": 2000,
+        "experience_id": new_experience_id,
+        "job_seeker_id": job_seeker_id,
+        "role": "cook",
+        "role_description": "do some cooking",
+        "start_year": 2018,
+        "workplace_name": "CyberArk Dining Room"
+    }
+    experience = Experience(**experience_dict)
+    job_seeker_experience_repository.create(experience)
+
+    experience_list = job_seeker_experience_repository.get_all(job_seeker_id=job_seeker_id)
+    assert len(list(filter(lambda x: x.experience_id == new_experience_id, experience_list))) == 1
+
+    new_experience = job_seeker_experience_repository.get(job_seeker_id=job_seeker_id, experience_id=new_experience_id)
+    assert new_experience.experience_id == new_experience_id
+
+    job_seeker_experience_repository.delete(job_seeker_id=job_seeker_id, experience_id=new_experience_id)
+
+    try:
+        job_seeker_experience_repository.get(job_seeker_id=job_seeker_id, experience_id=new_experience_id)
+        raise Exception("Expected not to find this experience")
+    except NotFoundError:
+        # all good. this is what we expected
+        pass

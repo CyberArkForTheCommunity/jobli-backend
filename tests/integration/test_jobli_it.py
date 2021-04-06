@@ -8,14 +8,11 @@ import pytest
 import requests
 from dotenv import load_dotenv
 
-from service.dtos.job_seeker_answer_dto import JobSeekerAnswerDto
-from service.dtos.job_seeker_profile_dto import JobSeekerProfileDto
-# from cdk.jobli_service_cdk.service_stack.jobli_construct import get_stack_name
-# from jobli_service_cdk.service_stack.constants import BASE_NAME
-from service.dtos.jobli_dto import JobliDto, UpdateUserTypeDto, UserType
+from service.dtos.jobli_dto import JobliDto
 from tests.helpers.cognito_auth_util import add_auth_header
-from tests.helpers.environment_handler import load_env_vars, get_stack_name
+from tests.helpers.environment_handler import load_env_vars
 from tests.helpers.random_utils import random_string
+
 
 # region test fixtures
 
@@ -32,6 +29,7 @@ def endpoint_url():
 @pytest.fixture(scope="module")
 def auth_headers():
     return add_auth_header()
+
 
 # endregion
 

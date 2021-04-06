@@ -28,6 +28,10 @@ class _JobSeekerRepository:
 
         return job_seeker_record_dict
 
+    def delete(self, job_seeker_id: str) -> None:
+        self.__single_table_service.remove_item(JobSeeker.build_pk(job_seeker_id),
+                                                JobSeeker.build_sk())
+
     def update(self, job_seeker: JobSeeker, user: str = None) -> None:
         self.__single_table_service.update_item(job_seeker, user)
 

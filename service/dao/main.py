@@ -1,10 +1,8 @@
 import json
-import uuid
 
 from service.dao.job_seeker_answers_repository import job_seeker_answers_repository
 from service.dao.job_seeker_repository import job_seeker_repository
 from service.dao.model.job_seeker import JobSeeker
-from service.dao.model.job_seeker_answers import JobSeekerAnswers
 
 if __name__ == "__main__":
 
@@ -22,8 +20,8 @@ if __name__ == "__main__":
     job_seeker_dict = job_seeker_repository.get("11111")
     job_seeker: JobSeeker = JobSeeker(**job_seeker_dict)
 
-    #job_seeker.birth_date = int(job_seeker.birth_date)
-    #job_seeker.version = int(job_seeker.version)
+    # job_seeker.birth_date = int(job_seeker.birth_date)
+    # job_seeker.version = int(job_seeker.version)
 
     print(json.dumps(job_seeker.as_dict()))
 
@@ -39,9 +37,7 @@ if __name__ == "__main__":
     # job_seeker.full_name = "Test User 3"
     # job_seeker.street = "EEE"
 
-    #job_seeker_repository.create(job_seeker)
-
-
+    # job_seeker_repository.create(job_seeker)
 
     #
     # answers = JobSeekerAnswers()

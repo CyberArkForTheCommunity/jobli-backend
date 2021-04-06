@@ -165,7 +165,7 @@ class JobliServiceEnvironment(core.Construct):
 
         seeker_languages: apigw.Resource = seeker_resource.add_resource("languages")
         self.__add_lambda_api(lambda_name='AddSeekerLanguages', handler_method='service.handler.add_seeker_languages',
-                              resource=seeker_languages, http_method=HttpMethods.POST, member_name="add_seeker_languages_api_lambda")
+                              resource=seeker_languages, http_method=HttpMethods.PUT, member_name="add_seeker_languages_api_lambda")
 
         seeker_summary: apigw.Resource = seeker_resource.add_resource("summary")
         self.__add_lambda_api(lambda_name='GetSeeekerSummary',

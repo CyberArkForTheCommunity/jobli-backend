@@ -51,6 +51,15 @@ In order to deploy infra-library CloudFormation stack resources for example: KMS
 python deploy.py
 ```
 
+### Configure Google App credentials
+Running python deploy.py will fail on missing enviroment variables. Do the following steps to fix this
+1. Go to: https://console.cloud.google.com/apis/credentials/oauthclient/909417432201-gkh6vpm1vdel1kq95j2pd3chtu3o8vua.apps.googleusercontent.com?authuser=1&project=jobliapp1&supportedpurview=project
+1. Sign in google account with email & password provided by Cyberark
+1. Go to created .env file and add (replace XXXX with actual Client ID & Secret shown in link above):
+GOOGLE_CLIENT_ID=XXXX
+GOOGLE_CLIENT_SECRET=XXXX
+1. run again: python deploy.py
+
 ### Run tests
 In order to run unit tests
 ```shell script

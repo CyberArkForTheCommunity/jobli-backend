@@ -1,27 +1,19 @@
 # jobli-service
 
-Cloned from the template-business-service at: 2021-04-04 08:36:33  
-Last updated at: 2021-04-04 08:36:33
-
 
 ## Prerequisite installation
 You should install the following tools before starting to work
-1. Install Python 3.7.+
+1. Install Python 3.8.+
 1. Install pipenv for python dependency management 
 - zsh shell (MacOS):
    ```shell script
-   pip install pipenv
+   pip install pipenv==2018.11.26
    echo export PIPENV_VENV_IN_PROJECT=true >> ~/.zshrc
     ```
  - bash shell (Linux):
    ```shell script
-   pip install pipenv
+   pip install pipenv==2018.11.26
    echo export PIPENV_VENV_IN_PROJECT=true >> ~/.bashrc
-    ```
-1. Install AWS SAM
-    ```cmd
-    brew tap aws/tap
-    brew install aws-sam-cli
     ```
 1. Node.js download and install from: [https://nodejs.org/en/download](https://nodejs.org/en/download/)
    Then configure [npm proxy](https://ca-il-confluence.il.cyber-ark.com/display/GRnD/Proxy+Configuration+for+Dev+Tools#ProxyConfigurationforDevTools-npm)
@@ -31,8 +23,6 @@ You should install the following tools before starting to work
     ```
 
 ## Getting started
-1. Use "Self-Service" Jenkins job in order to create template job and repository
-
 1. Load your github.com ssh key in order to resolve dependencies next step
     ```shell script
     ssh-add ~/.ssh/id_rsa
@@ -60,19 +50,23 @@ In order to deploy infra-library CloudFormation stack resources for example: KMS
 ```shell script
 python deploy.py
 ```
-Clean deployment, will remove the old stack from CloudFormation
+
+### Run tests
+In order to run unit tests
 ```shell script
-python deploy.py --clean
+pytest -v tests/unit
+```
+In order to run integration tests you should deploy first and then you can run 
+```shell script
+pytest -v tests/integration
+```
+In order to run all tests 
+```shell script
+pytest -v tests
 ```
 
 ### Destroy
 In order to delete the CloudFormation stack deployed in the last step:
 ```shell script
 python env_destroy.py
-```
-
-### Pylint
-Execute lint on your code:
-```shell script
-pylint <root-package/filename> -E
 ```

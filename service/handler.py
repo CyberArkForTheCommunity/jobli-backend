@@ -1,4 +1,5 @@
 import json
+import uuid
 from datetime import datetime
 from decimal import Decimal
 from http import HTTPStatus
@@ -16,6 +17,7 @@ from pydantic import ValidationError
 from service.common.exceptions import NotFoundError
 from service.dao.job_seeker_answers_repository import job_seeker_answers_repository, SearchResult
 from service.dao.job_seeker_repository import job_seeker_repository
+from service.dao.model.experience import Experience
 from service.dao.model.job_seeker import JobSeeker
 from service.dao.model.job_seeker_answers import JobSeekerAnswers
 from service.dtos.job_seeker_answer_dto import JobSeekerAnswerDto
@@ -181,24 +183,26 @@ def add_seeker_answers(event: dict, context: LambdaContext) -> dict:
 @logger.inject_lambda_context(log_event=True)
 def add_seeker_experience(event: dict, context: LambdaContext) -> dict:
     try:
+        event: APIGatewayProxyEvent = APIGatewayProxyEvent(event)
+        # user_id = event.request_context.authorizer.claims["sub"]
+        user_id = "11111"
         experience_dto: JobSeekerExperienceDto = JobSeekerExperienceDto.parse_raw(event["body"])
 
-        # # convert to model
-        # job_seeker: JobSeeker = JobSeeker()
-        # job_seeker.id = event["pathParameters"]["id"]
-        # job_seeker.full_name = profile_dto.full_name
-        #
-        # birth_date = datetime.datetime(year=profile_dto.birth_year, month=profile_dto.birth_month,
-        #                                day=profile_dto.birth_day)
-        #
-        # job_seeker.birth_date = time.mktime(birth_date.timetuple())
-        # job_seeker.email = profile_dto.email
-        # job_seeker.address = profile_dto.address
-        #
+        exp_dict = dict(job_seeker_id=user_id,
+                        experience_id=str(uuid.uuid4()))
+        exp_dict.update(experience_dto.dict())
+
+        experience: Experience = Experience(**exp_dict)
+        # workplace_name=experience_dto.workplace_name,
+        # start_year=experience_dto.start_year,
+        # end_year=experience_dto.end_year,
+        # role=experience_dto.role,
+        # role_description=experience_dto.role_description)
+
         # job_seeker_repository.update(job_seeker)
 
         # return resource
-        return _build_response(http_status=HTTPStatus.CREATED, body="")
+        return _build_response(http_status=HTTPStatus.CREATED, body=json.dumps(experience.as_dict()))
     except (ValidationError, TypeError) as err:
         return _build_error_response(err, HTTPStatus.BAD_REQUEST)
     except Exception as err:

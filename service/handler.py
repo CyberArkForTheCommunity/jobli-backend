@@ -6,17 +6,12 @@ from typing import List
 
 import boto3
 from aws_lambda_context import LambdaContext
-import boto3
-from mypy_boto3_cognito_idp import CognitoIdentityProviderClient
-from mypy_boto3_cognito_idp.type_defs import AttributeTypeTypeDef
-from pydantic import ValidationError
 from aws_lambda_powertools import Logger
 from aws_lambda_powertools.logging import logger
 from aws_lambda_powertools.utilities.data_classes import APIGatewayProxyEvent
 from mypy_boto3_cognito_idp import CognitoIdentityProviderClient
 from mypy_boto3_cognito_idp.type_defs import AttributeTypeTypeDef
 from pydantic import ValidationError
-from aws_lambda_powertools.utilities.data_classes import APIGatewayProxyEvent
 
 from service.common.exceptions import NotFoundError
 from service.dao.job_seeker_answers_repository import job_seeker_answers_repository
@@ -25,9 +20,10 @@ from service.dao.model.job_seeker import JobSeeker
 from service.dao.model.job_seeker_answers import JobSeekerAnswers
 from service.dtos.job_seeker_answer_dto import JobSeekerAnswerDto
 from service.dtos.job_seeker_experience_dto import JobSeekerExperienceDto
-from service.dtos.jobli_dto import JobliDto, UpdateUserTypeDto
 from service.dtos.job_seeker_profile_dto import JobSeekerProfileDto
+from service.dtos.jobli_dto import JobliDto
 from service.dtos.jobli_dto import UpdateUserTypeDto
+from service.models.job_seeker_resource import JobSeekerResource
 from service.models.jobli import Jobli
 
 logger = Logger()
@@ -53,6 +49,7 @@ def create_or_update_seeker_profile(event: dict, context: LambdaContext) -> dict
         return _build_error_response(err, HTTPStatus.BAD_REQUEST)
     except Exception as err:
         return _build_error_response(err)
+
 
 # PUT /api/seekers/{id}/profile
 @logger.inject_lambda_context(log_event=True)
@@ -117,10 +114,11 @@ def get_seeker_profile(event: dict, context: LambdaContext) -> dict:
         # convert to model
         job_seeker = job_seeker_repository.get(user_id)
 
-        # TODO convert to resource
+        # convert to resource
+        resource: JobSeekerResource = JobSeekerResource(**job_seeker)
 
         # return resource
-        return _build_response(http_status=HTTPStatus.OK, body=json.dumps(job_seeker))
+        return _build_response(http_status=HTTPStatus.OK, body=resource.json())
     except (ValidationError, TypeError) as err:
         return _build_error_response(err, HTTPStatus.BAD_REQUEST)
     except Exception as err:

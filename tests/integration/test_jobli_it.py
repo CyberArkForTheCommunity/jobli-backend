@@ -16,6 +16,8 @@ from tests.helpers.cognito_auth_util import add_auth_header
 # from jobli_service_cdk.service_stack.constants import BASE_NAME
 from service.dtos.jobli_dto import JobliDto, UpdateUserTypeDto, UserType
 
+# region test fixtures
+
 
 @pytest.fixture(scope="module")
 def endpoint_url():
@@ -30,10 +32,11 @@ def endpoint_url():
 def auth_headers():
     return add_auth_header()
 
+# endregion
+
 
 def test_create_or_update_seeker_profile(endpoint_url, auth_headers):
     # when create entity
-
 
     profile_dto: JobSeekerProfileDto = JobSeekerProfileDto(full_name=random_string(), birth_year=1970, birth_month=1, birth_day=1,
                                                            address=random_string(), email=random_string())
@@ -62,7 +65,7 @@ def test_create_or_update_seeker_profile(endpoint_url, auth_headers):
     # assert now - day_seconds < resource['created_date'] < now + day_seconds
     # assert resource['created_date'] == resource['updated_date']
 
-
+# region template tests
 
 def test_create_jobli(endpoint_url, auth_headers):
     # when create entity
@@ -124,6 +127,8 @@ def test_update_jobli(endpoint_url, auth_headers):
     assert now - day_seconds < resource['updated_date'] < now + day_seconds
     assert resource['created_date'] < resource['updated_date']
 
+# endregion
+
 
 def test_set_user_type(endpoint_url, auth_headers):
     # when create entity
@@ -134,6 +139,7 @@ def test_set_user_type(endpoint_url, auth_headers):
 
     # then assert
     assert response.status_code == HTTPStatus.OK
+
 
 def test_amit():
     seekers_table = get_stack_output(get_stack_name(), 'JobSeekersTableName')

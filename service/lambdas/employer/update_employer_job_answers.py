@@ -31,11 +31,13 @@ def update_employer_job_answers(event: dict, context: LambdaContext) -> dict:
         jobs_table = dynamo_resource.Table(get_env_or_raise(EmployerConstants.JOBS_TABLE_NAME))
 
         stored_job: EmployerJob = EmployerJob.parse_obj(jobs_table.get_item(
-            Key={"employer_id": employer_id, 'job_id': job_id})['Item'])
+            Key={'job_id': job_id})['Item'])
+        if stored_job.employer_id != employer_id:
+            return {'statusCode': HTTPStatus.BAD_REQUEST,
+                    'headers': {'Content-Type': 'application/json'},
+                    'body': "Given employer id does not match job id"}
         stored_job.answers = employer_answers
-
         jobs_table.update_item(Key={
-                "employer_id": employer_id,
                 "job_id": job_id
             },
             UpdateExpression="set answers=:a",

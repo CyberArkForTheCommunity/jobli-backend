@@ -179,20 +179,17 @@ class JobliServiceEnvironment(core.Construct):
                               resource=relevant_seekers_resource, http_method=HttpMethods.GET,
                               member_name="list_relevant_seekers_api_lambda")
 
-        # seeker_resource: apigw.Resource = api_resource.add_resource("seekers")
-        # seeker_id_resource: apigw.Resource = seeker_resource.add_resource("{id}")
-        #
-        # seeker_id_profile: apigw.Resource = seeker_id_resource.add_resource("profile")
-        # self.__add_lambda_api(lambda_name='CreateSeekerProfile', handler_method='service.handler.create_seeker_profile',
-        #                       resource=seeker_id_profile, http_method="POST", member_name="add_seeker_profile_api_lambda")
-        #
-        # seeker_id_answers: apigw.Resource = seeker_id_resource.add_resource("answers")
-        # self.__add_lambda_api(lambda_name='AddSeekerAnswers', handler_method='service.handler.add_seeker_answers',
-        #                       resource=seeker_id_answers, http_method="POST", member_name="add_seeker_answers_api_lambda")
-        #
-        # seeker_id_experience: apigw.Resource = seeker_id_resource.add_resource("experience")
-        # self.__add_lambda_api(lambda_name='AddSeekerExperience', handler_method='service.handler.add_seeker_experience',
-        #                       resource=seeker_id_experience, http_method="POST", member_name="add_seeker_experience_api_lambda")
+        self.__add_lambda_api(lambda_name='ListSeekerExperience',
+                              handler_method='service.handler.list_seeker_experience',
+                              resource=seeker_experience, http_method=HttpMethods.GET,
+                              member_name="list_seeker_experience_api_lambda")
+
+        seeker_experience_id: apigw.Resource = seeker_experience.add_resource("{experience_id}")
+        self.__add_lambda_api(lambda_name='GetSeekerExperienceById',
+                              handler_method='service.handler.get_seeker_experience_by_id',
+                              resource=seeker_experience_id, http_method=HttpMethods.GET,
+                              member_name="get_seeker_experience_by_id_api_lambda")
+
 
         # Employers REST's
         self.__add_lambda_api(lambda_name='CreateJobliEmployer', handler_method='service.lambdas.employer.create_employer.create_employer',

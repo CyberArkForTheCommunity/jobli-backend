@@ -205,6 +205,41 @@ def add_seeker_experience(event: dict, context: LambdaContext) -> dict:
         return _build_error_response(err)
 
 
+# GET /api/seekers/experience
+@logger.inject_lambda_context(log_event=True)
+def list_seeker_experience(event: dict, context: LambdaContext) -> dict:
+    try:
+
+        event: APIGatewayProxyEvent = APIGatewayProxyEvent(event)
+        user_id = event.request_context.authorizer.claims["sub"]
+
+        # TODO
+
+        return _build_response(http_status=HTTPStatus.CREATED, body="")
+    except (ValidationError, TypeError) as err:
+        return _build_error_response(err, HTTPStatus.BAD_REQUEST)
+    except Exception as err:
+        return _build_error_response(err)
+
+
+# GET /api/seekers/experience/{experience_id}
+@logger.inject_lambda_context(log_event=True)
+def get_seeker_experience_by_id(event: dict, context: LambdaContext) -> dict:
+    try:
+        experience_id = event["pathParameters"]["id"]
+
+        event: APIGatewayProxyEvent = APIGatewayProxyEvent(event)
+        user_id = event.request_context.authorizer.claims["sub"]
+
+        # TODO
+
+        return _build_response(http_status=HTTPStatus.CREATED, body="")
+    except (ValidationError, TypeError) as err:
+        return _build_error_response(err, HTTPStatus.BAD_REQUEST)
+    except Exception as err:
+        return _build_error_response(err)
+
+
 # PUT /api/seekers/languages
 @logger.inject_lambda_context(log_event=True)
 def add_seeker_languages(event: dict, context: LambdaContext) -> dict:

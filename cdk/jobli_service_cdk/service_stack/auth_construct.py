@@ -32,14 +32,14 @@ class JobliAuth(core.Construct):
         self.user_pool_identity_provider = UserPoolIdentityProviderGoogle(self, "JobliGoogleIdentityProvider", 
                                                                             client_id=google_client_id.value_as_string,
                                                                             client_secret=google_client_secret.value_as_string,
-                                                                            scopes=['profile', 'email', 'openid'], user_pool=self.user_pool,
+                                                                            scopes=['profile', 'email', 'openid', 'phone'], user_pool=self.user_pool,
                                                                             attribute_mapping=AttributeMapping(email=ProviderAttribute.GOOGLE_EMAIL))
         self.user_pool_client = UserPoolClient(
             self,
             "PoolClient",
             user_pool=self.user_pool,
             auth_flows=AuthFlow(admin_user_password=True, user_password=True), 
-            o_auth=OAuthSettings(callback_urls=['https://google.com'], 
+            o_auth=OAuthSettings(callback_urls=['myapp://', 'exp://127.0.0.1:19000/--/'], 
             flows=OAuthFlows(authorization_code_grant=True, implicit_code_grant=True), 
             scopes=[OAuthScope.PHONE, OAuthScope.EMAIL, OAuthScope.OPENID, OAuthScope.COGNITO_ADMIN]),
             supported_identity_providers=[UserPoolClientIdentityProvider.GOOGLE] 

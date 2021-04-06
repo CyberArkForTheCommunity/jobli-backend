@@ -18,6 +18,7 @@ from service.common.exceptions import NotFoundError
 from service.dao.job_seeker_answers_repository import job_seeker_answers_repository, SearchResult
 from service.dao.job_seeker_experience_repository import job_seeker_experience_repository
 from service.dao.job_seeker_repository import job_seeker_repository
+from service.dao.jobs_repository import jobs_repository
 from service.dao.model.experience import Experience
 from service.dao.model.job_seeker import JobSeeker
 from service.dao.model.job_seeker_answers import JobSeekerAnswers
@@ -128,11 +129,10 @@ def search_relevant_jobs(event: dict, context: LambdaContext) -> dict:
                        job_seeker_answers.a9,
                        job_seeker_answers.a10]
 
-        # search_results =
-        # TODO alex.search(answers_arr, 100)
+        search_results = jobs_repository.get_jobs(answers_arr, 100)
 
         # return resource
-        return _build_response(http_status=HTTPStatus.CREATED, body="")
+        return _build_response(http_status=HTTPStatus.CREATED, body=json.dumps(search_results))
     except (ValidationError, TypeError) as err:
         return _build_error_response(err, HTTPStatus.BAD_REQUEST)
 

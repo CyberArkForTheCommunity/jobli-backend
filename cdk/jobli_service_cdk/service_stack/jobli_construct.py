@@ -129,13 +129,28 @@ class JobliServiceEnvironment(core.Construct):
                               resource=seeker_id_profile, http_method="GET",
                               member_name="get_seeker_api_lambda")
 
-        seeker_id_answers: apigw.Resource = seeker_resource.add_resource("answers")
+        seeker_answers: apigw.Resource = seeker_resource.add_resource("answers")
         self.__add_lambda_api(lambda_name='AddSeekerAnswers', handler_method='service.handler.add_seeker_answers',
-                              resource=seeker_id_answers, http_method="POST", member_name="add_seeker_answers_api_lambda")
+                              resource=seeker_answers, http_method="POST", member_name="add_seeker_answers_api_lambda")
 
-        seeker_id_experience: apigw.Resource = seeker_resource.add_resource("experience")
+        seeker_experience: apigw.Resource = seeker_resource.add_resource("experience")
         self.__add_lambda_api(lambda_name='AddSeekerExperience', handler_method='service.handler.add_seeker_experience',
-                              resource=seeker_id_experience, http_method="POST", member_name="add_seeker_experience_api_lambda")
+                              resource=seeker_experience, http_method="POST", member_name="add_seeker_experience_api_lambda")
+
+        seeker_languages: apigw.Resource = seeker_resource.add_resource("languages")
+        self.__add_lambda_api(lambda_name='AddSeekerLanguages', handler_method='service.handler.add_seeker_languages',
+                              resource=seeker_languages, http_method="POST", member_name="add_seeker_languages_api_lambda")
+
+        seeker_summary: apigw.Resource = seeker_resource.add_resource("summary")
+        self.__add_lambda_api(lambda_name='GetSeeekerSummary',
+                              handler_method='service.handler.get_seeker_summary',
+                              resource=seeker_summary, http_method="GET",
+                              member_name="get_seeker_summary_api_lambda")
+
+        self.__add_lambda_api(lambda_name='ListSeeekers',
+                              handler_method='service.handler.list_seekers',
+                              resource=seeker_resource, http_method="GET",
+                              member_name="list_seekers_api_lambda")
 
         # seeker_resource: apigw.Resource = api_resource.add_resource("seekers")
         # seeker_id_resource: apigw.Resource = seeker_resource.add_resource("{id}")

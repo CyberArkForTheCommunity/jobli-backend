@@ -124,6 +124,7 @@ def get_seeker_profile(event: dict, context: LambdaContext) -> dict:
     except Exception as err:
         return _build_error_response(err)
 
+
 # GET /api/seekers/{id}/profile
 @logger.inject_lambda_context(log_event=True)
 def get_seeker_profile_with_id(event: dict, context: LambdaContext) -> dict:
@@ -267,6 +268,42 @@ def add_seeker_languages(event: dict, context: LambdaContext) -> dict:
 
         # return resource
         return _build_response(http_status=HTTPStatus.CREATED, body="")
+    except (ValidationError, TypeError) as err:
+        return _build_error_response(err, HTTPStatus.BAD_REQUEST)
+    except Exception as err:
+        return _build_error_response(err)
+
+
+# GET /api/seekers/{id}/summary
+@logger.inject_lambda_context(log_event=True)
+def get_seeker_summary(event: dict, context: LambdaContext) -> dict:
+    try:
+        job_seeker_id = event["pathParameters"]["id"]
+
+        # convert to model
+        job_seeker: JobSeeker = JobSeeker(**job_seeker_repository.get(job_seeker_id))
+
+        # TODO convert to resource
+        resource: JobSeekerResource = JobSeekerResource(**job_seeker.as_dict())
+        # return resource
+        return _build_response(http_status=HTTPStatus.OK, body=resource.json())
+    except (ValidationError, TypeError) as err:
+        return _build_error_response(err, HTTPStatus.BAD_REQUEST)
+    except Exception as err:
+        return _build_error_response(err)
+
+
+# GET /api/seekers/
+@logger.inject_lambda_context(log_event=True)
+def list_seekers(event: dict, context: LambdaContext) -> dict:
+    try:
+        # list seekers models
+        job_seekers = []
+
+        # convert to seekers resources
+        resources_json_list: List[dict] = [JobSeekerResource(**job_seeker.as_dict()).dict() for job_seeker in job_seekers]
+        # return resource
+        return _build_response(http_status=HTTPStatus.OK, body=json.dumps(resources_json_list))
     except (ValidationError, TypeError) as err:
         return _build_error_response(err, HTTPStatus.BAD_REQUEST)
     except Exception as err:

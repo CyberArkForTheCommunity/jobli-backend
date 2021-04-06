@@ -3,6 +3,7 @@ from typing import Dict
 from aws_lambda_powertools import Logger
 
 from service.common.exceptions import NotFoundError
+from service.dao.job_seeker_experience_repository import job_seeker_experience_repository
 from service.dao.model.job_seeker import JobSeeker
 from service.dao.single_table_service import single_table_service
 
@@ -31,6 +32,12 @@ class _JobSeekerRepository:
     def delete(self, job_seeker_id: str) -> None:
         self.__single_table_service.remove_item(JobSeeker.build_pk(job_seeker_id),
                                                 JobSeeker.build_sk())
+
+        # now remove the related experiences
+        experiences_list = job_seeker_experience_repository.get_all(job_seeker_id)
+        for experience in experiences_list:
+            job_seeker_experience_repository.delete(job_seeker_id=job_seeker_id,
+                                                    experience_id=experience.experience_id)
 
     def update(self, job_seeker: JobSeeker, user: str = None) -> None:
         self.__single_table_service.update_item(job_seeker, user)

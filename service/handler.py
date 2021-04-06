@@ -350,7 +350,7 @@ def set_user_type(event: dict, context: LambdaContext) -> dict:
 
 
 def _build_response(http_status: HTTPStatus, body: str) -> dict:
-    return {'statusCode': http_status, 'headers': {'Content-Type': 'application/json'}, 'body': body}
+    return {'statusCode': http_status, 'headers': {'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*'}, 'body': body}
 
 
 def _build_error_response(err, status: HTTPStatus = HTTPStatus.INTERNAL_SERVER_ERROR) -> dict:
@@ -358,7 +358,8 @@ def _build_error_response(err, status: HTTPStatus = HTTPStatus.INTERNAL_SERVER_E
     return {
         'statusCode': status,
         'headers': {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'Access-Control-Allow-Origin': '*'
         },
         'body': str(err),
     }

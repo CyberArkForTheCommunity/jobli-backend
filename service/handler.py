@@ -177,7 +177,6 @@ def add_seeker_answers(event: dict, context: LambdaContext) -> dict:
         return _build_error_response(err)
 
 
-
 # POST /api/seekers/experience
 @logger.inject_lambda_context(log_event=True)
 def add_seeker_experience(event: dict, context: LambdaContext) -> dict:
@@ -206,28 +205,23 @@ def add_seeker_experience(event: dict, context: LambdaContext) -> dict:
         return _build_error_response(err)
 
 
-# POST /api/seekers/languages
+# PUT /api/seekers/languages
 @logger.inject_lambda_context(log_event=True)
 def add_seeker_languages(event: dict, context: LambdaContext) -> dict:
     try:
         languages_list: List[str] = json.loads(event["body"])
 
-        # # convert to model
-        # job_seeker: JobSeeker = JobSeeker()
-        # job_seeker.id = event["pathParameters"]["id"]
-        # job_seeker.full_name = profile_dto.full_name
-        #
-        # birth_date = datetime.datetime(year=profile_dto.birth_year, month=profile_dto.birth_month,
-        #                                day=profile_dto.birth_day)
-        #
-        # job_seeker.birth_date = time.mktime(birth_date.timetuple())
-        # job_seeker.email = profile_dto.email
-        # job_seeker.address = profile_dto.address
-        #
-        # job_seeker_repository.update(job_seeker)
+        event: APIGatewayProxyEvent = APIGatewayProxyEvent(event)
+        user_id = event.request_context.authorizer.claims["sub"]
+
+        job_seeker: JobSeeker = JobSeeker(**job_seeker_repository.get(user_id))
+
+        job_seeker.languages = languages_list
+
+        job_seeker_repository.update(job_seeker)
 
         # return resource
-        return _build_response(http_status=HTTPStatus.CREATED, body="")
+        return _build_response(http_status=HTTPStatus.NO_CONTENT, body="")
     except (ValidationError, TypeError) as err:
         return _build_error_response(err, HTTPStatus.BAD_REQUEST)
     except Exception as err:
@@ -351,7 +345,6 @@ def add_seeker_answers_with_id(event: dict, context: LambdaContext) -> dict:
         return _build_error_response(err)
 
 
-
 # endregion
 
 # region template methods
@@ -432,6 +425,7 @@ def set_user_type(event: dict, context: LambdaContext) -> dict:
         return _build_error_response(err, HTTPStatus.BAD_REQUEST)
     except Exception as err:
         return _build_error_response(err)
+
 
 # endregion
 

@@ -110,12 +110,13 @@ def get_seeker_profile(event: dict, context: LambdaContext) -> dict:
         user_id = event.request_context.authorizer.claims["sub"]
 
         # convert to model
-        job_seeker = job_seeker_repository.get(user_id)
+        job_seeker: JobSeeker = JobSeeker(**job_seeker_repository.get(user_id))
 
         # TODO convert to resource
-
+        job_seeker.birth_date = int(job_seeker.birth_date)
+        job_seeker.version = int(job_seeker.version)
         # return resource
-        return _build_response(http_status=HTTPStatus.OK, body=json.dumps(job_seeker))
+        return _build_response(http_status=HTTPStatus.OK, body=json.dumps(job_seeker.as_dict()))
     except (ValidationError, TypeError) as err:
         return _build_error_response(err, HTTPStatus.BAD_REQUEST)
     except Exception as err:
@@ -128,12 +129,13 @@ def get_seeker_profile_with_id(event: dict, context: LambdaContext) -> dict:
         job_seeker_id = event["pathParameters"]["id"]
 
         # convert to model
-        job_seeker = job_seeker_repository.get(job_seeker_id)
+        job_seeker: JobSeeker = JobSeeker(**job_seeker_repository.get(job_seeker_id))
 
         # TODO convert to resource
-
+        job_seeker.birth_date = int(job_seeker.birth_date)
+        job_seeker.version = int(job_seeker.version)
         # return resource
-        return _build_response(http_status=HTTPStatus.OK, body=json.dumps(job_seeker))
+        return _build_response(http_status=HTTPStatus.OK, body=json.dumps(job_seeker.as_dict()))
     except (ValidationError, TypeError) as err:
         return _build_error_response(err, HTTPStatus.BAD_REQUEST)
     except Exception as err:

@@ -11,7 +11,7 @@ import boto3
 logger = Logger()
 
 
-# GET /jobli/employers/{employer_id}/jobs/{job_id}
+# GET /api/employers/{employer_id}/jobs/{job_id}
 @logger.inject_lambda_context(log_event=True)
 def get_employer_job_by_id(event: dict, context: LambdaContext) -> dict:
     try:

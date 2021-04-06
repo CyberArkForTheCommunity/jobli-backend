@@ -14,7 +14,7 @@ from decimal import Decimal
 logger = Logger()
 
 
-# POST /jobli/employers
+# POST /api/jobli/employers
 @logger.inject_lambda_context(log_event=True)
 def create_employer(event: dict, context: LambdaContext) -> dict:
     try:

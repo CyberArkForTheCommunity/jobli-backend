@@ -15,7 +15,7 @@ from decimal import Decimal
 logger = Logger()
 
 
-# POST /jobli/employers/{employer_id}/jobs
+# POST /api/employers/{employer_id}/jobs
 @logger.inject_lambda_context(log_event=True)
 def add_employer_job(event: dict, context: LambdaContext) -> dict:
     try:
@@ -33,7 +33,7 @@ def add_employer_job(event: dict, context: LambdaContext) -> dict:
         jobs_table = dynamo_resource.Table(get_env_or_raise(EmployerConstants.JOBS_TABLE_NAME))
         # Check if employer id exists, will throw exception if not
         Employer.parse_obj(employers_table.get_item(
-            Key={"employer_id": employer_job.employer_id})['Item'])
+            Key={"employer_id": employer_job.employer_id}).get('Item', {}))
         jobs_table.put_item(Item=employer_job.dict(exclude_none=True))
         return {'statusCode': HTTPStatus.CREATED,
                 'headers': {'Content-Type': 'application/json'},

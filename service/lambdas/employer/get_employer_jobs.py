@@ -16,7 +16,7 @@ import json
 logger = Logger()
 
 
-# GET /jobli/employers/{employer_id}/jobs
+# GET /api/employers/{employer_id}/jobs
 @logger.inject_lambda_context(log_event=True)
 def get_employer_jobs(event: dict, context: LambdaContext) -> dict:
     try:

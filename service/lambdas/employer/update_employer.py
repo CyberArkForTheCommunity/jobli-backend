@@ -8,12 +8,11 @@ from service.common.utils import get_env_or_raise
 from service.lambdas.employer.constants import EmployerConstants
 from typing import Dict
 import boto3
-import json
 
 logger = Logger()
 
 
-# PUT /jobli/employers/{employer_id}
+# PUT /api/employers/{employer_id}
 @logger.inject_lambda_context(log_event=True)
 def update_employer(event: dict, context: LambdaContext) -> dict:
     try:
@@ -31,7 +30,7 @@ def update_employer(event: dict, context: LambdaContext) -> dict:
         dynamo_resource = boto3.resource("dynamodb")
         employers_table = dynamo_resource.Table(get_env_or_raise(EmployerConstants.EMPLOYERS_TABLE_NAME))
         # Get the existing employer to make it exists and get its current details
-        stored_employer: Dict = employers_table.get_item(Key={"employer_id": employer_id})['Item']
+        stored_employer: Dict = employers_table.get_item(Key={"employer_id": employer_id}).get('Item', {})
 
         # Update it with the given model
         stored_employer.update(employer.dict(exclude_none=True))

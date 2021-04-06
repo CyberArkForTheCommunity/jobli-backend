@@ -7,6 +7,7 @@ from http import HTTPStatus
 import pytest
 from dotenv import load_dotenv
 
+from service.dtos.job_seeker_answer_dto import JobSeekerAnswerDto
 from service.dtos.job_seeker_profile_dto import JobSeekerProfileDto
 from tests.helpers.environment_handler import get_stack_output, load_env_vars, get_stack_name
 from tests.helpers.random_utils import random_string
@@ -62,7 +63,21 @@ def test_create_or_update_seeker_profile(endpoint_url, auth_headers):
     # assert now - day_seconds < resource['created_date'] < now + day_seconds
     # assert resource['created_date'] == resource['updated_date']
 
+def test_add_seeker_answers(endpoint_url, auth_headers):
+    # when create entity
 
+    answers_dto: [JobSeekerAnswerDto] = []
+
+    for i in range(1,10):
+        answers_dto.append(JobSeekerAnswerDto(key="a" + str(i), question="q" + str(i), answer=True))
+
+    headers = {"Content-Type": "application/json"}
+    headers.update(auth_headers)
+
+    response = requests.api.post(url=f"{endpoint_url}/api/seeker/answers", headers=headers, json=profile_dto.dict())
+
+    # then assert created
+    assert response.status_code == HTTPStatus.OK
 
 def test_create_jobli(endpoint_url, auth_headers):
     # when create entity

@@ -122,9 +122,46 @@ def get_seeker_profile(event: dict, context: LambdaContext) -> dict:
         return _build_error_response(err)
 
 
-# POST /api/seekers/{id}/answers
+# POST /api/seekers/answers
 @logger.inject_lambda_context(log_event=True)
 def add_seeker_answers(event: dict, context: LambdaContext) -> dict:
+    try:
+        answer_dto_list: List[JobSeekerAnswerDto] = [JobSeekerAnswerDto.parse_raw(item) for item in
+                                                     json.loads(event["body"])]
+
+        event: APIGatewayProxyEvent = APIGatewayProxyEvent(event)
+        user_id = event.request_context.authorizer.claims["sub"]
+
+        job_seeker: JobSeeker = JobSeeker(**job_seeker_repository.get(user_id))
+
+        job_seeker_answers: JobSeekerAnswers = JobSeekerAnswers(job_seeker_id=user_id,
+                                                                job_seeker_name=job_seeker.full_name)
+
+        job_seeker_answers.a1 = answer_dto_list[0].answer
+        job_seeker_answers.a2 = answer_dto_list[1].answer
+        job_seeker_answers.a3 = answer_dto_list[2].answer
+        job_seeker_answers.a4 = answer_dto_list[3].answer
+        job_seeker_answers.a5 = answer_dto_list[4].answer
+        job_seeker_answers.a6 = answer_dto_list[5].answer
+        job_seeker_answers.a7 = answer_dto_list[6].answer
+        job_seeker_answers.a8 = answer_dto_list[7].answer
+        job_seeker_answers.a9 = answer_dto_list[8].answer
+        job_seeker_answers.a10 = answer_dto_list[9].answer
+
+        job_seeker_answers_repository.create(job_seeker_answers=job_seeker_answers)
+
+        # return resource
+        return _build_response(http_status=HTTPStatus.CREATED, body="")
+    except (ValidationError, TypeError) as err:
+        return _build_error_response(err, HTTPStatus.BAD_REQUEST)
+    except NotFoundError as err:
+        return _build_error_response(err, HTTPStatus.NOT_FOUND)
+    except Exception as err:
+        return _build_error_response(err)
+
+# POST /api/seekers/{id}/answers
+@logger.inject_lambda_context(log_event=True)
+def add_seeker_answers_with_id(event: dict, context: LambdaContext) -> dict:
     try:
         answer_dto_list: List[JobSeekerAnswerDto] = [JobSeekerAnswerDto.parse_raw(item) for item in
                                                      json.loads(event["body"])]
@@ -157,7 +194,6 @@ def add_seeker_answers(event: dict, context: LambdaContext) -> dict:
         return _build_error_response(err, HTTPStatus.NOT_FOUND)
     except Exception as err:
         return _build_error_response(err)
-
 
 # POST /api/seekers/{id}/experience
 @logger.inject_lambda_context(log_event=True)

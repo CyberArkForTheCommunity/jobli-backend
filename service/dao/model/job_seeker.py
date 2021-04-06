@@ -1,6 +1,7 @@
-from typing import Dict, List
-from decimal import Decimal
-# from file_management.jobli.service.single_table_service import SingleTableRecord
+from typing import Dict, List, Optional
+
+from pydantic.main import BaseModel
+
 from service.dao.single_table_service import SingleTableRecord, DATA_DELIMITER
 
 JOB_SEEKER_PK_PREFIX = "JOB_SEEKER" + DATA_DELIMITER
@@ -8,28 +9,29 @@ FILES_PK1_CUSTOMER_ID_PREFIX = "CUSTOMER" + DATA_DELIMITER
 FILES_SK1_TYPE_PREFIX = "TYPE" + DATA_DELIMITER
 
 
-class JobSeeker(SingleTableRecord):
+class JobSeeker(BaseModel, SingleTableRecord):
 
-    def __init__(self, **kwargs):
-        if 'version' not in kwargs:
-            self.version = 0
-        for attribute, value in kwargs.items():
-            if hasattr(self, attribute):
-                setattr(self, attribute, value)
+    # def __init__(self, **kwargs):
+    #     if 'version' not in kwargs:
+    #         self.version = 0
+    #     for attribute, value in kwargs.items():
+    #         if hasattr(self, attribute):
+    #             setattr(self, attribute, value)
 
-    id: str = None
-    full_name: str = None
-    birth_date: int = None
+    id: str
+    full_name: str
+    birth_date: int
     # city: str = None
     # street: str = None
     # apartment: int = None
-    address: str = None
-    email: str = None
-    languages: List[str] = None
+    address: str
+    email: str
+    languages: Optional[List[str]]
 
-    creationTime: str = None
-    lastUpdatedBy: str = None
+    creationTime: Optional[str]
+    lastUpdatedTime: Optional[str]
     version: int = 0
+
     # skills: List[Skill] = None
 
     # education_institutes: List[EducationInstitute] = None
@@ -52,10 +54,10 @@ class JobSeeker(SingleTableRecord):
     def produce_sk(self) -> str:
         return DATA_DELIMITER
 
-    def produce_gsi1_pk(self) -> str:
+    def produce_gsi1_pk(self) -> Optional[str]:
         return None
 
-    def produce_gsi1_sk(self) -> str:
+    def produce_gsi1_sk(self) -> Optional[str]:
         return None
 
     def as_dict(self) -> Dict:

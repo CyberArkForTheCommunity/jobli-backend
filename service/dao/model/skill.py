@@ -18,10 +18,10 @@ class Skill(SingleTableRecord):
     def produce_sk(self) -> str:
         pass
 
-    def produce_gsi1_sk(self) -> str:
+    def produce_gsi1_sk(self) -> Optional[str]:
         pass
 
-    def produce_gsi1_pk(self) -> str:
+    def produce_gsi1_pk(self) -> Optional[str]:
         pass
 
     def as_dict(self) -> Dict:

@@ -11,6 +11,7 @@ class Jobli(BaseModel):
     updated_date: Optional[Decimal]
 
     # pylint: disable=no-self-argument,no-self-use,invalid-name
+    # noinspection PyMethodParameters
     @validator('name')
     def validate_changes(cls, v):
         if not v:

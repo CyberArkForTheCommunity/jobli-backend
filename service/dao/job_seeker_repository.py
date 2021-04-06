@@ -1,11 +1,10 @@
-import logging
 from typing import Dict
 
 from aws_lambda_powertools import Logger
 
 from service.common.exceptions import NotFoundError
-from service.dao.single_table_service import single_table_service
 from service.dao.model.job_seeker import JobSeeker
+from service.dao.single_table_service import single_table_service
 
 logger = Logger()
 
@@ -22,7 +21,8 @@ class _JobSeekerRepository:
         self.__single_table_service.create_item(job_seeker, user)
 
     def get(self, job_seeker_id: str) -> Dict:
-        job_seeker_record_dict = self.__single_table_service.find_by_pk_and_sk(JobSeeker.build_pk(job_seeker_id), JobSeeker.build_sk())
+        job_seeker_record_dict = self.__single_table_service.find_by_pk_and_sk(JobSeeker.build_pk(job_seeker_id),
+                                                                               JobSeeker.build_sk())
         if not job_seeker_record_dict:
             raise NotFoundError(f"JobSeeker with id='{job_seeker_id}' not found")
 

@@ -19,7 +19,8 @@ if __name__ == "__main__":
     #
     # job_seeker_repository.create(job_seeker)
 
-    job_seeker: JobSeeker = JobSeeker(**job_seeker_repository.get("11111"))
+    job_seeker_dict = job_seeker_repository.get("11111")
+    job_seeker: JobSeeker = JobSeeker(**job_seeker_dict)
 
     #job_seeker.birth_date = int(job_seeker.birth_date)
     #job_seeker.version = int(job_seeker.version)

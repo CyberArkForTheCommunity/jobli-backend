@@ -16,6 +16,7 @@ from pydantic import ValidationError
 
 from service.common.exceptions import NotFoundError
 from service.dao.job_seeker_answers_repository import job_seeker_answers_repository, SearchResult
+from service.dao.job_seeker_experience_repository import job_seeker_experience_repository
 from service.dao.job_seeker_repository import job_seeker_repository
 from service.dao.model.experience import Experience
 from service.dao.model.job_seeker import JobSeeker
@@ -184,8 +185,8 @@ def add_seeker_answers(event: dict, context: LambdaContext) -> dict:
 def add_seeker_experience(event: dict, context: LambdaContext) -> dict:
     try:
         event: APIGatewayProxyEvent = APIGatewayProxyEvent(event)
-        # user_id = event.request_context.authorizer.claims["sub"]
-        user_id = "11111"
+        user_id = event.request_context.authorizer.claims["sub"]
+        # user_id = "11111"
         experience_dto: JobSeekerExperienceDto = JobSeekerExperienceDto.parse_raw(event["body"])
 
         exp_dict = dict(job_seeker_id=user_id,
@@ -200,6 +201,7 @@ def add_seeker_experience(event: dict, context: LambdaContext) -> dict:
         # role_description=experience_dto.role_description)
 
         # job_seeker_repository.update(job_seeker)
+        experience = job_seeker_experience_repository.create(experience)
 
         # return resource
         return _build_response(http_status=HTTPStatus.CREATED, body=json.dumps(experience.as_dict()))
@@ -215,11 +217,14 @@ def list_seeker_experience(event: dict, context: LambdaContext) -> dict:
     try:
 
         event: APIGatewayProxyEvent = APIGatewayProxyEvent(event)
-        user_id = event.request_context.authorizer.claims["sub"]
+        # TODO user_id = event.request_context.authorizer.claims["sub"]
 
-        # TODO
+        user_id = "11111"
 
-        return _build_response(http_status=HTTPStatus.CREATED, body="")
+        result_list: List[Experience] = [Experience.parse_obj(item) for item in
+                                         job_seeker_experience_repository.get_all(user_id)]
+
+        return _build_response(http_status=HTTPStatus.OK, body=json.dumps(result_list))
     except (ValidationError, TypeError) as err:
         return _build_error_response(err, HTTPStatus.BAD_REQUEST)
     except Exception as err:
@@ -235,11 +240,13 @@ def get_seeker_experience_by_id(event: dict, context: LambdaContext) -> dict:
         event: APIGatewayProxyEvent = APIGatewayProxyEvent(event)
         user_id = event.request_context.authorizer.claims["sub"]
 
-        # TODO
+        experience: Experience = job_seeker_experience_repository.get(user_id, experience_id)
 
-        return _build_response(http_status=HTTPStatus.CREATED, body="")
+        return _build_response(http_status=HTTPStatus.CREATED, body=json.dumps(experience.as_dict()))
     except (ValidationError, TypeError) as err:
         return _build_error_response(err, HTTPStatus.BAD_REQUEST)
+    except NotFoundError as err:
+        return _build_error_response(err, HTTPStatus.NOT_FOUND)
     except Exception as err:
         return _build_error_response(err)
 

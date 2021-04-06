@@ -1,4 +1,4 @@
-from typing import List, Dict
+from typing import List
 
 from aws_lambda_powertools import Logger
 
@@ -14,22 +14,23 @@ class _JobSeekerExperienceRepository:
     def __init__(self):
         self.__single_table_service = single_table_service
 
-    def create(self, experience: Experience, user: str = None) -> None:
+    def create(self, experience: Experience, user: str = None) -> Experience:
         # if not user:
         #     user = SessionContext.get_user_name()
         logger.debug(f"saving experience {experience.__str__()} to db")
-        self.__single_table_service.create_item(experience, user)
+        dict_ret = self.__single_table_service.create_item(experience, user)
+        return Experience(**dict_ret)
 
     def get_all(self, job_seeker_id: str) -> List[dict]:
         return self.__single_table_service.find_by_pk_and_sk_begins_with(Experience.build_pk(job_seeker_id),
                                                                          EXPERIENCE_SK_PREFIX)
 
-    def get(self, job_seeker_id: str, experience_id) -> Dict:
-        result = self.__single_table_service.find_by_pk_and_sk(Experience.build_pk(job_seeker_id),
-                                                               Experience.build_sk(experience_id))
-        if not result:
-            raise NotFoundError(f"JobSeeker with id='{job_seeker_id}' experience not found")
-        return result
+    def get(self, job_seeker_id: str, experience_id) -> Experience:
+        dict_ret = self.__single_table_service.find_by_pk_and_sk(Experience.build_pk(job_seeker_id),
+                                                                 Experience.build_sk(experience_id))
+        if not dict_ret:
+            raise NotFoundError(f"JobSeeker experience with id='{experience_id}' not found")
+        return Experience(**dict_ret)
 
     def update(self, experience: Experience, user: str = None) -> None:
         self.__single_table_service.update_item(experience, user)

@@ -267,3 +267,4 @@ poetry.lock
 src/
 
 .build/
+/cdk/pyproject.toml

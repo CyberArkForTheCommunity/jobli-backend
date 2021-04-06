@@ -41,7 +41,7 @@ class JobliAuth(core.Construct):
             auth_flows=AuthFlow(admin_user_password=True, user_password=True), 
             o_auth=OAuthSettings(callback_urls=['myapp://', 'exp://127.0.0.1:19000/--/'], 
             flows=OAuthFlows(authorization_code_grant=True, implicit_code_grant=True), 
-            scopes=[OAuthScope.PHONE, OAuthScope.EMAIL, OAuthScope.OPENID, OAuthScope.COGNITO_ADMIN]),
+            scopes=[OAuthScope.PHONE, OAuthScope.EMAIL, OAuthScope.OPENID, OAuthScope.COGNITO_ADMIN, OAuthScope.PROFILE]),
             supported_identity_providers=[UserPoolClientIdentityProvider.GOOGLE] 
             )
         

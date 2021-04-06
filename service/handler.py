@@ -74,14 +74,14 @@ def create_or_update_seeker_profile_with_id(event: dict, context: LambdaContext)
 
 def __create_seeker_profile(user_id: str, profile_dto: JobSeekerProfileDto) -> dict:
     # convert to model
-    job_seeker: JobSeeker = JobSeeker()
-    job_seeker.id = user_id
-    job_seeker.full_name = profile_dto.full_name
 
     birth_date = datetime(year=profile_dto.birth_year, month=profile_dto.birth_month, day=profile_dto.birth_day)
-    job_seeker.birth_date = Decimal(birth_date.timestamp() * 1000)
-    job_seeker.email = profile_dto.email
-    job_seeker.address = profile_dto.address
+
+    job_seeker: JobSeeker = JobSeeker(id=user_id,
+                                      full_name=profile_dto.full_name,
+                                      birth_date=Decimal(birth_date.timestamp() * 1000),
+                                      email=profile_dto.email,
+                                      address=profile_dto.address)
 
     job_seeker_repository.create(job_seeker)
 
@@ -182,6 +182,7 @@ def add_seeker_answers(event: dict, context: LambdaContext) -> dict:
     except Exception as err:
         return _build_error_response(err)
 
+
 # POST /api/seekers/{id}/answers
 @logger.inject_lambda_context(log_event=True)
 def add_seeker_answers_with_id(event: dict, context: LambdaContext) -> dict:
@@ -217,6 +218,7 @@ def add_seeker_answers_with_id(event: dict, context: LambdaContext) -> dict:
         return _build_error_response(err, HTTPStatus.NOT_FOUND)
     except Exception as err:
         return _build_error_response(err)
+
 
 # POST /api/seekers/{id}/experience
 @logger.inject_lambda_context(log_event=True)
@@ -301,7 +303,8 @@ def list_seekers(event: dict, context: LambdaContext) -> dict:
         job_seekers = []
 
         # convert to seekers resources
-        resources_json_list: List[dict] = [JobSeekerResource(**job_seeker.as_dict()).dict() for job_seeker in job_seekers]
+        resources_json_list: List[dict] = [JobSeekerResource(**job_seeker.as_dict()).dict() for job_seeker in
+                                           job_seekers]
         # return resource
         return _build_response(http_status=HTTPStatus.OK, body=json.dumps(resources_json_list))
     except (ValidationError, TypeError) as err:
@@ -391,7 +394,8 @@ def set_user_type(event: dict, context: LambdaContext) -> dict:
 
 
 def _build_response(http_status: HTTPStatus, body: str) -> dict:
-    return {'statusCode': http_status, 'headers': {'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*'}, 'body': body}
+    return {'statusCode': http_status,
+            'headers': {'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*'}, 'body': body}
 
 
 def _build_error_response(err, status: HTTPStatus = HTTPStatus.INTERNAL_SERVER_ERROR) -> dict:

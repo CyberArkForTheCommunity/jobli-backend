@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "75d53a371ee43b88269c46c462004a3931c93accda2798ede0b10cbd91f7ce29"
+            "sha256": "0306dbada585c980b765c95d55f10d0167f92da72cee7f3e9835ebdbae17f0a7"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -178,6 +178,14 @@
                 "sha256:840947ebfa8b58f318d42301cf8c0a20fd794a33b61cc4638e28e9e61ba32f42"
             ],
             "version": "==2.3.3"
+        },
+        "atomicwrites": {
+            "hashes": [
+                "sha256:6d1784dea7c0c8d4a5172b6c620f40b6e4cbfdf96d783691f2e1302a7b88e197",
+                "sha256:ae70396ad1a434f9c7046fd2dd196fc04b12f9e91ffb859164193be8b6168a7a"
+            ],
+            "markers": "sys_platform == 'win32'",
+            "version": "==1.4.0"
         },
         "attrs": {
             "hashes": [
@@ -418,18 +426,6 @@
             "index": "pypi",
             "version": "==1.17.45"
         },
-        "boto3-stubs": {
-            "extras": [
-                "cloudformation",
-                "cognito-idp"
-            ],
-            "hashes": [
-                "sha256:75a16323ba7997f6981aff649a384594116408801f3264da553f4b45efccc5ab",
-                "sha256:b69b95bb174f0e31bac6fd8d0c6dca56aec766e4ba36124a414e87c9ea8f8f0f"
-            ],
-            "index": "pypi",
-            "version": "==1.17.45.0"
-        },
         "botocore": {
             "hashes": [
                 "sha256:64ffef8ea333f9baf9cb1f2b915d317f6d0359dc4d649279da683c27367c2fff",
@@ -464,7 +460,7 @@
                 "sha256:5941b2b48a20143d2267e95b1c2a7603ce057ee39fd88e7329b0c292aa16869b",
                 "sha256:9f47eda37229f68eee03b24b9748937c7dc3868f906e8ba69fbcbdd3bc5dc3e2"
             ],
-            "markers": "python_version > '3.4'",
+            "markers": "sys_platform == 'win32'",
             "version": "==0.4.4"
         },
         "constructs": {
@@ -689,20 +685,6 @@
             "index": "pypi",
             "version": "==1.17.45.0"
         },
-        "mypy-boto3-cloudformation": {
-            "hashes": [
-                "sha256:1cae52cc517d655a863fb97740a574504f11601f86a32a4a7aa2b67a1732d7ba",
-                "sha256:a83f6401f7b58d2944bd57db33acabb1a33c16507a155bdfb30651ec8b40e580"
-            ],
-            "version": "==1.17.45.0"
-        },
-        "mypy-boto3-cognito-idp": {
-            "hashes": [
-                "sha256:937191a6ae3ddf96effcd0bb48a202a274fbc0fc93657dd042439b7b0ba3f2b7",
-                "sha256:abc7cb6d49b538acc5fcf01e3f28adc385f44296d6d6ca0d216427881be7aa38"
-            ],
-            "version": "==1.17.45.0"
-        },
         "mypy-extensions": {
             "hashes": [
                 "sha256:090fedd75945a69ae91ce1303b5824f428daf5a028d2f6ab8a299250a846f15d",
@@ -852,6 +834,24 @@
             ],
             "index": "pypi",
             "version": "==0.17.0"
+        },
+        "pywin32": {
+            "hashes": [
+                "sha256:300a2db938e98c3e7e2093e4491439e62287d0d493fe07cce110db070b54c0be",
+                "sha256:31f88a89139cb2adc40f8f0e65ee56a8c585f629974f9e07622ba80199057511",
+                "sha256:371fcc39416d736401f0274dd64c2302728c9e034808e37381b5e1b22be4a6b0",
+                "sha256:47a3c7551376a865dd8d095a98deba954a98f326c6fe3c72d8726ca6e6b15507",
+                "sha256:4cdad3e84191194ea6d0dd1b1b9bdda574ff563177d2adf2b4efec2a244fa116",
+                "sha256:7c1ae32c489dc012930787f06244426f8356e129184a02c25aef163917ce158e",
+                "sha256:7f18199fbf29ca99dff10e1f09451582ae9e372a892ff03a28528a24d55875bc",
+                "sha256:9b31e009564fb95db160f154e2aa195ed66bcc4c058ed72850d047141b36f3a2",
+                "sha256:a929a4af626e530383a579431b70e512e736e9588106715215bf685a3ea508d4",
+                "sha256:c054c52ba46e7eb6b7d7dfae4dbd987a1bb48ee86debe3f245a2884ece46e295",
+                "sha256:f27cec5e7f588c3d1051651830ecc00294f90728d19c3bf6916e6dba93ea357c",
+                "sha256:f4c5be1a293bae0076d93c88f37ee8da68136744588bc5e2be2f299a34ceb7aa"
+            ],
+            "markers": "sys_platform == 'win32'",
+            "version": "==227"
         },
         "pyyaml": {
             "hashes": [

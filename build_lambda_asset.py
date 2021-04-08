@@ -9,11 +9,9 @@ from typing import List
 import docker
 from docker.types import Mount
 
-import platform
 
 # pylint: disable=print-used
 def timeit(method):
-
     def timed(*args, **kw):
         t_start = datetime.now()
         result = method(*args, **kw)
@@ -26,7 +24,8 @@ def timeit(method):
 
 class BuildLambdaAsset:
 
-    def __init__(self, include_paths: List[str], build_dir: Path, cache_dir: Path = None, requirements_txt: Path = Path('requirements.txt'),
+    def __init__(self, include_paths: List[str], build_dir: Path, cache_dir: Path = None,
+                 requirements_txt: Path = Path('requirements.txt'),
                  consume_dependencies: bool = None, verbose: bool = False) -> None:
         self._include_paths = include_paths
         self._build_dir: Path = build_dir
@@ -65,14 +64,15 @@ class BuildLambdaAsset:
         print('Copying \'include\' resources:')
         for include_path in self._include_paths:
             print(f'    -  {(Path.cwd() / include_path).resolve()}')
-            shutil.copytree(include_path, (self._build_dir / os.path.basename(os.path.normpath(include_path))).as_posix())
+            shutil.copytree(include_path,
+                            (self._build_dir / os.path.basename(os.path.normpath(include_path))).as_posix())
         shutil.copy(self._requirements_txt.as_posix(), (self._build_dir / 'requirements.txt').as_posix())
 
     def _consume(self) -> None:
-       # if platform.system().lower() == 'linux':
+        if platform.system().lower() == 'linux':
             self._consume_natively()
-        #else:
-        #    self._consume_using_docker()
+        else:
+            self._consume_using_docker()
 
     @timeit
     def _consume_natively(self) -> None:
@@ -96,7 +96,7 @@ class BuildLambdaAsset:
         container = client.containers.run(
             image='amazon/aws-sam-cli-build-image-python3.8:latest',
             command="/bin/sh -c 'python3.8 -m pip install --target /var/task/ --requirement /var/task/requirements.txt && "
-            "find /var/task -name \\*.so -exec strip \\{\\} \\;'",
+                    "find /var/task -name \\*.so -exec strip \\{\\} \\;'",
             auto_remove=True,
             mounts=[
                 Mount(target="/var/task", source=self._build_dir.as_posix(), type="bind", consistency="delegated"),

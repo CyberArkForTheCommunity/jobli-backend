@@ -3,6 +3,7 @@ import json
 import os
 import uuid
 from http import HTTPStatus
+from typing import List
 
 import pytest
 import requests
@@ -73,10 +74,11 @@ def test_create_or_update_seeker_profile(endpoint_url, auth_headers):
     # assert resource['created_date'] == resource['updated_date']
 
 
+@pytest.mark.skip(reason="This test will work only if user exists and doesn't already have answers in DB")
 def test_add_seeker_answers(endpoint_url, auth_headers):
     # when create entity
 
-    answers_dto: [JobSeekerAnswerDto] = []
+    answers_dto: List[JobSeekerAnswerDto] = []
 
     for i in range(1, 10):
         answers_dto.append(JobSeekerAnswerDto(key="a" + str(i), question="q" + str(i), answer=True))
@@ -90,6 +92,7 @@ def test_add_seeker_answers(endpoint_url, auth_headers):
     assert response.status_code == HTTPStatus.OK
 
 
+@pytest.mark.skip(reason="This test will work only if user doesn't exist in cognito")
 def test_set_user_type(endpoint_url, auth_headers):
     # when create entity
     jobli_dto: UpdateUserTypeDto = UpdateUserTypeDto(user_type=UserType.employer)
@@ -102,7 +105,7 @@ def test_set_user_type(endpoint_url, auth_headers):
 
 
 # noinspection PyPep8Naming
-def test_job_seekers_CRUD(endpoint_url):
+def test_job_seekers_crud_against_dynamo_db(endpoint_url):
     assert os.environ["JOB_SEEKERS_TABLE_NAME"] is not None
     print("\nseekers_table: ", os.environ["JOB_SEEKERS_TABLE_NAME"])
 
@@ -116,7 +119,7 @@ def test_job_seekers_CRUD(endpoint_url):
         "address": address,
         "email": "dummy@company.com"}
     job_seeker = JobSeeker(**job_seeker_dict)
-    job_seeker_repository.create(job_seeker=job_seeker, user="11111")
+    job_seeker_repository.create(job_seeker=job_seeker, user="testUser")
 
     job_seeker_read = JobSeeker(**job_seeker_repository.get(job_seeker_id=job_seeker_id))
 

@@ -15,7 +15,7 @@ SOME_EMPLOYER = Employer(
     employer_email="a@b.c",
     business_name="some_business",
     business_address=Address(full_address="some address in some city"),
-    business_website="www.some-site.com",
+    business_website="https://www.some-site.com",
     description="This is a description of some business",
     employer_terms=["Term1", "Term2"]
 )
@@ -40,7 +40,7 @@ def test_create_jobli_employer(endpoint_url, auth_headers):
     employer = SOME_EMPLOYER
     headers = {"Content-Type": "application/json"}
     headers.update(auth_headers)
-    response = requests.api.post(url=f"{endpoint_url}/jobli/employers", headers=headers, json=employer.dict())
+    response = requests.api.post(url=f"{endpoint_url}/api/employers", headers=headers, json=employer.dict())
 
     # Assert and test
     assert response.status_code == HTTPStatus.CREATED
@@ -50,11 +50,11 @@ def test_create_jobli_employer(endpoint_url, auth_headers):
     assert returned_employer.business_website == employer.business_website
     assert returned_employer.description == employer.description
     assert returned_employer.employer_id
-    assert returned_employer.created_time < datetime.now() + timedelta(days=1)
+    assert returned_employer.created_time < (datetime.now() + timedelta(days=1)).timestamp()
 
     # Get the created entity
-    response = requests.api.get(url=f"{endpoint_url}/jobli/employers/{returned_employer.employer_id}",
-                                headers=headers, json=employer.dict())
+    response = requests.api.get(url=f"{endpoint_url}/api/employers/{returned_employer.employer_id}",
+                                headers=headers)
     assert response.status_code == HTTPStatus.OK
     returned_employer = Employer.parse_obj(response.json())
     assert returned_employer.business_name == employer.business_name
@@ -62,7 +62,7 @@ def test_create_jobli_employer(endpoint_url, auth_headers):
     assert returned_employer.business_website == employer.business_website
     assert returned_employer.description == employer.description
     assert returned_employer.employer_id
-    assert returned_employer.created_time < datetime.now() + timedelta(days=1)
+    assert returned_employer.created_time < (datetime.now() + timedelta(days=1)).timestamp()
 
 
 def test_update_jobli_employer(endpoint_url, auth_headers):
@@ -71,7 +71,7 @@ def test_update_jobli_employer(endpoint_url, auth_headers):
     employer.business_name = "some business updated"
     headers = {"Content-Type": "application/json"}
     headers.update(auth_headers)
-    response = requests.api.post(url=f"{endpoint_url}/jobli/employers", headers=headers, json=employer.dict())
+    response = requests.api.post(url=f"{endpoint_url}/api/employers", headers=headers, json=employer.dict())
 
     # Assert and test
     assert response.status_code == HTTPStatus.CREATED
@@ -81,14 +81,15 @@ def test_update_jobli_employer(endpoint_url, auth_headers):
     assert returned_employer.business_website == employer.business_website
     assert returned_employer.description == employer.description
     assert returned_employer.employer_id
-    assert returned_employer.created_time < datetime.now() + timedelta(days=1)
+    assert returned_employer.created_time < (datetime.now() + timedelta(days=1)).timestamp()
 
     # Update the employer
     returned_employer.employer_terms.append("Term3")
     returned_employer.description = "The description changed!"
     returned_employer.business_website = "www.new-website.com"
-    response = requests.api.put(url=f"{endpoint_url}/jobli/employers/{returned_employer.employer_id}",
-                                headers=headers, json=employer.dict())
+    returned_employer.created_time = int(0)
+    response = requests.api.put(url=f"{endpoint_url}/api/employers/{returned_employer.employer_id}",
+                                headers=headers, json=returned_employer.dict())
     assert response.status_code == HTTPStatus.OK
     returned_employer = Employer.parse_obj(response.json())
     assert returned_employer.business_name == employer.business_name
@@ -96,7 +97,7 @@ def test_update_jobli_employer(endpoint_url, auth_headers):
     assert returned_employer.business_website == employer.business_website
     assert returned_employer.description == employer.description
     assert returned_employer.employer_id
-    assert returned_employer.created_time < datetime.now() + timedelta(days=1)
+    assert returned_employer.created_time < (datetime.now() + timedelta(days=1)).timestamp()
 
 
 def test_get_employers(endpoint_url, auth_headers):

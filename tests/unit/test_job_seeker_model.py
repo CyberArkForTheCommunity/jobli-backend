@@ -48,4 +48,4 @@ def __assert_new_model_atts(answers_model):
     assert full_name == answers_model.job_seeker_name
     assert 0 == answers_model.version
     assert answers_model.creationTime is None
-    assert answers_model.lastUpdatedTime is None
+    assert answers_model.lastUpdateTime is None

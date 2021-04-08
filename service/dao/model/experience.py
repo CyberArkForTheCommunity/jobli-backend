@@ -23,7 +23,7 @@ class Experience(BaseModel, SingleTableRecord):
     role_description: Optional[str]
 
     creationTime: Optional[str]
-    lastUpdatedTime: Optional[str]
+    lastUpdateTime: Optional[str]
     version: int = 0
 
     @staticmethod

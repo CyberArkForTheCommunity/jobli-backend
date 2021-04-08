@@ -339,9 +339,9 @@ class _SingleTableService:
                 record_dict = record.as_dict()
                 self.__set_index_keys(record, record_dict)
                 if add_creation_time:
-                    record_dict["creationTime"] = now
+                    record_dict[_CREATION_TIME] = now
                 if update_last_update_time:
-                    record_dict["lastUpdateTime"] = now
+                    record_dict[_LAST_UPDATE_TIME] = now
 
                 dict_list.append(record_dict)
 

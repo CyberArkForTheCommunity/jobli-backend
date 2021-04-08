@@ -253,6 +253,14 @@ class JobliServiceEnvironment(core.Construct):
                                 handler=handler, role=role, retry_attempts=0, environment=environment, timeout=timeout,
                                 memory_size=self._API_HANDLER_LAMBDA_MEMORY_SIZE, description=description)
 
+    @staticmethod
+    def __add_resource_method(resource: apigw.Resource, http_method: str, integration: apigw.LambdaIntegration,
+                              authorizer: apigw.CfnAuthorizer) -> None:
+        method = resource.add_method(
+            http_method=http_method,
+            integration=integration
+        )
+
     # @staticmethod
     # def __add_resource_method(resource: apigw.Resource, http_method: str, integration: apigw.LambdaIntegration,
     #                           authorizer: apigw.CfnAuthorizer) -> None:
@@ -264,10 +272,3 @@ class JobliServiceEnvironment(core.Construct):
     #     method_resource: apigw.Resource = method.node.find_child("Resource")
     #     method_resource.add_property_override("AuthorizerId", {"Ref": authorizer.logical_id})
 
-    @staticmethod
-    def __add_resource_method(resource: apigw.Resource, http_method: str, integration: apigw.LambdaIntegration,
-                              authorizer: apigw.CfnAuthorizer) -> None:
-        method = resource.add_method(
-            http_method=http_method,
-            integration=integration
-        )

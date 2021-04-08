@@ -31,5 +31,5 @@ class Skill(SingleTableRecord):
     name: str = None
 
     creationTime: str = None
-    lastUpdatedBy: str = None
+    lastUpdateBy: str = None
     version: int = 0

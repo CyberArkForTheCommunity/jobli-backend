@@ -2,8 +2,10 @@ from typing import Dict, Optional
 
 from pydantic.main import BaseModel
 
-from service.dao.single_table_service import SingleTableRecord
+from service.dao.single_table_service import SingleTableRecord, DATA_DELIMITER
 
+_EXPERIENCE_PK_PREFIX = "EXPERIENCE_BY_JOB_SEEKER_ID" + DATA_DELIMITER
+EXPERIENCE_SK_PREFIX = "EXPERIENCE_ID" + DATA_DELIMITER
 
 class Experience(BaseModel, SingleTableRecord):
     # def __init__(self, **kwargs):
@@ -12,23 +14,31 @@ class Experience(BaseModel, SingleTableRecord):
     #     for attribute, value in kwargs.items():
     #         if hasattr(self, attribute):
     #             setattr(self, attribute, value)
-
+    job_seeker_id: str
     experience_id: str
-    workplace: str
-    year_start: int
-    year_end: Optional[int]
+    workplace_name: str
+    start_year: int
+    end_year: Optional[int]
     role: Optional[str]
     role_description: Optional[str]
 
     creationTime: Optional[str]
-    lastUpdatedTime: Optional[str]
+    lastUpdateTime: Optional[str]
     version: int = 0
 
+    @staticmethod
+    def build_pk(job_seeker_id: str):
+        return _EXPERIENCE_PK_PREFIX + job_seeker_id
+
+    @staticmethod
+    def build_sk(experience_id: str):
+        return EXPERIENCE_SK_PREFIX + experience_id
+
     def produce_pk(self) -> str:
-        pass
+        return self.build_pk(self.job_seeker_id)
 
     def produce_sk(self) -> str:
-        pass
+        return self.build_sk(self.experience_id)
 
     def produce_gsi1_sk(self) -> Optional[str]:
         pass
@@ -37,4 +47,4 @@ class Experience(BaseModel, SingleTableRecord):
         pass
 
     def as_dict(self) -> Dict:
-        pass
+        return self.dict()

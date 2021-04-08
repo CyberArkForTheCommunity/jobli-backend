@@ -1,4 +1,4 @@
-from typing import Dict
+from typing import Dict, Optional
 
 from service.dao.single_table_service import SingleTableRecord
 
@@ -31,5 +31,5 @@ class Skill(SingleTableRecord):
     name: str = None
 
     creationTime: str = None
-    lastUpdatedBy: str = None
+    lastUpdateBy: str = None
     version: int = 0

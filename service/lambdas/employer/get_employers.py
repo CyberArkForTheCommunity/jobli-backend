@@ -24,7 +24,7 @@ def get_employers(event: dict, context: LambdaContext) -> dict:
         employers_table = dynamo_resource.Table(get_env_or_raise(EmployerConstants.EMPLOYERS_TABLE_NAME))
         employer_filter: Optional[EmployerFilter] = None
         if 'queryStringParameters' in event and event['queryStringParameters']:
-            employer_filter = EmployerFilter.parse_raw(event['queryStringParameters'])
+            employer_filter = EmployerFilter.parse_obj(event['queryStringParameters'])
         filter_expression = None
         result_items = None
         if employer_filter and employer_filter.employer_id:
@@ -32,9 +32,8 @@ def get_employers(event: dict, context: LambdaContext) -> dict:
         else:
             if employer_filter and employer_filter.business_name:
                 filter_expression = Key('business_name').eq(employer_filter.business_name)
-            if employer_filter and employer_filter.full_address:
-                filter_expression = filter_expression & \
-                                    Key('business_address.full_address').eq(employer_filter.full_address)
+            if employer_filter and employer_filter.city:
+                filter_expression = Key('business_address.city').eq(employer_filter.city)
             limit_per_page = EmployerConstants.LIMITS_PER_EMPLOYER_PAGE
             if employer_filter and employer_filter.limit_per_page:
                 limit_per_page = employer_filter.limit_per_page
@@ -43,15 +42,18 @@ def get_employers(event: dict, context: LambdaContext) -> dict:
                 args["FilterExpression"] = filter_expression
             if employer_filter and employer_filter.last_pagination_key:
                 args["ExclusiveStartKey"] = employer_filter.last_pagination_key
+
             result_items = parse_obj_as(List[Employer], employers_table.scan(**args).get("Items", []))
         return {'statusCode': HTTPStatus.OK,
                 'headers': EmployerConstants.HEADERS,
                 'body': json.dumps({"employers": [e.json(exclude_none=True) for e in result_items]})}
     except (ValidationError, TypeError) as err:
+        logger.exception(f"failed validation err={str(err)}")
         return {'statusCode': HTTPStatus.BAD_REQUEST,
                 'headers': EmployerConstants.HEADERS,
                 'body': str(err)}
     except Exception as err:
+        logger.exception(f"failed with exception err={str(err)}")
         return {'statusCode': HTTPStatus.INTERNAL_SERVER_ERROR,
                 'headers': EmployerConstants.HEADERS,
                 'body': str(err)}

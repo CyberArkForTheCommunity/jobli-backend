@@ -66,6 +66,14 @@ def test_create_jobli_employer(endpoint_url, auth_headers):
 
 
 def test_update_jobli_employer(endpoint_url, auth_headers):
+
+    value = "{\"employer_id\": \"261fe233-8da8-4dfd-af77-f5c7acba7409\", \"employer_email\": \"a@b.c\", \"business_name\": \"some business updated\", \"business_address\": {\"full_address\": \"some address in some city\", \"city\": null, \"street\": null, \"apartment\": null}, \"business_website\": \"https://www.new-website.com\", \"description\": \"The description changed!\", \"employer_terms\": [\"Term1\", \"Term2\", \"Term3\"], \"business_media\": null}"
+
+    employer_value = Employer.parse_raw(value)
+
+
+
+
     # Create the employer
     employer = SOME_EMPLOYER
     employer.business_name = "some business updated"
@@ -86,16 +94,25 @@ def test_update_jobli_employer(endpoint_url, auth_headers):
     # Update the employer
     returned_employer.employer_terms.append("Term3")
     returned_employer.description = "The description changed!"
-    returned_employer.business_website = "www.new-website.com"
-    returned_employer.created_time = int(0)
+    returned_employer.business_website = "https://www.new-website.com"
+    returned_employer.business_address.full_address = "check address changed"
+    returned_employer.business_address.city = "Tel Aviv"
+
+    # update_employer = Employer()
+    # update_employer.employer_id = returned_employer.employer_id
+    # update_employer.employer_terms = returned_employer.employer_terms
+    # update_employer.employer_terms.append("Term3")
+    # update_employer.description = "The description changed!"
+    # update_employer.business_website = "https://www.new-website.com"
+    returned_employer.__delattr__("created_time")
+
     response = requests.api.put(url=f"{endpoint_url}/api/employers/{returned_employer.employer_id}",
                                 headers=headers, json=returned_employer.dict())
     assert response.status_code == HTTPStatus.OK
     returned_employer = Employer.parse_obj(response.json())
     assert returned_employer.business_name == employer.business_name
     assert returned_employer.employer_email == employer.employer_email
-    assert returned_employer.business_website == employer.business_website
-    assert returned_employer.description == employer.description
+    assert returned_employer.description == "The description changed!"
     assert returned_employer.employer_id
     assert returned_employer.created_time < (datetime.now() + timedelta(days=1)).timestamp()
 
@@ -107,19 +124,20 @@ def test_get_employers(endpoint_url, auth_headers):
     headers.update(auth_headers)
     for idx, e in enumerate(employers):
         e.business_name += str(idx)
-        e.business_address.city = "Special city"
-        response = requests.api.post(url=f"{endpoint_url}/jobli/employers", headers=headers, json=e.dict())
-        assert response.status_code == HTTPStatus.OK
+        e.business_address.city = "SpecialTelAviv"
+        response = requests.api.post(url=f"{endpoint_url}/api/employers", headers=headers, json=e.dict())
+        assert response.status_code == HTTPStatus.CREATED
         returned_employer: Employer = Employer.parse_obj(response.json())
         assert returned_employer.business_name == e.business_name
         assert returned_employer.employer_email == e.employer_email
         assert returned_employer.business_website == e.business_website
         assert returned_employer.description == e.description
         assert returned_employer.employer_id
-        assert returned_employer.created_time < datetime.now() + timedelta(days=1)
+        assert returned_employer.created_time < (datetime.now() + timedelta(days=1)).timestamp()
 
     # Get all employers
-    response = requests.api.get(url=f"{endpoint_url}/jobli/employers?city=\"Special City\"", headers=headers)
+    response = requests.api.get(url=f"{endpoint_url}/api/employers?city=SpecialTelAviv", headers=headers)
     assert response.status_code == HTTPStatus.OK
-    returned_employers: List[Employer] = Employer.parse_obj(response.json())
-    assert len(returned_employers) == 5
+
+    returned_employers: List[Employer] = [Employer.parse_raw(item) for item in response.json()["employers"]]
+    assert len(returned_employers) >= 5

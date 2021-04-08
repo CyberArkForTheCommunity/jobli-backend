@@ -30,6 +30,7 @@ def update_employer(event: dict, context: LambdaContext) -> dict:
         dynamo_resource = boto3.resource("dynamodb")
         employers_table = dynamo_resource.Table(get_env_or_raise(EmployerConstants.EMPLOYERS_TABLE_NAME))
         # Get the existing employer to make it exists and get its current details
+
         stored_employer: Dict = employers_table.get_item(Key={"employer_id": employer_id}).get('Item', {})
 
         # Update it with the given model
@@ -48,7 +49,7 @@ def update_employer(event: dict, context: LambdaContext) -> dict:
             ExpressionAttributeValues={
                 ":ee": employer.employer_email,
                 ":bn": employer.business_name,
-                ":ba": employer.business_address,
+                ":ba": employer.business_address.dict(),
                 ":bw": employer.business_website,
                 ":d": employer.description,
                 ":et": employer.employer_terms
@@ -56,14 +57,16 @@ def update_employer(event: dict, context: LambdaContext) -> dict:
             ReturnValues="UPDATED_NEW"
         )
 
-        return {'statusCode': HTTPStatus.CREATED,
+        return {'statusCode': HTTPStatus.OK,
                 'headers': EmployerConstants.HEADERS,
                 'body': Employer.parse_obj(stored_employer).json(exclude_none=True)}
     except (ValidationError, TypeError) as err:
+        logger.exception(f"failed validation err={str(err)}")
         return {'statusCode': HTTPStatus.BAD_REQUEST,
                 'headers': EmployerConstants.HEADERS,
                 'body': str(err)}
     except Exception as err:
+        logger.exception(f"failed with exception err={str(err)}")
         return {'statusCode': HTTPStatus.INTERNAL_SERVER_ERROR,
                 'headers': EmployerConstants.HEADERS,
                 'body': str(err)}

@@ -115,3 +115,15 @@ remove the user_id = USER_ID line and use user_id = event.request_context.author
          method_resource.add_property_override("AuthorizerId", {"Ref": authorizer.logical_id})
    ```
    After you run deploy.py it will set the authorizer for all APIs in the API GW.
+
+
+### One time Google app configuration
+Steps in creating a google application for authentication in jobli after login with google account credentials: https://console.cloud.google.com/apis
+1. Create a project with Google Account ("Jobli")
+2. Configure Oauth consent page: https://console.cloud.google.com/apis/credentials/consent?authuser=2&project=jobli-328707:
+a. Configure application as "External" and add support email to be presented in Consent Page
+b. As long "Publishing status" is in Testing status, in order to to authenticate with app using google account, you must add your email to the Test Users
+3. Create an API application by going to "Credentials" section: https://console.cloud.google.com/apis/credentials?authuser=2&project=jobli-328707:
+a. Give Name for for API Client (for internal use, not displayed to users).
+b. Add under "Authorized JavaScript origins our cognito custom domain: https://<joblimain>.auth.<eu-west-1>.amazoncognito.com
+c. Add under "Authorized JavaScript redirect URIs the cognito redirect URI: https://<joblimain>.auth.<eu-west-1>.amazoncognito.com/oauth2/idpresponse

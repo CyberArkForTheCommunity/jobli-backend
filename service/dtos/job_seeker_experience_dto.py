@@ -6,8 +6,8 @@ class JobSeekerExperienceDto(BaseModel):
     workplace_name: str
     start_year: int
     end_year: int
-    job_title: str
-    job_description: str
+    role: str
+    role_description: str
 
     # pylint: disable=no-self-argument,no-self-use,invalid-name
     # noinspection PyMethodParameters

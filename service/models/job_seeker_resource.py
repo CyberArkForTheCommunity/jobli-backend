@@ -11,4 +11,4 @@ from service.dtos.job_seeker_profile_dto import JobSeekerProfileDto
 
 class JobSeekerResource(BaseModel):
     profile: JobSeeker
-#    experience: List[JobSeekerExperienceDto]
+    experience_list: List[JobSeekerExperienceDto]

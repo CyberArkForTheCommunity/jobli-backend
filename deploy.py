@@ -39,7 +39,6 @@ def main():
     parser.add_argument('--skip-deps', nargs="?", const=True, default=False, help="Skip lambda dependencies")
     args = parser.parse_args()
 
-
     # environment update with the .env file
     init_local_dotenv()
 

@@ -29,7 +29,7 @@ class JobSeeker(BaseModel, SingleTableRecord):
     languages: Optional[List[str]]
 
     creationTime: Optional[str]
-    lastUpdatedTime: Optional[str]
+    lastUpdateTime: Optional[str]
     version: int = 0
 
     # skills: List[Skill] = None

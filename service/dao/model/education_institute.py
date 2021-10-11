@@ -20,7 +20,7 @@ class EducationInstitute(BaseModel, SingleTableRecord):
     certificate: Optional[str]
 
     creationTime: Optional[str]
-    lastUpdatedTime: Optional[str]
+    lastUpdateTime: Optional[str]
     version: int = 0
 
     def produce_pk(self) -> str:

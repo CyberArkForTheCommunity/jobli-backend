@@ -32,7 +32,7 @@ class JobSeekerAnswers(BaseModel, SingleTableRecord):
     a10: Optional[bool]
 
     creationTime: Optional[str]
-    lastUpdatedTime: Optional[str]
+    lastUpdateTime: Optional[str]
     version: int = 0
 
     @staticmethod

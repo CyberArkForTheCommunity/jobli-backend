@@ -1,0 +1,1059 @@
+[
+  {
+    "Employer_Name": "שפע יששכר",
+    "Job_Name": "",
+    "job_description": "חלוקת מטבעות עבור עגלות סופר",
+    "job_employees_count": 20,
+    "job_scope": "Full",
+    "job_salary": "",
+    "job_experience_needed": "אין צורך",
+    "job_fields": [
+      "קופה ראשית",
+      "אריזת מוצרים"
+    ],
+    "answers": [
+      {
+        "key": "skill-sit-one",
+        "answer": true
+      },
+      {
+        "key": "skill-open-space-two",
+        "answer": true
+      },
+      {
+        "key": "skill-overweight-three",
+        "answer": false
+      },
+      {
+        "key": "skill-money-four",
+        "answer": true
+      },
+      {
+        "key": "skill-computer-five",
+        "answer": false
+      },
+      {
+        "key": "skill-help-people-six",
+        "answer": false
+      },
+      {
+        "key": "skill-location-seven",
+        "answer": true
+      },
+      {
+        "key": "skill-uniform-eight",
+        "answer": true
+      },
+      {
+        "key": "skill-teammate-nine",
+        "answer": true
+      },
+      {
+        "key": "skill-transport-ten",
+        "answer": true
+      }
+    ],
+    "job_requirements": [
+      "שירותיות, הופעה ייצוגית, יכולת עבודה תחת לחץ"
+    ]
+  },
+  {
+    "Employer_Name": "דרומה",
+    "Job_Name": "",
+    "job_description": "ניקוי שולחנות לאחר עזיבת לקוחות",
+    "job_employees_count": 4,
+    "job_scope": "Partial",
+    "job_salary": 3260.0,
+    "job_experience_needed": "אין צורך",
+    "job_fields": [
+      "שוטף כלים",
+      "מנקה שולחנות",
+      "סידור מלאי"
+    ],
+    "answers": [
+      {
+        "key": "skill-sit-one",
+        "answer": false
+      },
+      {
+        "key": "skill-open-space-two",
+        "answer": true
+      },
+      {
+        "key": "skill-overweight-three",
+        "answer": false
+      },
+      {
+        "key": "skill-money-four",
+        "answer": true
+      },
+      {
+        "key": "skill-computer-five",
+        "answer": false
+      },
+      {
+        "key": "skill-help-people-six",
+        "answer": true
+      },
+      {
+        "key": "skill-location-seven",
+        "answer": false
+      },
+      {
+        "key": "skill-uniform-eight",
+        "answer": true
+      },
+      {
+        "key": "skill-teammate-nine",
+        "answer": false
+      },
+      {
+        "key": "skill-transport-ten",
+        "answer": true
+      }
+    ],
+    "job_requirements": [
+      "ניקיון, סדר, זריזות"
+    ]
+  },
+  {
+    "Employer_Name": "אינטל",
+    "Job_Name": "",
+    "job_description": "ייצור שבבי מחשב",
+    "job_employees_count": 34,
+    "job_scope": "Full",
+    "job_salary": "",
+    "job_experience_needed": "אין צורך",
+    "job_fields": [
+      "Clean Room",
+      "ייצור שבבים"
+    ],
+    "answers": [
+      {
+        "key": "skill-sit-one",
+        "answer": true
+      },
+      {
+        "key": "skill-open-space-two",
+        "answer": false
+      },
+      {
+        "key": "skill-overweight-three",
+        "answer": false
+      },
+      {
+        "key": "skill-money-four",
+        "answer": false
+      },
+      {
+        "key": "skill-computer-five",
+        "answer": true
+      },
+      {
+        "key": "skill-help-people-six",
+        "answer": false
+      },
+      {
+        "key": "skill-location-seven",
+        "answer": false
+      },
+      {
+        "key": "skill-uniform-eight",
+        "answer": true
+      },
+      {
+        "key": "skill-teammate-nine",
+        "answer": true
+      },
+      {
+        "key": "skill-transport-ten",
+        "answer": false
+      }
+    ],
+    "job_requirements": [
+      "יכולת ריכוז גבוהה, עבודה במשמרות,סדר, ארגון, ריבוי משימות"
+    ]
+  },
+  {
+    "Employer_Name": "מקלרנ'ס פאב",
+    "Job_Name": "",
+    "job_description": "מזיגת וערבוב משקאות",
+    "job_employees_count": 1,
+    "job_scope": "Partial",
+    "job_salary": "",
+    "job_experience_needed": "נדרש ניסיון של שנתיים",
+    "job_fields": [
+      "ניקוי שולחנות",
+      "מזיגת משקאות",
+      "סידור מלאי"
+    ],
+    "answers": [
+      {
+        "key": "skill-sit-one",
+        "answer": false
+      },
+      {
+        "key": "skill-open-space-two",
+        "answer": false
+      },
+      {
+        "key": "skill-overweight-three",
+        "answer": true
+      },
+      {
+        "key": "skill-money-four",
+        "answer": true
+      },
+      {
+        "key": "skill-computer-five",
+        "answer": true
+      },
+      {
+        "key": "skill-help-people-six",
+        "answer": true
+      },
+      {
+        "key": "skill-location-seven",
+        "answer": false
+      },
+      {
+        "key": "skill-uniform-eight",
+        "answer": true
+      },
+      {
+        "key": "skill-teammate-nine",
+        "answer": true
+      },
+      {
+        "key": "skill-transport-ten",
+        "answer": true
+      }
+    ],
+    "job_requirements": [
+      "זיכרון לטווח ארוך, שירות לקוחות, אדיבות, סבלנות,עבודה בשעות הלילה"
+    ]
+  },
+  {
+    "Employer_Name": "קסטרו",
+    "Job_Name": "",
+    "job_description": "סידור מדפים ושירות לקוחות",
+    "job_employees_count": 5,
+    "job_scope": "Full",
+    "job_salary": "",
+    "job_experience_needed": "אין צורך",
+    "job_fields": [
+      "קיפול בגדים",
+      "מכירה ושירות לקוחות",
+      "החזרת מוצרים למדף"
+    ],
+    "answers": [
+      {
+        "key": "skill-sit-one",
+        "answer": false
+      },
+      {
+        "key": "skill-open-space-two",
+        "answer": false
+      },
+      {
+        "key": "skill-overweight-three",
+        "answer": false
+      },
+      {
+        "key": "skill-money-four",
+        "answer": true
+      },
+      {
+        "key": "skill-computer-five",
+        "answer": true
+      },
+      {
+        "key": "skill-help-people-six",
+        "answer": true
+      },
+      {
+        "key": "skill-location-seven",
+        "answer": false
+      },
+      {
+        "key": "skill-uniform-eight",
+        "answer": true
+      },
+      {
+        "key": "skill-teammate-nine",
+        "answer": true
+      },
+      {
+        "key": "skill-transport-ten",
+        "answer": true
+      }
+    ],
+    "job_requirements": [
+      "יצוגיות, יכולת עבודה בצוות, סבלנות, שירות לקוחות, חיבור לעולם האופנה"
+    ]
+  },
+  {
+    "Employer_Name": "בית אריזה- עץ השדה",
+    "Job_Name": "עוזר בית אריזה",
+    "job_description": "עזרה בצרכי בית האריזה, באופן משתנה ותלוי בעונה וביום",
+    "job_employees_count": 25,
+    "job_scope": "Full",
+    "job_salary": "",
+    "job_experience_needed": "אין צורך",
+    "job_fields": [
+      "מיון תפוחים",
+      "קטיף תפוחים",
+      "מילוי ארגזי פרי"
+    ],
+    "answers": [
+      {
+        "key": "skill-sit-one",
+        "answer": false
+      },
+      {
+        "key": "skill-open-space-two",
+        "answer": true
+      },
+      {
+        "key": "skill-overweight-three",
+        "answer": true
+      },
+      {
+        "key": "skill-money-four",
+        "answer": false
+      },
+      {
+        "key": "skill-computer-five",
+        "answer": false
+      },
+      {
+        "key": "skill-help-people-six",
+        "answer": false
+      },
+      {
+        "key": "skill-location-seven",
+        "answer": true
+      },
+      {
+        "key": "skill-uniform-eight",
+        "answer": true
+      },
+      {
+        "key": "skill-teammate-nine",
+        "answer": true
+      },
+      {
+        "key": "skill-transport-ten",
+        "answer": true
+      }
+    ],
+    "job_requirements": [
+      "ריכוז, שימת לב לפרטים, מוטוריקה עדינה"
+    ]
+  },
+  {
+    "Employer_Name": "אליעזר מכשירי כתיבה",
+    "Job_Name": "עוזר מכירה",
+    "job_description": "סיוע בצרכי החנות והמחסן- קליטת סחורה, מיון, וסיוע ללקוחות בהתנהלות בחנות",
+    "job_employees_count": 7,
+    "job_scope": "Partial",
+    "job_salary": "",
+    "job_experience_needed": "ניסיון בשירות לקוחות- יתרון",
+    "job_fields": [
+      "מיון מוצרים למדף",
+      "שירות לקוחות",
+      "סידור מלאי"
+    ],
+    "answers": [
+      {
+        "key": "skill-sit-one",
+        "answer": false
+      },
+      {
+        "key": "skill-open-space-two",
+        "answer": false
+      },
+      {
+        "key": "skill-overweight-three",
+        "answer": true
+      },
+      {
+        "key": "skill-money-four",
+        "answer": true
+      },
+      {
+        "key": "skill-computer-five",
+        "answer": true
+      },
+      {
+        "key": "skill-help-people-six",
+        "answer": true
+      },
+      {
+        "key": "skill-location-seven",
+        "answer": true
+      },
+      {
+        "key": "skill-uniform-eight",
+        "answer": true
+      },
+      {
+        "key": "skill-teammate-nine",
+        "answer": true
+      },
+      {
+        "key": "skill-transport-ten",
+        "answer": false
+      }
+    ],
+    "job_requirements": [
+      "יכולת ספירה, יחס אדיב וסבלנות, סדר וארגון"
+    ]
+  },
+  {
+    "Employer_Name": "זנגוויל - חנות המפעל",
+    "Job_Name": "עוזר טבח",
+    "job_description": "עזרה בהכנת מוצרים למכירה ושיווק- קבלת והכנת חומרי גלם, עבודת מטבח ופס קר",
+    "job_employees_count": 41,
+    "job_scope": "Full",
+    "job_salary": "",
+    "job_experience_needed": "עבודה במטבח - יתרון",
+    "job_fields": [
+      "הכנת כריכים",
+      "הובלת מוצרי גלם",
+      "חיתוך ירקות"
+    ],
+    "answers": [
+      {
+        "key": "skill-sit-one",
+        "answer": false
+      },
+      {
+        "key": "skill-open-space-two",
+        "answer": false
+      },
+      {
+        "key": "skill-overweight-three",
+        "answer": false
+      },
+      {
+        "key": "skill-money-four",
+        "answer": false
+      },
+      {
+        "key": "skill-computer-five",
+        "answer": false
+      },
+      {
+        "key": "skill-help-people-six",
+        "answer": false
+      },
+      {
+        "key": "skill-location-seven",
+        "answer": true
+      },
+      {
+        "key": "skill-uniform-eight",
+        "answer": true
+      },
+      {
+        "key": "skill-teammate-nine",
+        "answer": false
+      },
+      {
+        "key": "skill-transport-ten",
+        "answer": true
+      }
+    ],
+    "job_requirements": [
+      "שמירה על ניקיון, מוטוריקה עדינה, עבודה תחת לחץ"
+    ]
+  },
+  {
+    "Employer_Name": "תיאטרון העיפרון",
+    "Job_Name": "סדרן",
+    "job_description": "הובלת צופים למקומותיהם, בדיקת רכש הכרטיסים",
+    "job_employees_count": 12,
+    "job_scope": "Partial",
+    "job_salary": "",
+    "job_experience_needed": "אין צורך",
+    "job_fields": [
+      "סדרן",
+      "בודק כרטיסים"
+    ],
+    "answers": [
+      {
+        "key": "skill-sit-one",
+        "answer": false
+      },
+      {
+        "key": "skill-open-space-two",
+        "answer": false
+      },
+      {
+        "key": "skill-overweight-three",
+        "answer": false
+      },
+      {
+        "key": "skill-money-four",
+        "answer": false
+      },
+      {
+        "key": "skill-computer-five",
+        "answer": false
+      },
+      {
+        "key": "skill-help-people-six",
+        "answer": true
+      },
+      {
+        "key": "skill-location-seven",
+        "answer": true
+      },
+      {
+        "key": "skill-uniform-eight",
+        "answer": true
+      },
+      {
+        "key": "skill-teammate-nine",
+        "answer": true
+      },
+      {
+        "key": "skill-transport-ten",
+        "answer": true
+      }
+    ],
+    "job_requirements": [
+      "יחס אדיב, מראה נקי ומכובד, סבלנות וזריזות"
+    ]
+  },
+  {
+    "Employer_Name": "ריזלה",
+    "Job_Name": "עוזר אריזה",
+    "job_description": "סיוע בהכנת פרחי מריחואנה רפואית לשילוח ושיווק - החל מקטיף מהצמח, גיזום עלים מיותרים ושקילת הפרחים לאריזה בחבילות",
+    "job_employees_count": 6,
+    "job_scope": "Full",
+    "job_salary": "",
+    "job_experience_needed": "אין צורך",
+    "job_fields": [
+      "קוטף פרחים",
+      "קיצוץ עלים",
+      "שקילה ואריזה"
+    ],
+    "answers": [
+      {
+        "key": "skill-sit-one",
+        "answer": true
+      },
+      {
+        "key": "skill-open-space-two",
+        "answer": true
+      },
+      {
+        "key": "skill-overweight-three",
+        "answer": false
+      },
+      {
+        "key": "skill-money-four",
+        "answer": false
+      },
+      {
+        "key": "skill-computer-five",
+        "answer": false
+      },
+      {
+        "key": "skill-help-people-six",
+        "answer": false
+      },
+      {
+        "key": "skill-location-seven",
+        "answer": true
+      },
+      {
+        "key": "skill-uniform-eight",
+        "answer": false
+      },
+      {
+        "key": "skill-teammate-nine",
+        "answer": false
+      },
+      {
+        "key": "skill-transport-ten",
+        "answer": true
+      }
+    ],
+    "job_requirements": [
+      "מוטוריקה עדינה, סבלנות וריכוז, אריזה במשקלים"
+    ]
+  },
+  {
+    "Employer_Name": "הספרייה הלאומית",
+    "Job_Name": "ספרן",
+    "job_description": "סיוע בצרכי הספרייה- שמירת סדר וארגון, סיוע לקוראים וחוקרים, שמירה על שקט בספרייה והדבקת\\תחזוקת ספרים",
+    "job_employees_count": 16,
+    "job_scope": "Partial",
+    "job_salary": "",
+    "job_experience_needed": "עבודת מחסן ומלאי- יתרון",
+    "job_fields": [
+      "סידור ספרים",
+      "סיוע במציאת ספרים",
+      "תיקון ותחזוקת ספרים"
+    ],
+    "answers": [
+      {
+        "key": "skill-sit-one",
+        "answer": false
+      },
+      {
+        "key": "skill-open-space-two",
+        "answer": false
+      },
+      {
+        "key": "skill-overweight-three",
+        "answer": false
+      },
+      {
+        "key": "skill-money-four",
+        "answer": false
+      },
+      {
+        "key": "skill-computer-five",
+        "answer": true
+      },
+      {
+        "key": "skill-help-people-six",
+        "answer": true
+      },
+      {
+        "key": "skill-location-seven",
+        "answer": false
+      },
+      {
+        "key": "skill-uniform-eight",
+        "answer": true
+      },
+      {
+        "key": "skill-teammate-nine",
+        "answer": false
+      },
+      {
+        "key": "skill-transport-ten",
+        "answer": true
+      }
+    ],
+    "job_requirements": [
+      "מוטוריקה עדינה, קריאה ודיוק, סדר וארגון, סבלנות ושקט"
+    ]
+  },
+  {
+    "Employer_Name": "אלקטרה",
+    "Job_Name": "",
+    "job_description": "תיקון ותחזוק מזגני החברה",
+    "job_employees_count": 50,
+    "job_scope": "Full",
+    "job_salary": "",
+    "job_experience_needed": "הכשרה על חשבון החברה",
+    "job_fields": [
+      "טכנאי מזגנים",
+      "טכנאי מזגנים",
+      "תחזוקה"
+    ],
+    "answers": [
+      {
+        "key": "skill-sit-one",
+        "answer": false
+      },
+      {
+        "key": "skill-open-space-two",
+        "answer": true
+      },
+      {
+        "key": "skill-overweight-three",
+        "answer": true
+      },
+      {
+        "key": "skill-money-four",
+        "answer": false
+      },
+      {
+        "key": "skill-computer-five",
+        "answer": true
+      },
+      {
+        "key": "skill-help-people-six",
+        "answer": true
+      },
+      {
+        "key": "skill-location-seven",
+        "answer": false
+      },
+      {
+        "key": "skill-uniform-eight",
+        "answer": true
+      },
+      {
+        "key": "skill-teammate-nine",
+        "answer": true
+      },
+      {
+        "key": "skill-transport-ten",
+        "answer": true
+      }
+    ],
+    "job_requirements": [
+      "שירותיות, סבלנות, אוריינטציה טכנולוגית, עבודה בסביבה דינאמית ומשתנה"
+    ]
+  },
+  {
+    "Employer_Name": "עצמלא",
+    "Job_Name": "",
+    "job_description": "סיוע בצרכי הנגריה- תחזוקה קלה,סדר וניקיון",
+    "job_employees_count": 6,
+    "job_scope": "Partial",
+    "job_salary": "",
+    "job_experience_needed": "אין צורך",
+    "job_fields": [
+      "סיוע בנגריה",
+      "עובד כללי",
+      "תחזוקה קלה"
+    ],
+    "answers": [
+      {
+        "key": "skill-sit-one",
+        "answer": false
+      },
+      {
+        "key": "skill-open-space-two",
+        "answer": false
+      },
+      {
+        "key": "skill-overweight-three",
+        "answer": true
+      },
+      {
+        "key": "skill-money-four",
+        "answer": false
+      },
+      {
+        "key": "skill-computer-five",
+        "answer": false
+      },
+      {
+        "key": "skill-help-people-six",
+        "answer": false
+      },
+      {
+        "key": "skill-location-seven",
+        "answer": true
+      },
+      {
+        "key": "skill-uniform-eight",
+        "answer": true
+      },
+      {
+        "key": "skill-teammate-nine",
+        "answer": true
+      },
+      {
+        "key": "skill-transport-ten",
+        "answer": true
+      }
+    ],
+    "job_requirements": [
+      "עבודה בסביבה רועשת, עבודה בסמוך לציוד מכני כבד, הקפדה על נהלי בטיחות"
+    ]
+  },
+  {
+    "Employer_Name": "סופר פארם",
+    "Job_Name": "",
+    "job_description": "סידור מותרי החנות במדפים ומתן מענה ללקוחות החנות",
+    "job_employees_count": 15,
+    "job_scope": "Full",
+    "job_salary": "",
+    "job_experience_needed": "אין צורך",
+    "job_fields": [
+      "סדרן מוצרים",
+      "שירות לקוחות",
+      "סידור מלאי"
+    ],
+    "answers": [
+      {
+        "key": "skill-sit-one",
+        "answer": false
+      },
+      {
+        "key": "skill-open-space-two",
+        "answer": true
+      },
+      {
+        "key": "skill-overweight-three",
+        "answer": true
+      },
+      {
+        "key": "skill-money-four",
+        "answer": true
+      },
+      {
+        "key": "skill-computer-five",
+        "answer": true
+      },
+      {
+        "key": "skill-help-people-six",
+        "answer": true
+      },
+      {
+        "key": "skill-location-seven",
+        "answer": false
+      },
+      {
+        "key": "skill-uniform-eight",
+        "answer": true
+      },
+      {
+        "key": "skill-teammate-nine",
+        "answer": true
+      },
+      {
+        "key": "skill-transport-ten",
+        "answer": true
+      }
+    ],
+    "job_requirements": [
+      "שירותיות, עבודה על פי נהלים, ידיעת השפה האנגלית ברמה בסיסית"
+    ]
+  },
+  {
+    "Employer_Name": "קופישופ",
+    "Job_Name": "",
+    "job_description": "סיוע לטבח המסעדה בהכנת המנות ועבודת המטבח הכללית",
+    "job_employees_count": 12,
+    "job_scope": "Full",
+    "job_salary": "",
+    "job_experience_needed": "אין צורך",
+    "job_fields": [
+      "עובד מטבח",
+      "הכנות וחיתוכים"
+    ],
+    "answers": [
+      {
+        "key": "skill-sit-one",
+        "answer": false
+      },
+      {
+        "key": "skill-open-space-two",
+        "answer": false
+      },
+      {
+        "key": "skill-overweight-three",
+        "answer": true
+      },
+      {
+        "key": "skill-money-four",
+        "answer": false
+      },
+      {
+        "key": "skill-computer-five",
+        "answer": false
+      },
+      {
+        "key": "skill-help-people-six",
+        "answer": false
+      },
+      {
+        "key": "skill-location-seven",
+        "answer": false
+      },
+      {
+        "key": "skill-uniform-eight",
+        "answer": true
+      },
+      {
+        "key": "skill-teammate-nine",
+        "answer": true
+      },
+      {
+        "key": "skill-transport-ten",
+        "answer": true
+      }
+    ],
+    "job_requirements": [
+      "יכולת עבודה תחת לחץ, עבודה בסביבה רועשת וחמה. "
+    ]
+  },
+  {
+    "Employer_Name": "בית חולים הדסה עין כרם",
+    "Job_Name": "",
+    "job_description": "ביצוע עבודות ניקיון ברחבי בית החולים",
+    "job_employees_count": 80,
+    "job_scope": "Full",
+    "job_salary": "",
+    "job_experience_needed": "אין צורך",
+    "job_fields": [
+      "כח עזר",
+      "ניקיון ותחזוקה",
+      "ניקיון ותחזוקה"
+    ],
+    "answers": [
+      {
+        "key": "skill-sit-one",
+        "answer": false
+      },
+      {
+        "key": "skill-open-space-two",
+        "answer": true
+      },
+      {
+        "key": "skill-overweight-three",
+        "answer": true
+      },
+      {
+        "key": "skill-money-four",
+        "answer": false
+      },
+      {
+        "key": "skill-computer-five",
+        "answer": false
+      },
+      {
+        "key": "skill-help-people-six",
+        "answer": true
+      },
+      {
+        "key": "skill-location-seven",
+        "answer": true
+      },
+      {
+        "key": "skill-uniform-eight",
+        "answer": true
+      },
+      {
+        "key": "skill-teammate-nine",
+        "answer": true
+      },
+      {
+        "key": "skill-transport-ten",
+        "answer": true
+      }
+    ],
+    "job_requirements": [
+      "עבודה בעמידה ממושכת, סביבה דינאמית ומשתנה, עבודה על פי נהלים מחמירים"
+    ]
+  },
+  {
+    "Employer_Name": "השטיח האדום",
+    "Job_Name": "",
+    "job_description": "סידור סחורה ומעקב אחרי מלאי במחסני החברה",
+    "job_employees_count": 10,
+    "job_scope": "Full",
+    "job_salary": "",
+    "job_experience_needed": "",
+    "job_fields": [
+      "עובד מחסן",
+      "סידור סחורה"
+    ],
+    "answers": [
+      {
+        "key": "skill-sit-one",
+        "answer": false
+      },
+      {
+        "key": "skill-open-space-two",
+        "answer": false
+      },
+      {
+        "key": "skill-overweight-three",
+        "answer": true
+      },
+      {
+        "key": "skill-money-four",
+        "answer": false
+      },
+      {
+        "key": "skill-computer-five",
+        "answer": true
+      },
+      {
+        "key": "skill-help-people-six",
+        "answer": false
+      },
+      {
+        "key": "skill-location-seven",
+        "answer": true
+      },
+      {
+        "key": "skill-uniform-eight",
+        "answer": true
+      },
+      {
+        "key": "skill-teammate-nine",
+        "answer": true
+      },
+      {
+        "key": "skill-transport-ten",
+        "answer": true
+      }
+    ],
+    "job_requirements": [
+      "עבודה במחסני החברה, בסמוך לכלי שינוע וציוד מכני כבד, נדרשת הרמ משקלים מעל 10 ק\"ג, נדרשת יכולת  זיהוי אותיות באנגלית"
+    ]
+  },
+  {
+    "Employer_Name": "מרכז הספורט",
+    "Job_Name": "",
+    "job_description": "שימור ותחזוקת המרכז, סידור הכסאות וניקיון לאחר השימוש, ניקיון מתקני הכושר",
+    "job_employees_count": 32,
+    "job_scope": "Partial",
+    "job_salary": "",
+    "job_experience_needed": "אין צורך",
+    "job_fields": [
+      "סידור כסאות",
+      "הנעת ציוד לחוגים",
+      "ניקוי מתקנים"
+    ],
+    "answers": [
+      {
+        "key": "skill-sit-one",
+        "answer": false
+      },
+      {
+        "key": "skill-open-space-two",
+        "answer": true
+      },
+      {
+        "key": "skill-overweight-three",
+        "answer": true
+      },
+      {
+        "key": "skill-money-four",
+        "answer": false
+      },
+      {
+        "key": "skill-computer-five",
+        "answer": false
+      },
+      {
+        "key": "skill-help-people-six",
+        "answer": false
+      },
+      {
+        "key": "skill-location-seven",
+        "answer": true
+      },
+      {
+        "key": "skill-uniform-eight",
+        "answer": true
+      },
+      {
+        "key": "skill-teammate-nine",
+        "answer": false
+      },
+      {
+        "key": "skill-transport-ten",
+        "answer": true
+      }
+    ],
+    "job_requirements": [
+      "יכולת פיזית, עבודה מהירה, עין טובה לסדר וניקיון"
+    ]
+  }
+]

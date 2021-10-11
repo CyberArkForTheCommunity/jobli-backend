@@ -258,17 +258,8 @@ class JobliServiceEnvironment(core.Construct):
                               authorizer: apigw.CfnAuthorizer) -> None:
         method = resource.add_method(
             http_method=http_method,
-            integration=integration
+            integration=integration,
+            authorization_type=apigw.AuthorizationType.COGNITO,
         )
-
-    # @staticmethod
-    # def __add_resource_method(resource: apigw.Resource, http_method: str, integration: apigw.LambdaIntegration,
-    #                           authorizer: apigw.CfnAuthorizer) -> None:
-    #     method = resource.add_method(
-    #         http_method=http_method,
-    #         integration=integration,
-    #         authorization_type=apigw.AuthorizationType.COGNITO,
-    #     )
-    #     method_resource: apigw.Resource = method.node.find_child("Resource")
-    #     method_resource.add_property_override("AuthorizerId", {"Ref": authorizer.logical_id})
-
+        method_resource: apigw.Resource = method.node.find_child("Resource")
+        method_resource.add_property_override("AuthorizerId", {"Ref": authorizer.logical_id})

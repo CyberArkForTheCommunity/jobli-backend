@@ -288,8 +288,11 @@ def get_seeker_summary(event: dict, context: LambdaContext) -> dict:
         # convert to model
         job_seeker: JobSeeker = JobSeeker(**job_seeker_repository.get(user_id))
 
+        job_seeker_experience_list: List[Experience] = job_seeker_experience_repository.get_all(user_id)
+
         # TODO convert to resource
-        resource: JobSeekerResource = JobSeekerResource(**job_seeker.as_dict())
+        resource: JobSeekerResource = JobSeekerResource(profile=job_seeker.as_dict(),
+                                                        experience_list=job_seeker_experience_list)
         # return resource
         return _build_response(http_status=HTTPStatus.OK, body=resource.json())
     except (ValidationError, TypeError) as err:

@@ -36,7 +36,7 @@ def auth_headers():
 
 
 def test_create_jobli_employer(endpoint_url, auth_headers):
-    # Create the employer
+# Create the employer
     employer = SOME_EMPLOYER
     headers = {"Content-Type": "application/json"}
     headers.update(auth_headers)

@@ -41,10 +41,30 @@ def auth_headers():
 
 # endregion
 
-
-def test_create_or_update_seeker_profile(endpoint_url, auth_headers):
+def _add_seeker_languages(endpoint_url: str, auth_headers: str)-> None:
     # when create entity
+    headers = {"Content-Type": "application/json"}
+    headers.update(auth_headers)
+    response = requests.api.put(url=f"{endpoint_url}/api/seeker/languages", headers=headers, json=['English', 'Hebrew'])
 
+    # then assert
+    assert response.status_code == HTTPStatus.NO_CONTENT
+
+def _set_user_type(endpoint_url: str, auth_headers: str)-> None:
+    # when create entity
+    jobli_dto: UpdateUserTypeDto = UpdateUserTypeDto(user_type=UserType.employer)
+    headers = {"Content-Type": "application/json"}
+    headers.update(auth_headers)
+    response = requests.api.post(url=f"{endpoint_url}/api/users/type", headers=headers, json=jobli_dto.dict())
+
+    # then assert
+    assert response.status_code == HTTPStatus.OK
+
+
+def _create_seeker_profile(endpoint_url: str, auth_headers: dict)-> None:
+
+
+    # when create entity
     profile_dto: JobSeekerProfileDto = JobSeekerProfileDto(full_name=random_string(), birth_year=1970, birth_month=1,
                                                            birth_day=1,
                                                            address=random_string(), email=random_string())
@@ -55,32 +75,13 @@ def test_create_or_update_seeker_profile(endpoint_url, auth_headers):
 
     # then assert created
     assert response.status_code == HTTPStatus.OK
-    # # assert created_date & updated_date was initialize
-    # resource = json.loads(response.content)
-    # assert resource['full_name'] == profile_dto.full_name
-    # day_seconds = 24 * 60 * 60
-    # now = datetime.now().timestamp()
-    # assert now - day_seconds < resource['created_date'] < now + day_seconds
-    # assert resource['created_date'] == resource['updated_date']
-    #
-    # # when get the created entity
-    # response = requests.api.get(url=f"{endpoint_url}/jobli/{jobli_dto.name}", headers=auth_headers)
-    #
-    # # then assert all fields saved successfully
-    # assert response.status_code == HTTPStatus.OK
-    # resource = json.loads(response.content)
-    # assert resource['name'] == jobli_dto.name
-    # assert now - day_seconds < resource['created_date'] < now + day_seconds
-    # assert resource['created_date'] == resource['updated_date']
 
-
-@pytest.mark.skip(reason="This test will work only if user exists and doesn't already have answers in DB")
-def test_add_seeker_answers(endpoint_url, auth_headers):
-    # when create entity
+def _add_seeker_answers(endpoint_url: str, auth_headers: str)-> None:
+     # when create entity
 
     answers_dto: List[JobSeekerAnswerDto] = []
 
-    for i in range(1, 10):
+    for i in range(0, 10):
         answers_dto.append(JobSeekerAnswerDto(key="a" + str(i), question="q" + str(i), answer=True))
 
     headers = {"Content-Type": "application/json"}
@@ -94,14 +95,21 @@ def test_add_seeker_answers(endpoint_url, auth_headers):
 
 @pytest.mark.skip(reason="This test will work only if user doesn't exist in cognito")
 def test_set_user_type(endpoint_url, auth_headers):
-    # when create entity
-    jobli_dto: UpdateUserTypeDto = UpdateUserTypeDto(user_type=UserType.employer)
-    headers = {"Content-Type": "application/json"}
-    headers.update(auth_headers)
-    response = requests.api.post(url=f"{endpoint_url}/api/users/type", headers=headers, json=jobli_dto.dict())
+    _set_user_type(endpoint_url=endpoint_url, auth_headers=auth_headers)
 
-    # then assert
-    assert response.status_code == HTTPStatus.OK
+
+def test_create_or_update_seeker_profile(endpoint_url, auth_headers):
+    _create_seeker_profile(endpoint_url=endpoint_url, auth_headers=auth_headers)
+
+
+@pytest.mark.skip(reason="This test will work only if user exists and doesn't already have answers in DB")
+def test_add_seeker_answers(endpoint_url, auth_headers):
+
+    _add_seeker_answers(endpoint_url=endpoint_url, auth_headers=auth_headers)
+
+
+
+
 
 
 # noinspection PyPep8Naming
@@ -179,3 +187,11 @@ def test_create_delete_read_experience(endpoint_url):
     except NotFoundError:
         # all good. this is what we expected
         pass
+
+
+@pytest.mark.skip(reason="This test is to fill user with initial data - _add_seeker_answers can be run only once")
+def test_seeker_full_flow(endpoint_url, auth_headers):
+    _set_user_type(endpoint_url=endpoint_url, auth_headers=auth_headers)
+    _create_seeker_profile(endpoint_url=endpoint_url, auth_headers=auth_headers)
+    _add_seeker_languages(endpoint_url=endpoint_url, auth_headers=auth_headers)
+    _add_seeker_answers(endpoint_url=endpoint_url, auth_headers=auth_headers)

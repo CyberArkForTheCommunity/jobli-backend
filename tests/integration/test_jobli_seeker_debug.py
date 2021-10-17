@@ -1,18 +1,10 @@
 # pylint: disable = print-used
-import json
 import os
-import uuid
-from http import HTTPStatus
 from typing import List
 
 import pytest
-from pytest import skip
-
-from service import handler
-import requests
 from dotenv import load_dotenv
 
-from service.common.exceptions import NotFoundError
 from service.dao.job_seeker_answers_repository import job_seeker_answers_repository
 from service.dao.job_seeker_experience_repository import job_seeker_experience_repository
 from service.dao.job_seeker_repository import job_seeker_repository
@@ -20,24 +12,14 @@ from service.dao.jobs_repository import jobs_repository
 from service.dao.model.experience import Experience
 from service.dao.model.job_seeker import JobSeeker
 from service.dao.model.job_seeker_answers import JobSeekerAnswers
-from service.dtos.job_seeker_answer_dto import JobSeekerAnswerDto
-from service.dtos.job_seeker_profile_dto import JobSeekerProfileDto
-# from cdk.jobli_service_cdk.service_stack.jobli_construct import get_stack_name
-# from jobli_service_cdk.service_stack.constants import BASE_NAME
-from service.dtos.jobli_dto import UpdateUserTypeDto, UserType
 from service.models.employer.employer_job import JobSearchResult
 from service.models.job_seeker_resource import JobSeekerResource
-from tests.helpers.cognito_auth_util import add_auth_header
 from tests.helpers.environment_handler import load_env_vars
-from tests.helpers.random_utils import random_string
 
-
-# region test fixtures
 
 @pytest.fixture(scope="module")
 def endpoint_url():
     load_dotenv()
-    # load_env_vars(get_stack_name(BASE_NAME))
     load_env_vars()
     endpoint_url = os.environ['JOBLI_API_GW']
     return endpoint_url[:-1]

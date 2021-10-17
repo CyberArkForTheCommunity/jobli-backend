@@ -1,4 +1,6 @@
 # pylint: disable=no-name-in-module
+from typing import Optional
+
 from pydantic import BaseModel, validator
 
 
@@ -9,6 +11,9 @@ class JobSeekerProfileDto(BaseModel):
     birth_day: int
     address: str
     email: str
+    about_me: Optional[str]
+    job_ambitions: Optional[str]
+    hobbies: Optional[str]
 
     # pylint: disable=no-self-argument,no-self-use,invalid-name
     # noinspection PyMethodParameters

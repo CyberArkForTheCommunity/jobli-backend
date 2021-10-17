@@ -66,7 +66,10 @@ def __create_seeker_profile(user_id: str, profile_dto: JobSeekerProfileDto) -> d
                                       full_name=profile_dto.full_name,
                                       birth_date=Decimal(birth_date.timestamp() * 1000),
                                       email=profile_dto.email,
-                                      address=profile_dto.address)
+                                      address=profile_dto.address,
+                                      about_me=profile_dto.about_me,
+                                      hobbies=profile_dto.hobbies,
+                                      job_ambitions=profile_dto.job_ambitions)
 
     job_seeker_repository.create(job_seeker)
 
@@ -82,6 +85,9 @@ def __update_seeker_profile(profile_dto: JobSeekerProfileDto, job_seeker: JobSee
     job_seeker.birth_date = int(birth_date.timestamp()) * 1000
     job_seeker.email = profile_dto.email
     job_seeker.address = profile_dto.address
+    job_seeker.about_me = profile_dto.about_me
+    job_seeker.hobbies = profile_dto.hobbies
+    job_seeker.job_ambitions = profile_dto.job_ambitions
 
     job_seeker_repository.update(job_seeker)
 

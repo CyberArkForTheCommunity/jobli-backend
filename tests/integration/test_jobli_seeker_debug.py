@@ -89,6 +89,6 @@ def test_job_seekers_get_summary_debug(endpoint_url):
     job_seeker_experience_list: List[Experience] = job_seeker_experience_repository.get_all(user_id)
 
     # TODO convert to resource
-    resource: JobSeekerResource = JobSeekerResource(profile=job_seeker.as_dict(),
+    resource: JobSeekerResource = JobSeekerResource(profile=job_seeker,
+                                                    experience_list=job_seeker_experience_list,
                                                     answers=job_seeker_answers)
-    print()

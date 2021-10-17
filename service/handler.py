@@ -295,7 +295,7 @@ def get_seeker_summary(event: dict, context: LambdaContext) -> dict:
             JobSeekerAnswers(**job_seeker_answers_repository.get_by_seeker_id(user_id))
 
         # TODO convert to resource
-        resource: JobSeekerResource = JobSeekerResource(profile=job_seeker.as_dict(),
+        resource: JobSeekerResource = JobSeekerResource(profile=job_seeker,
                                                         experience_list=job_seeker_experience_list,
                                                         answers=job_seeker_answers)
         # return resource

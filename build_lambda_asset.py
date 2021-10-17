@@ -1,6 +1,5 @@
 import hashlib
 import os
-import platform
 import shutil
 from datetime import datetime
 from pathlib import Path

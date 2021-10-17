@@ -25,7 +25,6 @@ def endpoint_url():
     return endpoint_url[:-1]
 
 
-# endregion
 # noinspection PyPep8Naming
 @pytest.mark.skip(msg="Test retrieval of relevant job for debug")
 def test_job_seekers_get_relevant_jobs_debug(endpoint_url):

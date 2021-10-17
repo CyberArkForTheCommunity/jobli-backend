@@ -12,12 +12,13 @@ def create_user(name: str, password: str, user_pool_id: str, group_name: str = "
     if email is None:
         email = f"{name}@jobli.com"
     existing_users = client.list_users(UserPoolId=user_pool_id, Limit=1, Filter=f"username = \"{name}\"")
-    if len(existing_users['Users']) > 0:
-        client.admin_delete_user(UserPoolId=user_pool_id, Username=name)
-    client.admin_create_user(UserPoolId=user_pool_id, Username=name, UserAttributes=[{
-        'Name': "email",
-        'Value': email
-    }], MessageAction='SUPPRESS')
+
+    if len(existing_users['Users']) == 0:
+        client.admin_create_user(UserPoolId=user_pool_id, Username=name, UserAttributes=[{
+            'Name': "email",
+            'Value': email
+        }], MessageAction='SUPPRESS')
+
     client.admin_set_user_password(UserPoolId=user_pool_id, Username=name, Password=password, Permanent=True)
 
     groups = client.list_groups(UserPoolId=user_pool_id)

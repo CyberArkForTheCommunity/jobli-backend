@@ -29,11 +29,10 @@ from service.dtos.jobli_dto import JobliDto
 from service.dtos.jobli_dto import UpdateUserTypeDto
 from service.models.employer.employer_job import JobSearchResult
 from service.models.job_seeker_resource import JobSeekerResource
+from service.dao.model.job_seeker_answers import JobSeekerAnswers
 from service.models.jobli import Jobli
 
 logger = Logger()
-
-USER_ID = "11111"
 
 
 # PUT /api/seeker/profile
@@ -41,8 +40,7 @@ USER_ID = "11111"
 def create_or_update_seeker_profile(event: dict, context: LambdaContext) -> dict:
     try:
         event: APIGatewayProxyEvent = APIGatewayProxyEvent(event)
-        # TODO user_id = event.request_context.authorizer.claims["sub"]
-        user_id = USER_ID
+        user_id = event.request_context.authorizer.claims["sub"]
 
         profile_dto: JobSeekerProfileDto = JobSeekerProfileDto.parse_raw(event["body"])
 
@@ -102,8 +100,7 @@ def __update_seeker_profile(profile_dto: JobSeekerProfileDto, job_seeker: JobSee
 def get_seeker_profile(event: dict, context: LambdaContext) -> dict:
     try:
         event: APIGatewayProxyEvent = APIGatewayProxyEvent(event)
-        # TODO user_id = event.request_context.authorizer.claims["sub"]
-        user_id = USER_ID
+        user_id = event.request_context.authorizer.claims["sub"]
 
         # convert to model
         job_seeker: JobSeeker = JobSeeker(**job_seeker_repository.get(user_id))
@@ -124,8 +121,7 @@ def get_seeker_profile(event: dict, context: LambdaContext) -> dict:
 def search_relevant_jobs(event: dict, context: LambdaContext) -> dict:
     try:
         event: APIGatewayProxyEvent = APIGatewayProxyEvent(event)
-        # TODO user_id = event.request_context.authorizer.claims["sub"]
-        user_id = USER_ID
+        user_id = event.request_context.authorizer.claims["sub"]
 
         job_seeker_answers: JobSeekerAnswers = JobSeekerAnswers(
             **job_seeker_answers_repository.get_by_seeker_id(user_id))
@@ -167,8 +163,7 @@ def add_seeker_answers(event: dict, context: LambdaContext) -> dict:
                                                      json.loads(event["body"])]
 
         event: APIGatewayProxyEvent = APIGatewayProxyEvent(event)
-        # TODO user_id = event.request_context.authorizer.claims["sub"]
-        user_id = USER_ID
+        user_id = event.request_context.authorizer.claims["sub"]
 
         job_seeker: JobSeeker = JobSeeker(**job_seeker_repository.get(user_id))
 
@@ -203,8 +198,7 @@ def add_seeker_answers(event: dict, context: LambdaContext) -> dict:
 def add_seeker_experience(event: dict, context: LambdaContext) -> dict:
     try:
         event: APIGatewayProxyEvent = APIGatewayProxyEvent(event)
-        # TODO user_id = event.request_context.authorizer.claims["sub"]
-        user_id = USER_ID
+        user_id = event.request_context.authorizer.claims["sub"]
 
         experience_dto: JobSeekerExperienceDto = JobSeekerExperienceDto.parse_raw(event["body"])
 
@@ -236,8 +230,7 @@ def list_seeker_experience(event: dict, context: LambdaContext) -> dict:
     try:
 
         event: APIGatewayProxyEvent = APIGatewayProxyEvent(event)
-        # TODO user_id = event.request_context.authorizer.claims["sub"]
-        user_id = USER_ID
+        user_id = event.request_context.authorizer.claims["sub"]
 
         result_list = [item.dict() for item in
                        job_seeker_experience_repository.get_all(user_id)]
@@ -256,8 +249,7 @@ def get_seeker_experience_by_id(event: dict, context: LambdaContext) -> dict:
         experience_id = event["pathParameters"]["experience_id"]
 
         event: APIGatewayProxyEvent = APIGatewayProxyEvent(event)
-        # TODO user_id = event.request_context.authorizer.claims["sub"]
-        user_id = USER_ID
+        user_id = event.request_context.authorizer.claims["sub"]
 
         experience: Experience = job_seeker_experience_repository.get(user_id, experience_id)
 
@@ -277,8 +269,7 @@ def add_seeker_languages(event: dict, context: LambdaContext) -> dict:
         languages_list: List[str] = json.loads(event["body"])
 
         event: APIGatewayProxyEvent = APIGatewayProxyEvent(event)
-        # TODO user_id = event.request_context.authorizer.claims["sub"]
-        user_id = USER_ID
+        user_id = event.request_context.authorizer.claims["sub"]
 
         job_seeker: JobSeeker = JobSeeker(**job_seeker_repository.get(user_id))
 
@@ -299,14 +290,20 @@ def add_seeker_languages(event: dict, context: LambdaContext) -> dict:
 def get_seeker_summary(event: dict, context: LambdaContext) -> dict:
     try:
         event: APIGatewayProxyEvent = APIGatewayProxyEvent(event)
-        # TODO user_id = event.request_context.authorizer.claims["sub"]
-        user_id = USER_ID
+        user_id = event.request_context.authorizer.claims["sub"]
 
         # convert to model
         job_seeker: JobSeeker = JobSeeker(**job_seeker_repository.get(user_id))
 
+        job_seeker_experience_list: List[Experience] = job_seeker_experience_repository.get_all(user_id)
+
+        job_seeker_answers: JobSeekerAnswers = \
+            JobSeekerAnswers(**job_seeker_answers_repository.get_by_seeker_id(user_id))
+
         # TODO convert to resource
-        resource: JobSeekerResource = JobSeekerResource(**job_seeker.as_dict())
+        resource: JobSeekerResource = JobSeekerResource(profile=job_seeker,
+                                                        experience_list=job_seeker_experience_list,
+                                                        answers=job_seeker_answers)
         # return resource
         return _build_response(http_status=HTTPStatus.OK, body=resource.json())
     except (ValidationError, TypeError) as err:

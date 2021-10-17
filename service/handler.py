@@ -29,6 +29,7 @@ from service.dtos.jobli_dto import JobliDto
 from service.dtos.jobli_dto import UpdateUserTypeDto
 from service.models.employer.employer_job import JobSearchResult
 from service.models.job_seeker_resource import JobSeekerResource
+from service.dao.model.job_seeker_answers import JobSeekerAnswers
 from service.models.jobli import Jobli
 
 logger = Logger()
@@ -288,8 +289,15 @@ def get_seeker_summary(event: dict, context: LambdaContext) -> dict:
         # convert to model
         job_seeker: JobSeeker = JobSeeker(**job_seeker_repository.get(user_id))
 
+        job_seeker_experience_list: List[Experience] = job_seeker_experience_repository.get_all(user_id)
+
+        job_seeker_answers: JobSeekerAnswers = \
+            JobSeekerAnswers(**job_seeker_answers_repository.get_by_seeker_id(user_id))
+
         # TODO convert to resource
-        resource: JobSeekerResource = JobSeekerResource(**job_seeker.as_dict())
+        resource: JobSeekerResource = JobSeekerResource(profile=job_seeker,
+                                                        experience_list=job_seeker_experience_list,
+                                                        answers=job_seeker_answers)
         # return resource
         return _build_response(http_status=HTTPStatus.OK, body=resource.json())
     except (ValidationError, TypeError) as err:

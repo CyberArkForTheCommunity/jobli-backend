@@ -112,12 +112,14 @@ def test_job_seekers_crud_against_dynamo_db(endpoint_url):
     job_seeker_id = str(uuid.uuid4())
     full_name = str(uuid.uuid4())
     address = str(uuid.uuid4())
+    about_me = str(uuid.uuid4())
     job_seeker_dict = {
         "id": job_seeker_id,
         "full_name": full_name,
         "birth_date": 11003484,
         "address": address,
-        "email": "dummy@company.com"}
+        "email": "dummy@company.com",
+        "about_me": about_me}
     job_seeker = JobSeeker(**job_seeker_dict)
     job_seeker_repository.create(job_seeker=job_seeker, user="testUser")
 
@@ -127,6 +129,7 @@ def test_job_seekers_crud_against_dynamo_db(endpoint_url):
     assert job_seeker_read.version == 0
     assert job_seeker_read.id == job_seeker_id
     assert job_seeker_read.address == address
+    assert job_seeker_read.about_me == about_me
 
     # job_seeker_dict = job_seeker_repository.get(job_seeker_id)
 

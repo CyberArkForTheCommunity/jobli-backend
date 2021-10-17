@@ -38,7 +38,9 @@ class JobSeeker(BaseModel, SingleTableRecord):
     # experience: List[Experience] = None
     # summary: str
     # job_ambitions: str
-    # hobbies: str
+    about_me: Optional[str]
+    job_ambitions: Optional[str]
+    hobbies: Optional[str]
 
     @staticmethod
     def build_pk(job_seeker_id: str):

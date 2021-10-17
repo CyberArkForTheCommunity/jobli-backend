@@ -50,7 +50,7 @@ def test_job_seekers_get_relevant_jobs_debug(endpoint_url):
     assert os.environ["JOB_SEEKERS_TABLE_NAME"] is not None
     print("\nseekers_table: ", os.environ["JOB_SEEKERS_TABLE_NAME"])
 
-    user_id = '830ac377-9846-4c9a-96eb-7d2ea9560357'
+    user_id = '7dd6f937-88d6-4a13-8032-d3456b7dd8bb'
 
     job_seeker_answers: JobSeekerAnswers = JobSeekerAnswers(
         **job_seeker_answers_repository.get_by_seeker_id(user_id))
@@ -79,11 +79,16 @@ def test_job_seekers_get_summary_debug(endpoint_url):
     assert os.environ["JOB_SEEKERS_TABLE_NAME"] is not None
     print("\nseekers_table: ", os.environ["JOB_SEEKERS_TABLE_NAME"])
 
-    user_id = '830ac377-9846-4c9a-96eb-7d2ea9560357'
+    user_id = '7dd6f937-88d6-4a13-8032-d3456b7dd8bb'
 # convert to model
     job_seeker: JobSeeker = JobSeeker(**job_seeker_repository.get(user_id))
+
+    job_seeker_answers: JobSeekerAnswers = \
+        JobSeekerAnswers(**job_seeker_answers_repository.get_by_seeker_id(user_id))
 
     job_seeker_experience_list: List[Experience] = job_seeker_experience_repository.get_all(user_id)
 
     # TODO convert to resource
-    resource: JobSeekerResource = JobSeekerResource(profile=job_seeker.as_dict())
+    resource: JobSeekerResource = JobSeekerResource(profile=job_seeker.as_dict(),
+                                                    answers=job_seeker_answers)
+    print()

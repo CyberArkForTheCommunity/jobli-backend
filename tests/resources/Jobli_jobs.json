@@ -1,11 +1,11 @@
 [
   {
-    "Employer_Name": "שפע יששכר",
-    "Job_Name": "",
+    "business_name": "שפע יששכר",
+    "job_name": "",
     "job_description": "חלוקת מטבעות עבור עגלות סופר",
     "job_employees_count": 20,
-    "job_scope": "Full",
-    "job_salary": "",
+    "job_scope": "full",
+    "job_salary": null,
     "job_experience_needed": "אין צורך",
     "job_fields": [
       "קופה ראשית",
@@ -14,42 +14,52 @@
     "answers": [
       {
         "key": "skill-sit-one",
+        "question": "האם תרצי לעבוד בישיבה?",
         "answer": true
       },
       {
         "key": "skill-open-space-two",
+        "question": "האם חשוב לך לעבוד במקום פתוח?",
         "answer": true
       },
       {
         "key": "skill-overweight-three",
+        "question": "האם תוכל/י להרים משקל??",
         "answer": false
       },
       {
         "key": "skill-money-four",
+        "question": "האם תדע/י לעבוד עם מחשב?",
         "answer": true
       },
       {
         "key": "skill-computer-five",
+        "question": "האם תדע/י איך לעבוד עם כסף?",
         "answer": false
       },
       {
         "key": "skill-help-people-six",
+        "question": "האם תרצה/י לתת שירות לאנשים?",
         "answer": false
       },
       {
         "key": "skill-location-seven",
+        "question": "האם תוכל/י לעבוד במקום רועש?",
         "answer": true
       },
       {
         "key": "skill-uniform-eight",
+        "question": "האם תרצה/י לעבוד עם מדים?",
         "answer": true
       },
       {
         "key": "skill-teammate-nine",
+        "question": "האם את/ה רוצה לעבוד בצוות עם אנשים נוספים?",
         "answer": true
       },
       {
         "key": "skill-transport-ten",
+        "question": "האם תגיע/י לעבודה בתחבורה ציבורית?",
         "answer": true
       }
     ],
@@ -58,11 +68,11 @@
     ]
   },
   {
-    "Employer_Name": "דרומה",
-    "Job_Name": "",
+    "business_name": "דרומה",
+    "job_name": "",
     "job_description": "ניקוי שולחנות לאחר עזיבת לקוחות",
     "job_employees_count": 4,
-    "job_scope": "Partial",
+    "job_scope": "partial",
     "job_salary": 3260.0,
     "job_experience_needed": "אין צורך",
     "job_fields": [
@@ -73,42 +83,52 @@
     "answers": [
       {
         "key": "skill-sit-one",
+        "question": "האם תרצי לעבוד בישיבה?",
         "answer": false
       },
       {
         "key": "skill-open-space-two",
+        "question": "האם חשוב לך לעבוד במקום פתוח?",
         "answer": true
       },
       {
         "key": "skill-overweight-three",
+        "question": "האם תוכל/י להרים משקל??",
         "answer": false
       },
       {
         "key": "skill-money-four",
+        "question": "האם תדע/י לעבוד עם מחשב?",
         "answer": true
       },
       {
         "key": "skill-computer-five",
+        "question": "האם תדע/י איך לעבוד עם כסף?",
         "answer": false
       },
       {
         "key": "skill-help-people-six",
+        "question": "האם תרצה/י לתת שירות לאנשים?",
         "answer": true
       },
       {
         "key": "skill-location-seven",
+        "question": "האם תוכל/י לעבוד במקום רועש?",
         "answer": false
       },
       {
         "key": "skill-uniform-eight",
+        "question": "האם תרצה/י לעבוד עם מדים?",
         "answer": true
       },
       {
         "key": "skill-teammate-nine",
+        "question": "האם את/ה רוצה לעבוד בצוות עם אנשים נוספים?",
         "answer": false
       },
       {
         "key": "skill-transport-ten",
+        "question": "האם תגיע/י לעבודה בתחבורה ציבורית?",
         "answer": true
       }
     ],
@@ -117,12 +137,12 @@
     ]
   },
   {
-    "Employer_Name": "אינטל",
-    "Job_Name": "",
+    "business_name": "אינטל",
+    "job_name": "",
     "job_description": "ייצור שבבי מחשב",
     "job_employees_count": 34,
-    "job_scope": "Full",
-    "job_salary": "",
+    "job_scope": "full",
+    "job_salary": null,
     "job_experience_needed": "אין צורך",
     "job_fields": [
       "Clean Room",
@@ -131,42 +151,52 @@
     "answers": [
       {
         "key": "skill-sit-one",
+        "question": "האם תרצי לעבוד בישיבה?",
         "answer": true
       },
       {
         "key": "skill-open-space-two",
+        "question": "האם חשוב לך לעבוד במקום פתוח?",
         "answer": false
       },
       {
         "key": "skill-overweight-three",
+        "question": "האם תוכל/י להרים משקל??",
         "answer": false
       },
       {
         "key": "skill-money-four",
+        "question": "האם תדע/י לעבוד עם מחשב?",
         "answer": false
       },
       {
         "key": "skill-computer-five",
+        "question": "האם תדע/י איך לעבוד עם כסף?",
         "answer": true
       },
       {
         "key": "skill-help-people-six",
+        "question": "האם תרצה/י לתת שירות לאנשים?",
         "answer": false
       },
       {
         "key": "skill-location-seven",
+        "question": "האם תוכל/י לעבוד במקום רועש?",
         "answer": false
       },
       {
         "key": "skill-uniform-eight",
+        "question": "האם תרצה/י לעבוד עם מדים?",
         "answer": true
       },
       {
         "key": "skill-teammate-nine",
+        "question": "האם את/ה רוצה לעבוד בצוות עם אנשים נוספים?",
         "answer": true
       },
       {
         "key": "skill-transport-ten",
+        "question": "האם תגיע/י לעבודה בתחבורה ציבורית?",
         "answer": false
       }
     ],
@@ -175,12 +205,12 @@
     ]
   },
   {
-    "Employer_Name": "מקלרנ'ס פאב",
-    "Job_Name": "",
+    "business_name": "מקלרנ'ס פאב",
+    "job_name": "",
     "job_description": "מזיגת וערבוב משקאות",
     "job_employees_count": 1,
-    "job_scope": "Partial",
-    "job_salary": "",
+    "job_scope": "partial",
+    "job_salary": null,
     "job_experience_needed": "נדרש ניסיון של שנתיים",
     "job_fields": [
       "ניקוי שולחנות",
@@ -190,42 +220,52 @@
     "answers": [
       {
         "key": "skill-sit-one",
+        "question": "האם תרצי לעבוד בישיבה?",
         "answer": false
       },
       {
         "key": "skill-open-space-two",
+        "question": "האם חשוב לך לעבוד במקום פתוח?",
         "answer": false
       },
       {
         "key": "skill-overweight-three",
+        "question": "האם תוכל/י להרים משקל??",
         "answer": true
       },
       {
         "key": "skill-money-four",
+        "question": "האם תדע/י לעבוד עם מחשב?",
         "answer": true
       },
       {
         "key": "skill-computer-five",
+        "question": "האם תדע/י איך לעבוד עם כסף?",
         "answer": true
       },
       {
         "key": "skill-help-people-six",
+        "question": "האם תרצה/י לתת שירות לאנשים?",
         "answer": true
       },
       {
         "key": "skill-location-seven",
+        "question": "האם תוכל/י לעבוד במקום רועש?",
         "answer": false
       },
       {
         "key": "skill-uniform-eight",
+        "question": "האם תרצה/י לעבוד עם מדים?",
         "answer": true
       },
       {
         "key": "skill-teammate-nine",
+        "question": "האם את/ה רוצה לעבוד בצוות עם אנשים נוספים?",
         "answer": true
       },
       {
         "key": "skill-transport-ten",
+        "question": "האם תגיע/י לעבודה בתחבורה ציבורית?",
         "answer": true
       }
     ],
@@ -234,12 +274,12 @@
     ]
   },
   {
-    "Employer_Name": "קסטרו",
-    "Job_Name": "",
+    "business_name": "קסטרו",
+    "job_name": "",
     "job_description": "סידור מדפים ושירות לקוחות",
     "job_employees_count": 5,
-    "job_scope": "Full",
-    "job_salary": "",
+    "job_scope": "full",
+    "job_salary": null,
     "job_experience_needed": "אין צורך",
     "job_fields": [
       "קיפול בגדים",
@@ -249,42 +289,52 @@
     "answers": [
       {
         "key": "skill-sit-one",
+        "question": "האם תרצי לעבוד בישיבה?",
         "answer": false
       },
       {
         "key": "skill-open-space-two",
+        "question": "האם חשוב לך לעבוד במקום פתוח?",
         "answer": false
       },
       {
         "key": "skill-overweight-three",
+        "question": "האם תוכל/י להרים משקל??",
         "answer": false
       },
       {
         "key": "skill-money-four",
+        "question": "האם תדע/י לעבוד עם מחשב?",
         "answer": true
       },
       {
         "key": "skill-computer-five",
+        "question": "האם תדע/י איך לעבוד עם כסף?",
         "answer": true
       },
       {
         "key": "skill-help-people-six",
+        "question": "האם תרצה/י לתת שירות לאנשים?",
         "answer": true
       },
       {
         "key": "skill-location-seven",
+        "question": "האם תוכל/י לעבוד במקום רועש?",
         "answer": false
       },
       {
         "key": "skill-uniform-eight",
+        "question": "האם תרצה/י לעבוד עם מדים?",
         "answer": true
       },
       {
         "key": "skill-teammate-nine",
+        "question": "האם את/ה רוצה לעבוד בצוות עם אנשים נוספים?",
         "answer": true
       },
       {
         "key": "skill-transport-ten",
+        "question": "האם תגיע/י לעבודה בתחבורה ציבורית?",
         "answer": true
       }
     ],
@@ -293,12 +343,12 @@
     ]
   },
   {
-    "Employer_Name": "בית אריזה- עץ השדה",
-    "Job_Name": "עוזר בית אריזה",
+    "business_name": "בית אריזה- עץ השדה",
+    "job_name": "עוזר בית אריזה",
     "job_description": "עזרה בצרכי בית האריזה, באופן משתנה ותלוי בעונה וביום",
     "job_employees_count": 25,
-    "job_scope": "Full",
-    "job_salary": "",
+    "job_scope": "full",
+    "job_salary": null,
     "job_experience_needed": "אין צורך",
     "job_fields": [
       "מיון תפוחים",
@@ -308,42 +358,52 @@
     "answers": [
       {
         "key": "skill-sit-one",
+        "question": "האם תרצי לעבוד בישיבה?",
         "answer": false
       },
       {
         "key": "skill-open-space-two",
+        "question": "האם חשוב לך לעבוד במקום פתוח?",
         "answer": true
       },
       {
         "key": "skill-overweight-three",
+        "question": "האם תוכל/י להרים משקל??",
         "answer": true
       },
       {
         "key": "skill-money-four",
+        "question": "האם תדע/י לעבוד עם מחשב?",
         "answer": false
       },
       {
         "key": "skill-computer-five",
+        "question": "האם תדע/י איך לעבוד עם כסף?",
         "answer": false
       },
       {
         "key": "skill-help-people-six",
+        "question": "האם תרצה/י לתת שירות לאנשים?",
         "answer": false
       },
       {
         "key": "skill-location-seven",
+        "question": "האם תוכל/י לעבוד במקום רועש?",
         "answer": true
       },
       {
         "key": "skill-uniform-eight",
+        "question": "האם תרצה/י לעבוד עם מדים?",
         "answer": true
       },
       {
         "key": "skill-teammate-nine",
+        "question": "האם את/ה רוצה לעבוד בצוות עם אנשים נוספים?",
         "answer": true
       },
       {
         "key": "skill-transport-ten",
+        "question": "האם תגיע/י לעבודה בתחבורה ציבורית?",
         "answer": true
       }
     ],
@@ -352,12 +412,12 @@
     ]
   },
   {
-    "Employer_Name": "אליעזר מכשירי כתיבה",
-    "Job_Name": "עוזר מכירה",
+    "business_name": "אליעזר מכשירי כתיבה",
+    "job_name": "עוזר מכירה",
     "job_description": "סיוע בצרכי החנות והמחסן- קליטת סחורה, מיון, וסיוע ללקוחות בהתנהלות בחנות",
     "job_employees_count": 7,
-    "job_scope": "Partial",
-    "job_salary": "",
+    "job_scope": "partial",
+    "job_salary": null,
     "job_experience_needed": "ניסיון בשירות לקוחות- יתרון",
     "job_fields": [
       "מיון מוצרים למדף",
@@ -367,42 +427,52 @@
     "answers": [
       {
         "key": "skill-sit-one",
+        "question": "האם תרצי לעבוד בישיבה?",
         "answer": false
       },
       {
         "key": "skill-open-space-two",
+        "question": "האם חשוב לך לעבוד במקום פתוח?",
         "answer": false
       },
       {
         "key": "skill-overweight-three",
+        "question": "האם תוכל/י להרים משקל??",
         "answer": true
       },
       {
         "key": "skill-money-four",
+        "question": "האם תדע/י לעבוד עם מחשב?",
         "answer": true
       },
       {
         "key": "skill-computer-five",
+        "question": "האם תדע/י איך לעבוד עם כסף?",
         "answer": true
       },
       {
         "key": "skill-help-people-six",
+        "question": "האם תרצה/י לתת שירות לאנשים?",
         "answer": true
       },
       {
         "key": "skill-location-seven",
+        "question": "האם תוכל/י לעבוד במקום רועש?",
         "answer": true
       },
       {
         "key": "skill-uniform-eight",
+        "question": "האם תרצה/י לעבוד עם מדים?",
         "answer": true
       },
       {
         "key": "skill-teammate-nine",
+        "question": "האם את/ה רוצה לעבוד בצוות עם אנשים נוספים?",
         "answer": true
       },
       {
         "key": "skill-transport-ten",
+        "question": "האם תגיע/י לעבודה בתחבורה ציבורית?",
         "answer": false
       }
     ],
@@ -411,12 +481,12 @@
     ]
   },
   {
-    "Employer_Name": "זנגוויל - חנות המפעל",
-    "Job_Name": "עוזר טבח",
+    "business_name": "זנגוויל - חנות המפעל",
+    "job_name": "עוזר טבח",
     "job_description": "עזרה בהכנת מוצרים למכירה ושיווק- קבלת והכנת חומרי גלם, עבודת מטבח ופס קר",
     "job_employees_count": 41,
-    "job_scope": "Full",
-    "job_salary": "",
+    "job_scope": "full",
+    "job_salary": null,
     "job_experience_needed": "עבודה במטבח - יתרון",
     "job_fields": [
       "הכנת כריכים",
@@ -426,42 +496,52 @@
     "answers": [
       {
         "key": "skill-sit-one",
+        "question": "האם תרצי לעבוד בישיבה?",
         "answer": false
       },
       {
         "key": "skill-open-space-two",
+        "question": "האם חשוב לך לעבוד במקום פתוח?",
         "answer": false
       },
       {
         "key": "skill-overweight-three",
+        "question": "האם תוכל/י להרים משקל??",
         "answer": false
       },
       {
         "key": "skill-money-four",
+        "question": "האם תדע/י לעבוד עם מחשב?",
         "answer": false
       },
       {
         "key": "skill-computer-five",
+        "question": "האם תדע/י איך לעבוד עם כסף?",
         "answer": false
       },
       {
         "key": "skill-help-people-six",
+        "question": "האם תרצה/י לתת שירות לאנשים?",
         "answer": false
       },
       {
         "key": "skill-location-seven",
+        "question": "האם תוכל/י לעבוד במקום רועש?",
         "answer": true
       },
       {
         "key": "skill-uniform-eight",
+        "question": "האם תרצה/י לעבוד עם מדים?",
         "answer": true
       },
       {
         "key": "skill-teammate-nine",
+        "question": "האם את/ה רוצה לעבוד בצוות עם אנשים נוספים?",
         "answer": false
       },
       {
         "key": "skill-transport-ten",
+        "question": "האם תגיע/י לעבודה בתחבורה ציבורית?",
         "answer": true
       }
     ],
@@ -470,12 +550,12 @@
     ]
   },
   {
-    "Employer_Name": "תיאטרון העיפרון",
-    "Job_Name": "סדרן",
+    "business_name": "תיאטרון העיפרון",
+    "job_name": "סדרן",
     "job_description": "הובלת צופים למקומותיהם, בדיקת רכש הכרטיסים",
     "job_employees_count": 12,
-    "job_scope": "Partial",
-    "job_salary": "",
+    "job_scope": "partial",
+    "job_salary": null,
     "job_experience_needed": "אין צורך",
     "job_fields": [
       "סדרן",
@@ -484,42 +564,52 @@
     "answers": [
       {
         "key": "skill-sit-one",
+        "question": "האם תרצי לעבוד בישיבה?",
         "answer": false
       },
       {
         "key": "skill-open-space-two",
+        "question": "האם חשוב לך לעבוד במקום פתוח?",
         "answer": false
       },
       {
         "key": "skill-overweight-three",
+        "question": "האם תוכל/י להרים משקל??",
         "answer": false
       },
       {
         "key": "skill-money-four",
+        "question": "האם תדע/י לעבוד עם מחשב?",
         "answer": false
       },
       {
         "key": "skill-computer-five",
+        "question": "האם תדע/י איך לעבוד עם כסף?",
         "answer": false
       },
       {
         "key": "skill-help-people-six",
+        "question": "האם תרצה/י לתת שירות לאנשים?",
         "answer": true
       },
       {
         "key": "skill-location-seven",
+        "question": "האם תוכל/י לעבוד במקום רועש?",
         "answer": true
       },
       {
         "key": "skill-uniform-eight",
+        "question": "האם תרצה/י לעבוד עם מדים?",
         "answer": true
       },
       {
         "key": "skill-teammate-nine",
+        "question": "האם את/ה רוצה לעבוד בצוות עם אנשים נוספים?",
         "answer": true
       },
       {
         "key": "skill-transport-ten",
+        "question": "האם תגיע/י לעבודה בתחבורה ציבורית?",
         "answer": true
       }
     ],
@@ -528,12 +618,12 @@
     ]
   },
   {
-    "Employer_Name": "ריזלה",
-    "Job_Name": "עוזר אריזה",
+    "business_name": "ריזלה",
+    "job_name": "עוזר אריזה",
     "job_description": "סיוע בהכנת פרחי מריחואנה רפואית לשילוח ושיווק - החל מקטיף מהצמח, גיזום עלים מיותרים ושקילת הפרחים לאריזה בחבילות",
     "job_employees_count": 6,
-    "job_scope": "Full",
-    "job_salary": "",
+    "job_scope": "full",
+    "job_salary": null,
     "job_experience_needed": "אין צורך",
     "job_fields": [
       "קוטף פרחים",
@@ -543,42 +633,52 @@
     "answers": [
       {
         "key": "skill-sit-one",
+        "question": "האם תרצי לעבוד בישיבה?",
         "answer": true
       },
       {
         "key": "skill-open-space-two",
+        "question": "האם חשוב לך לעבוד במקום פתוח?",
         "answer": true
       },
       {
         "key": "skill-overweight-three",
+        "question": "האם תוכל/י להרים משקל??",
         "answer": false
       },
       {
         "key": "skill-money-four",
+        "question": "האם תדע/י לעבוד עם מחשב?",
         "answer": false
       },
       {
         "key": "skill-computer-five",
+        "question": "האם תדע/י איך לעבוד עם כסף?",
         "answer": false
       },
       {
         "key": "skill-help-people-six",
+        "question": "האם תרצה/י לתת שירות לאנשים?",
         "answer": false
       },
       {
         "key": "skill-location-seven",
+        "question": "האם תוכל/י לעבוד במקום רועש?",
         "answer": true
       },
       {
         "key": "skill-uniform-eight",
+        "question": "האם תרצה/י לעבוד עם מדים?",
         "answer": false
       },
       {
         "key": "skill-teammate-nine",
+        "question": "האם את/ה רוצה לעבוד בצוות עם אנשים נוספים?",
         "answer": false
       },
       {
         "key": "skill-transport-ten",
+        "question": "האם תגיע/י לעבודה בתחבורה ציבורית?",
         "answer": true
       }
     ],
@@ -587,12 +687,12 @@
     ]
   },
   {
-    "Employer_Name": "הספרייה הלאומית",
-    "Job_Name": "ספרן",
+    "business_name": "הספרייה הלאומית",
+    "job_name": "ספרן",
     "job_description": "סיוע בצרכי הספרייה- שמירת סדר וארגון, סיוע לקוראים וחוקרים, שמירה על שקט בספרייה והדבקת\\תחזוקת ספרים",
     "job_employees_count": 16,
-    "job_scope": "Partial",
-    "job_salary": "",
+    "job_scope": "partial",
+    "job_salary": null,
     "job_experience_needed": "עבודת מחסן ומלאי- יתרון",
     "job_fields": [
       "סידור ספרים",
@@ -602,42 +702,52 @@
     "answers": [
       {
         "key": "skill-sit-one",
+        "question": "האם תרצי לעבוד בישיבה?",
         "answer": false
       },
       {
         "key": "skill-open-space-two",
+        "question": "האם חשוב לך לעבוד במקום פתוח?",
         "answer": false
       },
       {
         "key": "skill-overweight-three",
+        "question": "האם תוכל/י להרים משקל??",
         "answer": false
       },
       {
         "key": "skill-money-four",
+        "question": "האם תדע/י לעבוד עם מחשב?",
         "answer": false
       },
       {
         "key": "skill-computer-five",
+        "question": "האם תדע/י איך לעבוד עם כסף?",
         "answer": true
       },
       {
         "key": "skill-help-people-six",
+        "question": "האם תרצה/י לתת שירות לאנשים?",
         "answer": true
       },
       {
         "key": "skill-location-seven",
+        "question": "האם תוכל/י לעבוד במקום רועש?",
         "answer": false
       },
       {
         "key": "skill-uniform-eight",
+        "question": "האם תרצה/י לעבוד עם מדים?",
         "answer": true
       },
       {
         "key": "skill-teammate-nine",
+        "question": "האם את/ה רוצה לעבוד בצוות עם אנשים נוספים?",
         "answer": false
       },
       {
         "key": "skill-transport-ten",
+        "question": "האם תגיע/י לעבודה בתחבורה ציבורית?",
         "answer": true
       }
     ],
@@ -646,12 +756,12 @@
     ]
   },
   {
-    "Employer_Name": "אלקטרה",
-    "Job_Name": "",
+    "business_name": "אלקטרה",
+    "job_name": "",
     "job_description": "תיקון ותחזוק מזגני החברה",
     "job_employees_count": 50,
-    "job_scope": "Full",
-    "job_salary": "",
+    "job_scope": "full",
+    "job_salary": null,
     "job_experience_needed": "הכשרה על חשבון החברה",
     "job_fields": [
       "טכנאי מזגנים",
@@ -661,42 +771,52 @@
     "answers": [
       {
         "key": "skill-sit-one",
+        "question": "האם תרצי לעבוד בישיבה?",
         "answer": false
       },
       {
         "key": "skill-open-space-two",
+        "question": "האם חשוב לך לעבוד במקום פתוח?",
         "answer": true
       },
       {
         "key": "skill-overweight-three",
+        "question": "האם תוכל/י להרים משקל??",
         "answer": true
       },
       {
         "key": "skill-money-four",
+        "question": "האם תדע/י לעבוד עם מחשב?",
         "answer": false
       },
       {
         "key": "skill-computer-five",
+        "question": "האם תדע/י איך לעבוד עם כסף?",
         "answer": true
       },
       {
         "key": "skill-help-people-six",
+        "question": "האם תרצה/י לתת שירות לאנשים?",
         "answer": true
       },
       {
         "key": "skill-location-seven",
+        "question": "האם תוכל/י לעבוד במקום רועש?",
         "answer": false
       },
       {
         "key": "skill-uniform-eight",
+        "question": "האם תרצה/י לעבוד עם מדים?",
         "answer": true
       },
       {
         "key": "skill-teammate-nine",
+        "question": "האם את/ה רוצה לעבוד בצוות עם אנשים נוספים?",
         "answer": true
       },
       {
         "key": "skill-transport-ten",
+        "question": "האם תגיע/י לעבודה בתחבורה ציבורית?",
         "answer": true
       }
     ],
@@ -705,12 +825,12 @@
     ]
   },
   {
-    "Employer_Name": "עצמלא",
-    "Job_Name": "",
+    "business_name": "עצמלא",
+    "job_name": "",
     "job_description": "סיוע בצרכי הנגריה- תחזוקה קלה,סדר וניקיון",
     "job_employees_count": 6,
-    "job_scope": "Partial",
-    "job_salary": "",
+    "job_scope": "partial",
+    "job_salary": null,
     "job_experience_needed": "אין צורך",
     "job_fields": [
       "סיוע בנגריה",
@@ -720,42 +840,52 @@
     "answers": [
       {
         "key": "skill-sit-one",
+        "question": "האם תרצי לעבוד בישיבה?",
         "answer": false
       },
       {
         "key": "skill-open-space-two",
+        "question": "האם חשוב לך לעבוד במקום פתוח?",
         "answer": false
       },
       {
         "key": "skill-overweight-three",
+        "question": "האם תוכל/י להרים משקל??",
         "answer": true
       },
       {
         "key": "skill-money-four",
+        "question": "האם תדע/י לעבוד עם מחשב?",
         "answer": false
       },
       {
         "key": "skill-computer-five",
+        "question": "האם תדע/י איך לעבוד עם כסף?",
         "answer": false
       },
       {
         "key": "skill-help-people-six",
+        "question": "האם תרצה/י לתת שירות לאנשים?",
         "answer": false
       },
       {
         "key": "skill-location-seven",
+        "question": "האם תוכל/י לעבוד במקום רועש?",
         "answer": true
       },
       {
         "key": "skill-uniform-eight",
+        "question": "האם תרצה/י לעבוד עם מדים?",
         "answer": true
       },
       {
         "key": "skill-teammate-nine",
+        "question": "האם את/ה רוצה לעבוד בצוות עם אנשים נוספים?",
         "answer": true
       },
       {
         "key": "skill-transport-ten",
+        "question": "האם תגיע/י לעבודה בתחבורה ציבורית?",
         "answer": true
       }
     ],
@@ -764,12 +894,12 @@
     ]
   },
   {
-    "Employer_Name": "סופר פארם",
-    "Job_Name": "",
+    "business_name": "סופר פארם",
+    "job_name": "",
     "job_description": "סידור מותרי החנות במדפים ומתן מענה ללקוחות החנות",
     "job_employees_count": 15,
-    "job_scope": "Full",
-    "job_salary": "",
+    "job_scope": "full",
+    "job_salary": null,
     "job_experience_needed": "אין צורך",
     "job_fields": [
       "סדרן מוצרים",
@@ -779,42 +909,52 @@
     "answers": [
       {
         "key": "skill-sit-one",
+        "question": "האם תרצי לעבוד בישיבה?",
         "answer": false
       },
       {
         "key": "skill-open-space-two",
+        "question": "האם חשוב לך לעבוד במקום פתוח?",
         "answer": true
       },
       {
         "key": "skill-overweight-three",
+        "question": "האם תוכל/י להרים משקל??",
         "answer": true
       },
       {
         "key": "skill-money-four",
+        "question": "האם תדע/י לעבוד עם מחשב?",
         "answer": true
       },
       {
         "key": "skill-computer-five",
+        "question": "האם תדע/י איך לעבוד עם כסף?",
         "answer": true
       },
       {
         "key": "skill-help-people-six",
+        "question": "האם תרצה/י לתת שירות לאנשים?",
         "answer": true
       },
       {
         "key": "skill-location-seven",
+        "question": "האם תוכל/י לעבוד במקום רועש?",
         "answer": false
       },
       {
         "key": "skill-uniform-eight",
+        "question": "האם תרצה/י לעבוד עם מדים?",
         "answer": true
       },
       {
         "key": "skill-teammate-nine",
+        "question": "האם את/ה רוצה לעבוד בצוות עם אנשים נוספים?",
         "answer": true
       },
       {
         "key": "skill-transport-ten",
+        "question": "האם תגיע/י לעבודה בתחבורה ציבורית?",
         "answer": true
       }
     ],
@@ -823,12 +963,12 @@
     ]
   },
   {
-    "Employer_Name": "קופישופ",
-    "Job_Name": "",
+    "business_name": "קופישופ",
+    "job_name": "",
     "job_description": "סיוע לטבח המסעדה בהכנת המנות ועבודת המטבח הכללית",
     "job_employees_count": 12,
-    "job_scope": "Full",
-    "job_salary": "",
+    "job_scope": "full",
+    "job_salary": null,
     "job_experience_needed": "אין צורך",
     "job_fields": [
       "עובד מטבח",
@@ -837,42 +977,52 @@
     "answers": [
       {
         "key": "skill-sit-one",
+        "question": "האם תרצי לעבוד בישיבה?",
         "answer": false
       },
       {
         "key": "skill-open-space-two",
+        "question": "האם חשוב לך לעבוד במקום פתוח?",
         "answer": false
       },
       {
         "key": "skill-overweight-three",
+        "question": "האם תוכל/י להרים משקל??",
         "answer": true
       },
       {
         "key": "skill-money-four",
+        "question": "האם תדע/י לעבוד עם מחשב?",
         "answer": false
       },
       {
         "key": "skill-computer-five",
+        "question": "האם תדע/י איך לעבוד עם כסף?",
         "answer": false
       },
       {
         "key": "skill-help-people-six",
+        "question": "האם תרצה/י לתת שירות לאנשים?",
         "answer": false
       },
       {
         "key": "skill-location-seven",
+        "question": "האם תוכל/י לעבוד במקום רועש?",
         "answer": false
       },
       {
         "key": "skill-uniform-eight",
+        "question": "האם תרצה/י לעבוד עם מדים?",
         "answer": true
       },
       {
         "key": "skill-teammate-nine",
+        "question": "האם את/ה רוצה לעבוד בצוות עם אנשים נוספים?",
         "answer": true
       },
       {
         "key": "skill-transport-ten",
+        "question": "האם תגיע/י לעבודה בתחבורה ציבורית?",
         "answer": true
       }
     ],
@@ -881,12 +1031,12 @@
     ]
   },
   {
-    "Employer_Name": "בית חולים הדסה עין כרם",
-    "Job_Name": "",
+    "business_name": "בית חולים הדסה עין כרם",
+    "job_name": "",
     "job_description": "ביצוע עבודות ניקיון ברחבי בית החולים",
     "job_employees_count": 80,
-    "job_scope": "Full",
-    "job_salary": "",
+    "job_scope": "full",
+    "job_salary": null,
     "job_experience_needed": "אין צורך",
     "job_fields": [
       "כח עזר",
@@ -896,42 +1046,52 @@
     "answers": [
       {
         "key": "skill-sit-one",
+        "question": "האם תרצי לעבוד בישיבה?",
         "answer": false
       },
       {
         "key": "skill-open-space-two",
+        "question": "האם חשוב לך לעבוד במקום פתוח?",
         "answer": true
       },
       {
         "key": "skill-overweight-three",
+        "question": "האם תוכל/י להרים משקל??",
         "answer": true
       },
       {
         "key": "skill-money-four",
+        "question": "האם תדע/י לעבוד עם מחשב?",
         "answer": false
       },
       {
         "key": "skill-computer-five",
+        "question": "האם תדע/י איך לעבוד עם כסף?",
         "answer": false
       },
       {
         "key": "skill-help-people-six",
+        "question": "האם תרצה/י לתת שירות לאנשים?",
         "answer": true
       },
       {
         "key": "skill-location-seven",
+        "question": "האם תוכל/י לעבוד במקום רועש?",
         "answer": true
       },
       {
         "key": "skill-uniform-eight",
+        "question": "האם תרצה/י לעבוד עם מדים?",
         "answer": true
       },
       {
         "key": "skill-teammate-nine",
+        "question": "האם את/ה רוצה לעבוד בצוות עם אנשים נוספים?",
         "answer": true
       },
       {
         "key": "skill-transport-ten",
+        "question": "האם תגיע/י לעבודה בתחבורה ציבורית?",
         "answer": true
       }
     ],
@@ -940,12 +1100,12 @@
     ]
   },
   {
-    "Employer_Name": "השטיח האדום",
-    "Job_Name": "",
+    "business_name": "השטיח האדום",
+    "job_name": "",
     "job_description": "סידור סחורה ומעקב אחרי מלאי במחסני החברה",
     "job_employees_count": 10,
-    "job_scope": "Full",
-    "job_salary": "",
+    "job_scope": "full",
+    "job_salary": null,
     "job_experience_needed": "",
     "job_fields": [
       "עובד מחסן",
@@ -954,42 +1114,52 @@
     "answers": [
       {
         "key": "skill-sit-one",
+        "question": "האם תרצי לעבוד בישיבה?",
         "answer": false
       },
       {
         "key": "skill-open-space-two",
+        "question": "האם חשוב לך לעבוד במקום פתוח?",
         "answer": false
       },
       {
         "key": "skill-overweight-three",
+        "question": "האם תוכל/י להרים משקל??",
         "answer": true
       },
       {
         "key": "skill-money-four",
+        "question": "האם תדע/י לעבוד עם מחשב?",
         "answer": false
       },
       {
         "key": "skill-computer-five",
+        "question": "האם תדע/י איך לעבוד עם כסף?",
         "answer": true
       },
       {
         "key": "skill-help-people-six",
+        "question": "האם תרצה/י לתת שירות לאנשים?",
         "answer": false
       },
       {
         "key": "skill-location-seven",
+        "question": "האם תוכל/י לעבוד במקום רועש?",
         "answer": true
       },
       {
         "key": "skill-uniform-eight",
+        "question": "האם תרצה/י לעבוד עם מדים?",
         "answer": true
       },
       {
         "key": "skill-teammate-nine",
+        "question": "האם את/ה רוצה לעבוד בצוות עם אנשים נוספים?",
         "answer": true
       },
       {
         "key": "skill-transport-ten",
+        "question": "האם תגיע/י לעבודה בתחבורה ציבורית?",
         "answer": true
       }
     ],
@@ -998,12 +1168,12 @@
     ]
   },
   {
-    "Employer_Name": "מרכז הספורט",
-    "Job_Name": "",
+    "business_name": "מרכז הספורט",
+    "job_name": "",
     "job_description": "שימור ותחזוקת המרכז, סידור הכסאות וניקיון לאחר השימוש, ניקיון מתקני הכושר",
     "job_employees_count": 32,
-    "job_scope": "Partial",
-    "job_salary": "",
+    "job_scope": "partial",
+    "job_salary": null,
     "job_experience_needed": "אין צורך",
     "job_fields": [
       "סידור כסאות",
@@ -1013,42 +1183,52 @@
     "answers": [
       {
         "key": "skill-sit-one",
+        "question": "האם תרצי לעבוד בישיבה?",
         "answer": false
       },
       {
         "key": "skill-open-space-two",
+        "question": "האם חשוב לך לעבוד במקום פתוח?",
         "answer": true
       },
       {
         "key": "skill-overweight-three",
+        "question": "האם תוכל/י להרים משקל??",
         "answer": true
       },
       {
         "key": "skill-money-four",
+        "question": "האם תדע/י לעבוד עם מחשב?",
         "answer": false
       },
       {
         "key": "skill-computer-five",
+        "question": "האם תדע/י איך לעבוד עם כסף?",
         "answer": false
       },
       {
         "key": "skill-help-people-six",
+        "question": "האם תרצה/י לתת שירות לאנשים?",
         "answer": false
       },
       {
         "key": "skill-location-seven",
+        "question": "האם תוכל/י לעבוד במקום רועש?",
         "answer": true
       },
       {
         "key": "skill-uniform-eight",
+        "question": "האם תרצה/י לעבוד עם מדים?",
         "answer": true
       },
       {
         "key": "skill-teammate-nine",
+        "question": "האם את/ה רוצה לעבוד בצוות עם אנשים נוספים?",
         "answer": false
       },
       {
         "key": "skill-transport-ten",
+        "question": "האם תגיע/י לעבודה בתחבורה ציבורית?",
         "answer": true
       }
     ],

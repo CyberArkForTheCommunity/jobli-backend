@@ -132,7 +132,7 @@ def save_new_job(auth_headers: dict, job: EmployerJob, endpoint_url: str) -> Emp
 
 
 def test_create_jobli_employer(endpoint_url, auth_headers):
-    # Create the employer
+# Create the employer
     employer = SOME_EMPLOYER
     headers = {"Content-Type": "application/json"}
     headers.update(auth_headers)

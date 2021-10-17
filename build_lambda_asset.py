@@ -11,6 +11,7 @@ from docker.types import Mount
 
 import platform
 
+
 # pylint: disable=print-used
 def timeit(method):
     def timed(*args, **kw):
@@ -70,10 +71,10 @@ class BuildLambdaAsset:
         shutil.copy(self._requirements_txt.as_posix(), (self._build_dir / 'requirements.txt').as_posix())
 
     def _consume(self) -> None:
-       # if platform.system().lower() == 'linux':
-        self._consume_natively()
-        #else:
-        #    self._consume_using_docker()
+        if platform.system().lower() == 'linux':
+            self._consume_natively()
+        else:
+            self._consume_using_docker()
 
     @timeit
     def _consume_natively(self) -> None:

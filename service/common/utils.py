@@ -1,6 +1,7 @@
 import json
 import os
 import time
+import decimal
 from datetime import datetime, timedelta
 
 from service.common.exceptions import MissingEnvironmentVariableError
@@ -78,3 +79,13 @@ def timeit(method):
         return result
 
     return timed
+
+# Helper class to convert a DynamoDB item to JSON.
+class DecimalEncoder(json.JSONEncoder):
+    def default(self, o):
+        if isinstance(o, decimal.Decimal):
+            if o % 1 > 0:
+                return float(o)
+            else:
+                return int(o)
+        return super(DecimalEncoder, self).default(o)

@@ -10,11 +10,13 @@ from aws_lambda_context import LambdaContext
 from aws_lambda_powertools import Logger
 from aws_lambda_powertools.logging import logger
 from aws_lambda_powertools.utilities.data_classes import APIGatewayProxyEvent
+from botocore.exceptions import ClientError
 from mypy_boto3_cognito_idp import CognitoIdentityProviderClient
 from mypy_boto3_cognito_idp.type_defs import AttributeTypeTypeDef
 from pydantic import ValidationError
 
 from service.common.exceptions import NotFoundError
+from service.common.utils import get_env_or_raise
 from service.dao.job_seeker_answers_repository import job_seeker_answers_repository, SearchResult
 from service.dao.job_seeker_experience_repository import job_seeker_experience_repository
 from service.dao.job_seeker_repository import job_seeker_repository
@@ -27,6 +29,7 @@ from service.dtos.job_seeker_experience_dto import JobSeekerExperienceDto
 from service.dtos.job_seeker_profile_dto import JobSeekerProfileDto
 from service.dtos.jobli_dto import JobliDto
 from service.dtos.jobli_dto import UpdateUserTypeDto
+from service.lambdas.employer.constants import EmployerConstants
 from service.models.employer.employer_job import JobSearchResult
 from service.models.job_seeker_resource import JobSeekerResource
 from service.dao.model.job_seeker_answers import JobSeekerAnswers
@@ -139,8 +142,37 @@ def search_relevant_jobs(event: dict, context: LambdaContext) -> dict:
 
         search_results: List[JobSearchResult] = jobs_repository.get_jobs(answers_arr, 100)
 
+        dynamo_resource = boto3.resource("dynamodb")
+        employer_table_name = get_env_or_raise(EmployerConstants.EMPLOYERS_TABLE_NAME)
+
+        employer_ids = [item.employer_job.employer_id for item in search_results]
+        employer_ids = list(dict.fromkeys(employer_ids))
+
         for item in search_results:
             item.employer_job.created_time = int(item.employer_job.created_time)
+
+        employer_keys = [{"employer_id": employer_id} for employer_id in employer_ids]
+
+        if len(employer_keys) > 0:
+            try:
+                response = dynamo_resource.batch_get_item(
+                    RequestItems={
+                        employer_table_name: {
+                            'Keys': employer_keys,
+                            'ConsistentRead': True
+                        }
+                    },
+                    ReturnConsumedCapacity='TOTAL'
+                )
+            except ClientError as err:
+                logger.exception(err.response['Error']['Message'])
+                return _build_error_response(err, HTTPStatus.INTERNAL_SERVER_ERROR)
+            else:
+                employers_list = response['Responses'][employer_table_name]
+                employers_dict = {x['employer_id']: x for x in employers_list}
+                for item in search_results:
+                    item.employer = employers_dict.get(item.employer_job.employer_id)
+                    item.employer['created_time'] = int(item.employer['created_time'])
 
         search_results = [item.dict() for item in search_results]
 
@@ -285,7 +317,7 @@ def add_seeker_languages(event: dict, context: LambdaContext) -> dict:
         return _build_error_response(err)
 
 
-# GET /api/seekers/summary
+# GET /api/seeker/summary
 @logger.inject_lambda_context(log_event=True)
 def get_seeker_summary(event: dict, context: LambdaContext) -> dict:
     try:

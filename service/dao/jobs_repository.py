@@ -21,7 +21,7 @@ class _JobsRepository:
         results = parse_obj_as(List[EmployerJob], jobs_table.scan().get("Items", []))
         jobs = []
         for item in results:
-            if answers in item and len(item.answers) == NUM_OF_ANSWERS:
+            if item.answers is not None and len(item.answers) == NUM_OF_ANSWERS:
                 score = 0
                 for i in range(1, NUM_OF_ANSWERS):
                     score += (answers[i - 1] == item.answers[i - 1].answer)

@@ -45,7 +45,8 @@ class JobliServiceEnvironment(core.Construct):
             self, "JobliServiceRole", assumed_by=iam.ServicePrincipal("lambda.amazonaws.com"), inline_policies={
                 "JobliServicePolicy":
                     iam.PolicyDocument(statements=[
-                        iam.PolicyStatement(actions=["cognito-idp:AdminUpdateUserAttributes"],
+                        iam.PolicyStatement(actions=["cognito-idp:AdminUpdateUserAttributes",
+                                                     "cognito-idp:AdminDeleteUserAttributes"],
                                             resources=[user_pool_arn], effect=iam.Effect.ALLOW)
                     ])
             }, managed_policies=[iam.ManagedPolicy.from_aws_managed_policy_name("service-role/AWSLambdaBasicExecutionRole")])

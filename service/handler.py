@@ -128,6 +128,13 @@ def delete_seeker(event: dict, context: LambdaContext) -> dict:
 
         job_seeker_repository.delete(user_id)
 
+        user_name = event.request_context.authorizer.claims["cognito:username"]
+        userpool_id = str(event.request_context.authorizer.claims["iss"]).split("/")[-1]
+        logger.info(f"user id: {user_id}")
+
+        client: CognitoIdentityProviderClient = boto3.client("cognito-idp")
+        client.admin_delete_user_attributes(UserPoolId=userpool_id, Username=user_name, UserAttributeNames=["custom:user_type"])
+
         return _build_response(http_status=HTTPStatus.OK, body='{}')
     except (ValidationError, TypeError) as err:
         return _build_error_response(err, HTTPStatus.BAD_REQUEST)

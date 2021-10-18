@@ -194,7 +194,7 @@ def test_create_delete_read_experience(endpoint_url):
         pass
 
 
-@pytest.mark.skip(reason="This test is to fill user with initial data - _add_seeker_answers can be run only once")
+#@pytest.mark.skip(reason="This test is to fill user with initial data - _add_seeker_answers can be run only once")
 def test_seeker_full_flow(endpoint_url, auth_headers):
     _set_user_type(endpoint_url=endpoint_url, auth_headers=auth_headers)
     _create_seeker_profile(endpoint_url=endpoint_url, auth_headers=auth_headers)

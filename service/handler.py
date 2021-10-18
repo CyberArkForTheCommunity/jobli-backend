@@ -329,8 +329,13 @@ def get_seeker_summary(event: dict, context: LambdaContext) -> dict:
 
         job_seeker_experience_list: List[Experience] = job_seeker_experience_repository.get_all(user_id)
 
-        job_seeker_answers: JobSeekerAnswers = \
-            JobSeekerAnswers(**job_seeker_answers_repository.get_by_seeker_id(user_id))
+        job_seeker_answers = None
+
+        try:
+            job_seeker_answers: JobSeekerAnswers = \
+                JobSeekerAnswers(**job_seeker_answers_repository.get_by_seeker_id(user_id))
+        except NotFoundError:
+            pass
 
         # TODO convert to resource
         resource: JobSeekerResource = JobSeekerResource(profile=job_seeker,

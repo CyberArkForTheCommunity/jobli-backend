@@ -119,6 +119,22 @@ def get_seeker_profile(event: dict, context: LambdaContext) -> dict:
         return _build_error_response(err)
 
 
+# DELETE /api/seeker
+@logger.inject_lambda_context(log_event=True)
+def delete_seeker(event: dict, context: LambdaContext) -> dict:
+    try:
+        event: APIGatewayProxyEvent = APIGatewayProxyEvent(event)
+        user_id = event.request_context.authorizer.claims["sub"]
+
+        job_seeker_repository.delete(user_id)
+
+        return _build_response(http_status=HTTPStatus.OK, body='{}')
+    except (ValidationError, TypeError) as err:
+        return _build_error_response(err, HTTPStatus.BAD_REQUEST)
+    except Exception as err:
+        return _build_error_response(err)
+
+
 # GET /api/seeker/relevant-jobs
 @logger.inject_lambda_context(log_event=True)
 def search_relevant_jobs(event: dict, context: LambdaContext) -> dict:

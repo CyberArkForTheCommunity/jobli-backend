@@ -86,9 +86,10 @@ class _JobSeekerAnswersRepository:
     # def update(self, file: File, user: str = None) -> None:
     #     self.__single_table_service.update_item(file, user)
     #
-    # def delete(self, file_id: str) -> None:
-    #     logger.info(f"Deleting file id '{file_id}'")
-    #     self.__single_table_service.remove_item(File.build_pk(file_id), File.build_sk())
+    def delete(self, job_seeker_id: str) -> None:
+        logger.info(f"Deleting answers for job seeker id '{job_seeker_id}'")
+        self.__single_table_service.remove_item(JobSeekerAnswers.build_pk(),
+                                                JobSeekerAnswers.build_sk(job_seeker_id))
 
 
 job_seeker_answers_repository: _JobSeekerAnswersRepository = _JobSeekerAnswersRepository()

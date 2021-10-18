@@ -51,6 +51,7 @@ def get_employer_by_name(business_name: str, existing_employers: List[Employer])
     return None
 
 
+# @pytest.mark.skip(reason="This test is to fill employer_and_jobs_from_file")
 def test_create_jobli_employer_and_jobs_from_file(endpoint_url, auth_headers):
     try:
         project_dir: str = os.getenv('PROJECT_DIR')
@@ -77,7 +78,7 @@ def test_create_jobli_employer_and_jobs_from_file(endpoint_url, auth_headers):
                 # address handling
                 address: Address = Address()
                 address.city = "פתח תקוה"
-                address.apartment= random.randint(1, 1000)
+                address.apartment = random.randint(1, 1000)
                 address.street = "ג׳בוטינסקי"
                 address.full_address = f"{address.city} {address.street} {address.apartment}"
                 employer.business_address = address
@@ -124,7 +125,8 @@ def save_new_employer(auth_headers, employer, endpoint_url) -> Employer:
 def save_new_job(auth_headers: dict, job: EmployerJob, endpoint_url: str) -> EmployerJob:
     headers = {"Content-Type": "application/json"}
     headers.update(auth_headers)
-    response = requests.api.post(url=f"{endpoint_url}/api/employers/{job.employer_id}/jobs", headers=headers, json=job.dict())
+    response = requests.api.post(url=f"{endpoint_url}/api/employers/{job.employer_id}/jobs", headers=headers,
+                                 json=job.dict())
     assert response.status_code == HTTPStatus.CREATED
     returned_job: Employer = EmployerJob.parse_obj(response.json())
     assert returned_job.job_id
@@ -132,7 +134,7 @@ def save_new_job(auth_headers: dict, job: EmployerJob, endpoint_url: str) -> Emp
 
 
 def test_create_jobli_employer(endpoint_url, auth_headers):
-# Create the employer
+    # Create the employer
     employer = SOME_EMPLOYER
     headers = {"Content-Type": "application/json"}
     headers.update(auth_headers)
@@ -162,7 +164,6 @@ def test_create_jobli_employer(endpoint_url, auth_headers):
 
 
 def test_update_jobli_employer(endpoint_url, auth_headers):
-
     value = "{\"employer_id\": \"261fe233-8da8-4dfd-af77-f5c7acba7409\", \"employer_email\": \"a@b.c\", \"business_name\": \"some business updated\", \"business_address\": {\"full_address\": \"some address in some city\", \"city\": null, \"street\": null, \"apartment\": null}, \"business_website\": \"https://www.new-website.com\", \"description\": \"The description changed!\", \"employer_terms\": [\"Term1\", \"Term2\", \"Term3\"], \"business_media\": null}"
 
     employer_value = Employer.parse_raw(value)

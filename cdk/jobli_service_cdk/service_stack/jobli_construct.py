@@ -146,6 +146,11 @@ class JobliServiceEnvironment(core.Construct):
 
         seeker_resource: apigw.Resource = api_resource.add_resource("seeker")
 
+        self.__add_lambda_api(lambda_name='DeleteSeeeker',
+                              handler_method='service.handler.delete_seeker',
+                              resource=seeker_resource, http_method=HttpMethods.DELETE,
+                              member_name="delete_seeker_api_lambda")
+
         seeker_profile: apigw.Resource = seeker_resource.add_resource("profile")
         self.__add_lambda_api(lambda_name='CreateOrUpdateSeekerProfile', handler_method='service.handler.create_or_update_seeker_profile',
                               resource=seeker_profile, http_method=HttpMethods.PUT, member_name="add_seeker_profile_api_lambda")

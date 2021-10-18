@@ -39,9 +39,10 @@ def endpoint_url():
 def auth_headers():
     return add_auth_header()
 
+
 # endregion
 
-def _add_seeker_languages(endpoint_url: str, auth_headers: str)-> None:
+def _add_seeker_languages(endpoint_url: str, auth_headers: str) -> None:
     # when create entity
     headers = {"Content-Type": "application/json"}
     headers.update(auth_headers)
@@ -50,7 +51,8 @@ def _add_seeker_languages(endpoint_url: str, auth_headers: str)-> None:
     # then assert
     assert response.status_code == HTTPStatus.NO_CONTENT
 
-def _set_user_type(endpoint_url: str, auth_headers: str)-> None:
+
+def _set_user_type(endpoint_url: str, auth_headers: str) -> None:
     # when create entity
     jobli_dto: UpdateUserTypeDto = UpdateUserTypeDto(user_type=UserType.employer)
     headers = {"Content-Type": "application/json"}
@@ -61,9 +63,7 @@ def _set_user_type(endpoint_url: str, auth_headers: str)-> None:
     assert response.status_code == HTTPStatus.OK
 
 
-def _create_seeker_profile(endpoint_url: str, auth_headers: dict)-> None:
-
-
+def _create_seeker_profile(endpoint_url: str, auth_headers: dict) -> None:
     # when create entity
     profile_dto: JobSeekerProfileDto = JobSeekerProfileDto(full_name=random_string(), birth_year=1970, birth_month=1,
                                                            birth_day=1,
@@ -76,8 +76,9 @@ def _create_seeker_profile(endpoint_url: str, auth_headers: dict)-> None:
     # then assert created
     assert response.status_code == HTTPStatus.OK
 
-def _add_seeker_answers(endpoint_url: str, auth_headers: str)-> None:
-     # when create entity
+
+def _add_seeker_answers(endpoint_url: str, auth_headers: str) -> None:
+    # when create entity
 
     answers_dto: List[JobSeekerAnswerDto] = []
 
@@ -90,7 +91,7 @@ def _add_seeker_answers(endpoint_url: str, auth_headers: str)-> None:
     response = requests.api.post(url=f"{endpoint_url}/api/seeker/answers", headers=headers, data=json_body)
 
     # then assert created
-    assert response.status_code == HTTPStatus.OK
+    assert response.status_code == HTTPStatus.CREATED
 
 
 @pytest.mark.skip(reason="This test will work only if user doesn't exist in cognito")
@@ -104,12 +105,7 @@ def test_create_or_update_seeker_profile(endpoint_url, auth_headers):
 
 @pytest.mark.skip(reason="This test will work only if user exists and doesn't already have answers in DB")
 def test_add_seeker_answers(endpoint_url, auth_headers):
-
     _add_seeker_answers(endpoint_url=endpoint_url, auth_headers=auth_headers)
-
-
-
-
 
 
 # noinspection PyPep8Naming

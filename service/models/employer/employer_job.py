@@ -6,6 +6,7 @@ from typing import List, Optional
 from pydantic import BaseModel, Field
 
 from service.models.common import Answer
+from service.models.employer.employer import Employer
 
 
 class JobScope(str, Enum):
@@ -24,7 +25,7 @@ class EmployerJob(BaseModel):
     job_scope: Optional[JobScope] = Field(description="Scope of the job in time")
     job_time_scope: Optional[List[timedelta]] = Field(description="Time deltas of the job if TimeBased")
     answers: Optional[List[Answer]] = Field(description="Questions of the employer job")
-    job_requirements: Optional[List[str]] = Field(description="Job requirmenets needed")
+    job_requirements: Optional[List[str]] = Field(description="Job requirements needed")
     job_salary: Optional[int] = Field(description="Optional job salary")
     job_experience_needed: Optional[str] = Field(description="Experience needed for the job")
     created_time: Optional[Decimal] = Field(description="Creation time of the employer job")
@@ -33,3 +34,4 @@ class EmployerJob(BaseModel):
 class JobSearchResult(BaseModel):
     score: int
     employer_job: EmployerJob
+    employer: Optional[Employer]

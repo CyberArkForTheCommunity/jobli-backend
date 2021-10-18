@@ -165,7 +165,7 @@ def search_relevant_jobs(event: dict, context: LambdaContext) -> dict:
                     ReturnConsumedCapacity='TOTAL'
                 )
             except ClientError as err:
-                logger.error(err.response['Error']['Message'])
+                logger.exception(err.response['Error']['Message'])
                 return _build_error_response(err, HTTPStatus.INTERNAL_SERVER_ERROR)
             else:
                 employers_list = response['Responses'][employer_table_name]

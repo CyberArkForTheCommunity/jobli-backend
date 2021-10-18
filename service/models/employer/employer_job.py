@@ -1,7 +1,6 @@
-from datetime import timedelta
-from decimal import Decimal
+from datetime import datetime, timedelta
 from enum import Enum
-from typing import List, Optional
+from typing import List, Optional, Dict
 
 from pydantic import BaseModel, Field
 
@@ -27,8 +26,18 @@ class EmployerJob(BaseModel):
     job_requirements: Optional[List[str]] = Field(description="Job requirmenets needed")
     job_salary: Optional[int] = Field(description="Optional job salary")
     job_experience_needed: Optional[str] = Field(description="Experience needed for the job")
-    created_time: Optional[Decimal] = Field(description="Creation time of the employer job")
+    created_time: Optional[datetime] = Field(description="Creation time of the employer job",
+                                             default_factory=datetime.utcnow)
 
+    class Config:
+        json_encoders = {
+            datetime: lambda v: v.strftime("%FT%T%z")
+        }
+
+    def create_employer_job_item(self) -> Dict:
+        employer_job_dict = self.dict(exclude_none=True)
+        employer_job_dict["created_time"] = self.created_time.strftime("%FT%T%z")
+        return employer_job_dict
 
 class JobSearchResult(BaseModel):
     score: int

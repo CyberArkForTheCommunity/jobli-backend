@@ -1,4 +1,5 @@
 from abc import abstractmethod
+from datetime import datetime
 from typing import Dict, List, Optional
 
 import boto3
@@ -238,7 +239,7 @@ class _SingleTableService:
         # if not user:
         #     user = SessionContext.get_user_name()
 
-        now = TimeUtils.get_time_iso8601()
+        now = datetime.utcnow().strftime("%FT%T%z")
         record_dict = record.as_dict()
 
         # set mandatory index keys
@@ -276,7 +277,7 @@ class _SingleTableService:
         self.__init()
 
         # set creation and last update time
-        now = TimeUtils.get_time_iso8601()
+        now = datetime.utcnow().strftime("%FT%T%z")
         record_dict = record.as_dict()
         # logger.info(f"update_item called. record = {str(record_dict)}")
 
@@ -333,7 +334,7 @@ class _SingleTableService:
         self.__init()
 
         dict_list: List[Dict] = list()
-        now = TimeUtils.get_time_iso8601()
+        now = datetime.utcnow().strftime("%FT%T%z")
         with self.__table.batch_writer() as batch:
             for record in records:
                 record_dict = record.as_dict()
@@ -411,7 +412,7 @@ class _SingleTableService:
         put_items_lists = []
 
         if add_last_update_time:
-            now = TimeUtils.get_time_iso8601()
+            now = datetime.utcnow().strftime("%FT%T%z")
             for x in high_level_items:
                 x["last_updated"] = now
 

@@ -90,7 +90,7 @@ def _add_seeker_answers(endpoint_url: str, auth_headers: str)-> None:
     response = requests.api.post(url=f"{endpoint_url}/api/seeker/answers", headers=headers, data=json_body)
 
     # then assert created
-    assert response.status_code == HTTPStatus.OK
+    assert response.status_code == HTTPStatus.CREATED
 
 
 @pytest.mark.skip(reason="This test will work only if user doesn't exist in cognito")

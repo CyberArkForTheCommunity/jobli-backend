@@ -1,3 +1,4 @@
+from datetime import datetime
 from typing import Dict, List, Optional
 
 from pydantic.main import BaseModel
@@ -20,7 +21,7 @@ class JobSeeker(BaseModel, SingleTableRecord):
 
     id: str
     full_name: str
-    birth_date: int
+    birth_date: datetime
     # city: str = None
     # street: str = None
     # apartment: int = None
@@ -41,6 +42,11 @@ class JobSeeker(BaseModel, SingleTableRecord):
     about_me: Optional[str]
     job_ambitions: Optional[str]
     hobbies: Optional[str]
+
+    class Config:
+        json_encoders = {
+            datetime: lambda v: v.strftime("%FT%T%z")
+        }
 
     @staticmethod
     def build_pk(job_seeker_id: str):
@@ -63,4 +69,6 @@ class JobSeeker(BaseModel, SingleTableRecord):
         return None
 
     def as_dict(self) -> Dict:
-        return self.__dict__
+        item = self.dict()
+        item["birth_date"] = self.birth_date.strftime("%FT%T%z")
+        return item

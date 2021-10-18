@@ -1,7 +1,6 @@
 import json
 import uuid
 from datetime import datetime
-from decimal import Decimal
 from http import HTTPStatus
 from typing import List
 
@@ -64,7 +63,7 @@ def __create_seeker_profile(user_id: str, profile_dto: JobSeekerProfileDto) -> d
 
     job_seeker: JobSeeker = JobSeeker(id=user_id,
                                       full_name=profile_dto.full_name,
-                                      birth_date=Decimal(birth_date.timestamp() * 1000),
+                                      birth_date=birth_date,
                                       email=profile_dto.email,
                                       address=profile_dto.address,
                                       about_me=profile_dto.about_me,
@@ -82,7 +81,7 @@ def __update_seeker_profile(profile_dto: JobSeekerProfileDto, job_seeker: JobSee
     job_seeker.full_name = profile_dto.full_name
 
     birth_date = datetime(year=profile_dto.birth_year, month=profile_dto.birth_month, day=profile_dto.birth_day)
-    job_seeker.birth_date = int(birth_date.timestamp()) * 1000
+    job_seeker.birth_date = birth_date
     job_seeker.email = profile_dto.email
     job_seeker.address = profile_dto.address
     job_seeker.about_me = profile_dto.about_me
@@ -106,10 +105,9 @@ def get_seeker_profile(event: dict, context: LambdaContext) -> dict:
         job_seeker: JobSeeker = JobSeeker(**job_seeker_repository.get(user_id))
 
         # TODO convert to resource
-        job_seeker.birth_date = int(job_seeker.birth_date)
         job_seeker.version = int(job_seeker.version)
         # return resource
-        return _build_response(http_status=HTTPStatus.OK, body=json.dumps(job_seeker.as_dict()))
+        return _build_response(http_status=HTTPStatus.OK, body=job_seeker.json(exclude_none=True))
     except (ValidationError, TypeError) as err:
         return _build_error_response(err, HTTPStatus.BAD_REQUEST)
     except Exception as err:

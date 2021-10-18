@@ -7,7 +7,7 @@ import string
 from boto3 import session
 from pathlib import Path
 from dotenv import load_dotenv
-from jobli_service_cdk.service_stack.jobli_construct import get_stack_name
+from cdk.jobli_service_cdk.service_stack.jobli_construct import get_stack_name
 from build import do_build
 from deploy import users
 

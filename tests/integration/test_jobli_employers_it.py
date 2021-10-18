@@ -114,7 +114,7 @@ def get_exiting_employer_list(auth_headers, endpoint_url) -> List[Employer]:
 def save_new_employer(auth_headers, employer, endpoint_url) -> Employer:
     headers = {"Content-Type": "application/json"}
     headers.update(auth_headers)
-    response = requests.api.post(url=f"{endpoint_url}/api/employers", headers=headers, json=employer.dict())
+    response = requests.api.post(url=f"{endpoint_url}/api/employers", headers=headers, data=employer.json())
     assert response.status_code == HTTPStatus.CREATED
     returned_employer: Employer = Employer.parse_obj(response.json())
     assert returned_employer.employer_id
@@ -124,9 +124,9 @@ def save_new_employer(auth_headers, employer, endpoint_url) -> Employer:
 def save_new_job(auth_headers: dict, job: EmployerJob, endpoint_url: str) -> EmployerJob:
     headers = {"Content-Type": "application/json"}
     headers.update(auth_headers)
-    response = requests.api.post(url=f"{endpoint_url}/api/employers/{job.employer_id}/jobs", headers=headers, json=job.dict())
+    response = requests.api.post(url=f"{endpoint_url}/api/employers/{job.employer_id}/jobs", headers=headers, data=job.json())
     assert response.status_code == HTTPStatus.CREATED
-    returned_job: Employer = EmployerJob.parse_obj(response.json())
+    returned_job: EmployerJob = EmployerJob.parse_obj(response.json())
     assert returned_job.job_id
     return returned_job
 
@@ -136,7 +136,7 @@ def test_create_jobli_employer(endpoint_url, auth_headers):
     employer = SOME_EMPLOYER
     headers = {"Content-Type": "application/json"}
     headers.update(auth_headers)
-    response = requests.api.post(url=f"{endpoint_url}/api/employers", headers=headers, json=employer.dict())
+    response = requests.api.post(url=f"{endpoint_url}/api/employers", headers=headers, data=employer.json())
 
     # Assert and test
     assert response.status_code == HTTPStatus.CREATED
@@ -146,7 +146,7 @@ def test_create_jobli_employer(endpoint_url, auth_headers):
     assert returned_employer.business_website == employer.business_website
     assert returned_employer.description == employer.description
     assert returned_employer.employer_id
-    assert returned_employer.created_time < (datetime.now() + timedelta(days=1)).timestamp()
+    assert returned_employer.created_time < (datetime.now() + timedelta(days=1))
 
     # Get the created entity
     response = requests.api.get(url=f"{endpoint_url}/api/employers/{returned_employer.employer_id}",
@@ -158,7 +158,7 @@ def test_create_jobli_employer(endpoint_url, auth_headers):
     assert returned_employer.business_website == employer.business_website
     assert returned_employer.description == employer.description
     assert returned_employer.employer_id
-    assert returned_employer.created_time < (datetime.now() + timedelta(days=1)).timestamp()
+    assert returned_employer.created_time < (datetime.now() + timedelta(days=1))
 
 
 def test_update_jobli_employer(endpoint_url, auth_headers):
@@ -172,7 +172,7 @@ def test_update_jobli_employer(endpoint_url, auth_headers):
     employer.business_name = "some business updated"
     headers = {"Content-Type": "application/json"}
     headers.update(auth_headers)
-    response = requests.api.post(url=f"{endpoint_url}/api/employers", headers=headers, json=employer.dict())
+    response = requests.api.post(url=f"{endpoint_url}/api/employers", headers=headers, data=employer.json())
 
     # Assert and test
     assert response.status_code == HTTPStatus.CREATED
@@ -182,7 +182,7 @@ def test_update_jobli_employer(endpoint_url, auth_headers):
     assert returned_employer.business_website == employer.business_website
     assert returned_employer.description == employer.description
     assert returned_employer.employer_id
-    assert returned_employer.created_time < (datetime.now() + timedelta(days=1)).timestamp()
+    assert returned_employer.created_time < (datetime.now() + timedelta(days=1))
 
     # Update the employer
     returned_employer.employer_terms.append("Term3")
@@ -207,7 +207,7 @@ def test_update_jobli_employer(endpoint_url, auth_headers):
     assert returned_employer.employer_email == employer.employer_email
     assert returned_employer.description == "The description changed!"
     assert returned_employer.employer_id
-    assert returned_employer.created_time < (datetime.now() + timedelta(days=1)).timestamp()
+    assert returned_employer.created_time < (datetime.now() + timedelta(days=1))
 
 
 def test_get_employers(endpoint_url, auth_headers):
@@ -218,7 +218,7 @@ def test_get_employers(endpoint_url, auth_headers):
     for idx, e in enumerate(employers):
         e.business_name += str(idx)
         e.business_address.city = "SpecialTelAviv"
-        response = requests.api.post(url=f"{endpoint_url}/api/employers", headers=headers, json=e.dict())
+        response = requests.api.post(url=f"{endpoint_url}/api/employers", headers=headers, data=e.json())
         assert response.status_code == HTTPStatus.CREATED
         returned_employer: Employer = Employer.parse_obj(response.json())
         assert returned_employer.business_name == e.business_name
@@ -226,7 +226,7 @@ def test_get_employers(endpoint_url, auth_headers):
         assert returned_employer.business_website == e.business_website
         assert returned_employer.description == e.description
         assert returned_employer.employer_id
-        assert returned_employer.created_time < (datetime.now() + timedelta(days=1)).timestamp()
+        assert returned_employer.created_time < (datetime.now() + timedelta(days=1))
 
     # Get all employers
     response = requests.api.get(url=f"{endpoint_url}/api/employers?city=SpecialTelAviv", headers=headers)

@@ -9,8 +9,6 @@ from service.common.utils import get_env_or_raise
 from service.lambdas.employer.constants import EmployerConstants
 import uuid
 import boto3
-from datetime import datetime
-from decimal import Decimal
 
 logger = Logger()
 
@@ -27,14 +25,13 @@ def add_employer_job(event: dict, context: LambdaContext) -> dict:
         employer_job: EmployerJob = EmployerJob.parse_raw(event['body'])
         employer_job.job_id = str(uuid.uuid4())
         employer_job.employer_id = event["pathParameters"]["employer_id"]
-        employer_job.created_time = Decimal(datetime.now().timestamp())
         dynamo_resource = boto3.resource("dynamodb")
         employers_table = dynamo_resource.Table(get_env_or_raise(EmployerConstants.EMPLOYERS_TABLE_NAME))
         jobs_table = dynamo_resource.Table(get_env_or_raise(EmployerConstants.JOBS_TABLE_NAME))
         # Check if employer id exists, will throw exception if not
         Employer.parse_obj(employers_table.get_item(
             Key={"employer_id": employer_job.employer_id}).get('Item', {}))
-        jobs_table.put_item(Item=employer_job.dict(exclude_none=True))
+        jobs_table.put_item(Item=employer_job.create_employer_job_item())
         return {'statusCode': HTTPStatus.CREATED,
                 'headers': EmployerConstants.HEADERS,
                 'body': employer_job.json(exclude_none=True)}

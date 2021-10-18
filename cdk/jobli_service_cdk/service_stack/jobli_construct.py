@@ -3,7 +3,7 @@ import sys
 from aws_cdk.aws_s3 import HttpMethods
 from git import Repo
 
-from jobli_service_cdk.service_stack.constants import BASE_NAME
+from cdk.jobli_service_cdk.service_stack.constants import BASE_NAME
 from aws_cdk.aws_apigateway import Resource
 from aws_cdk.core import Duration, CfnResource
 from aws_cdk.aws_iam import Role

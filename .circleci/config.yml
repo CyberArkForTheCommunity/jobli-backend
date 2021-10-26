@@ -78,7 +78,7 @@ jobs:
           command: echo ${MY_SECRET}
       - run:
           name: install AWS CDK
-          command: npm install aws-cdk
+          command: npm install --prefix=$HOME/.local --global aws-cdk
       - run: cdk --version
       - run:
           name: Deploy

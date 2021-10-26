@@ -30,8 +30,11 @@ jobs:
     steps:
       - checkout
       - run:
-          name: Consume Dependencies
+          name: Install Dependencies
           command: pipenv sync --dev
+      - run:
+          name: Enter pipenv shell
+          command: pipenv shell
 #      - python/install-packages:
 #          args: sync --dev
 #          pkg-manager: pipenv

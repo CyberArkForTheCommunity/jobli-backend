@@ -67,7 +67,7 @@ jobs:
           command: echo ${MY_SECRET}
       - run:
           name: install AWS CDK
-          command: npm install -g aws-cdk
+          command: npm install aws-cdk
       - run: cdk --version
       - run:
           name: Deploy

@@ -27,7 +27,8 @@ jobs:
     # The executor is the environment in which the steps below will be executed - below will use a python 3.8 container
     # Change the version below to your required version of python
     docker:
-      - image: cimg/python:3.8
+#      - image: cimg/python:3.8
+      - image: cimg/python:3.8.12-node
         environment:
           CDK_REQUIRE_APPROVAL: never
           PIPENV_VENV_IN_PROJECT: true
@@ -51,7 +52,7 @@ jobs:
           paths:
             - .venv
       - run:
-          name: Run tests
+          name: Unit tests
           command: pipenv run pytest -v tests/unit --junitxml unit-test-results.xml
       - store_test_results:
           path: unit-test-results.xml
@@ -64,9 +65,46 @@ jobs:
       - run:
           name: "context environment variable"
           command: echo ${MY_SECRET}
+      - run:
+          name: install AWS CDK
+          command: npm install -g aws-cdk
+      - run: cdk --version
+      - run:
+          name: Deploy
+          command: pipenv run ./deploy.py --no-build --region << pipeline.parameters.region >> --require-approval ${CDK_REQUIRE_APPROVAL}
+
+  deploy:
+    docker:
+      - image: cimg/python:3.8.12-node
+        environment:
+          CDK_REQUIRE_APPROVAL: never
+    steps:
+      - checkout
+      - run: node --version
+      - run: npm --version
+#      - run:
+#          name: install AWS CDK
+#          command: npm install -g aws-cdk
+#      - run: cdk --version
 #      - run:
 #          name: Deploy
 #          command: pipenv run ./deploy.py --no-build --region << pipeline.parameters.region >> --require-approval ${CDK_REQUIRE_APPROVAL}
+
+  integration-tests:
+    docker:
+      - image: cimg/python:3.8
+        environment:
+          PIPENV_VENV_IN_PROJECT: true
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - venv-{{ checksum "Pipfile.lock" }}
+      - run:
+          name: Integration tests
+          command: pipenv run pytest -v tests/integration --junitxml integration-test-results.xml
+      - store_test_results:
+          path: integration-test-results.xml
 
 # Invoke jobs via workflows
 # See: https://circleci.com/docs/2.0/configuration-reference/#workflows
@@ -76,3 +114,17 @@ workflows:
     jobs:
       - build-and-test:
           context: jobli-context
+#      - setup:
+#          filters:
+#            branches:
+#              only:
+#                - master
+#                - /^issues\/\d+$/
+      - deploy:
+          context: jobli-context
+          requires:
+            - build-and-test
+      - integration-tests:
+          context: jobli-context
+          requires:
+            - deploy

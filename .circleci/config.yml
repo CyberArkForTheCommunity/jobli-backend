@@ -17,6 +17,15 @@ orbs:
   python: circleci/python@1.2
   node: circleci/node@4.7.0
 
+executors:
+  default:
+    docker:
+      - image: cimg/python:3.8.12-node
+    environment:
+      AWS_REGION: 'eu-west-1'
+      CDK_REQUIRE_APPROVAL: never
+      PIPENV_VENV_IN_PROJECT: true
+
 # Define a job to be invoked later in a workflow.
 # See: https://circleci.com/docs/2.0/configuration-reference/#jobs
 jobs:
@@ -26,12 +35,14 @@ jobs:
     # A list of available CircleCI Docker convenience images are available here: https://circleci.com/developer/images/image/cimg/python
     # The executor is the environment in which the steps below will be executed - below will use a python 3.8 container
     # Change the version below to your required version of python
-    docker:
-#      - image: cimg/python:3.8
-      - image: cimg/python:3.8.12-node
-        environment:
-          CDK_REQUIRE_APPROVAL: never
-          PIPENV_VENV_IN_PROJECT: true
+    executor: 'default'
+#    docker:
+##      - image: cimg/python:3.8
+#      - image: cimg/python:3.8.12-node
+#        environment:
+#          CDK_REQUIRE_APPROVAL: never
+#          PIPENV_VENV_IN_PROJECT: true
+#
     # Checkout the code as the first step. This is a dedicated CircleCI step.
     # The python orb's install-packages step will install the dependencies from a Pipfile via Pipenv by default.
     # Here we're making sure we use just use the system-wide pip. By default it uses the project root's requirements.txt.
@@ -91,10 +102,11 @@ jobs:
 #          command: pipenv run ./deploy.py --no-build --region << pipeline.parameters.region >> --require-approval ${CDK_REQUIRE_APPROVAL}
 
   integration-tests:
-    docker:
-      - image: cimg/python:3.8
-        environment:
-          PIPENV_VENV_IN_PROJECT: true
+    executor: 'default'
+#    docker:
+#      - image: cimg/python:3.8
+#        environment:
+#          PIPENV_VENV_IN_PROJECT: true
     steps:
       - checkout
       - restore_cache:

@@ -62,8 +62,11 @@ jobs:
           name: "What was my custom environment variable?"
           command: echo ${CDK_REQUIRE_APPROVAL}
       - run:
-          name: Deploy
-          command: pipenv run ./deploy.py --no-build --region << pipeline.parameters.region >> --require-approval ${CDK_REQUIRE_APPROVAL}
+          name: "context environment variable"
+          command: echo ${MY_SECRET}
+#      - run:
+#          name: Deploy
+#          command: pipenv run ./deploy.py --no-build --region << pipeline.parameters.region >> --require-approval ${CDK_REQUIRE_APPROVAL}
 
 # Invoke jobs via workflows
 # See: https://circleci.com/docs/2.0/configuration-reference/#workflows

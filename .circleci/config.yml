@@ -32,9 +32,6 @@ jobs:
       - run:
           name: Install Dependencies
           command: pipenv sync --dev
-      - run:
-          name: Enter pipenv shell
-          command: pipenv shell
 #      - python/install-packages:
 #          args: sync --dev
 #          pkg-manager: pipenv
@@ -43,7 +40,7 @@ jobs:
       - run:
           name: Run tests
           # This assumes pytest is installed via the install-package step above
-          command: pytest -v tests/unit
+          command: pipenv run pytest -v tests/unit
 
 # Invoke jobs via workflows
 # See: https://circleci.com/docs/2.0/configuration-reference/#workflows

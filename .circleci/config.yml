@@ -39,7 +39,7 @@ jobs:
           path: unit-test-results.xml
       - run:
           name: Build Lambda
-          command: ./build.py
+          command: pipenv run ./build.py
 
 # Invoke jobs via workflows
 # See: https://circleci.com/docs/2.0/configuration-reference/#workflows

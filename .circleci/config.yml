@@ -92,6 +92,11 @@ jobs:
       - run:
           name: Deploy
           command: pipenv run ./deploy.py --no-build --region ${AWS_DEFAULT_REGION} --require-approval ${CDK_REQUIRE_APPROVAL}
+      - run:
+          name: Integration tests
+          command: pipenv run pytest -v tests/integration --junitxml integration-test-results.xml
+      - store_test_results:
+          path: integration-test-results.xml
 
   deploy:
     docker:
@@ -120,11 +125,11 @@ jobs:
       # Reuse the workspace from the build job
       - attach_workspace:
           at: .
-      - run:
-          name: Integration tests
-          command: pipenv run pytest -v tests/integration --junitxml integration-test-results.xml
-      - store_test_results:
-          path: integration-test-results.xml
+#      - run:
+#          name: Integration tests
+#          command: pipenv run pytest -v tests/integration --junitxml integration-test-results.xml
+#      - store_test_results:
+#          path: integration-test-results.xml
 
 # Invoke jobs via workflows
 # See: https://circleci.com/docs/2.0/configuration-reference/#workflows

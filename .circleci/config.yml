@@ -3,9 +3,9 @@
 version: 2.1
 
 parameters:
-  region:
+  my-param:
     type: string
-    default: "eu-west-1"
+    default: "my-value"
 
 # Orbs are reusable packages of CircleCI configuration that you may share across projects, enabling you to create encapsulated, parameterized commands, jobs, and executors that can be used across multiple projects.
 # See: https://circleci.com/docs/2.0/orb-intro/
@@ -55,12 +55,12 @@ jobs:
           keys:
             # Find a cache corresponding to this specific Pipfile.lock checksum
             # when this file is changed, this key will fail
-            - venv-{{ checksum "Pipfile.lock" }}
+            - v1-venv-{{ checksum "Pipfile.lock" }}
       - run:
           name: Install Dependencies
           command: pipenv sync --dev
       - save_cache:
-          key: venv-{{ checksum "Pipfile.lock" }}
+          key: v1-venv-{{ checksum "Pipfile.lock" }}
           paths:
             - .venv
             - .env
@@ -76,6 +76,9 @@ jobs:
           name: "What was my custom environment variable?"
           command: echo ${CDK_REQUIRE_APPROVAL}
       - run:
+          name: "What was my parameter?"
+          command: echo << pipeline.parameters.my-param >>
+      - run:
           name: "context environment variable"
           command: echo ${MY_SECRET}
       - run:
@@ -84,7 +87,7 @@ jobs:
       - run: cdk --version
       - run:
           name: Deploy
-          command: pipenv run ./deploy.py --no-build --region << pipeline.parameters.region >> --require-approval ${CDK_REQUIRE_APPROVAL}
+          command: pipenv run ./deploy.py --no-build --region ${AWS_DEFAULT_REGION} --require-approval ${CDK_REQUIRE_APPROVAL}
 
   deploy:
     docker:
@@ -113,7 +116,7 @@ jobs:
       - checkout
       - restore_cache:
           keys:
-            - venv-{{ checksum "Pipfile.lock" }}
+            - v1-venv-{{ checksum "Pipfile.lock" }}
       - run:
           name: Integration tests
           command: pipenv run pytest -v tests/integration --junitxml integration-test-results.xml

@@ -63,7 +63,6 @@ jobs:
           key: v1-venv-{{ checksum "Pipfile.lock" }}
           paths:
             - .venv
-            - .env
       - run:
           name: Unit tests
           command: pipenv run pytest -v tests/unit --junitxml unit-test-results.xml
@@ -72,6 +71,11 @@ jobs:
       - run:
           name: Build Lambda
           command: pipenv run ./build.py
+      # Save workspace for subsequent jobs (i.e. integration test / deploy)
+      - persist_to_workspace:
+          root: .
+          paths:
+            - .
       - run:
           name: "What was my custom environment variable?"
           command: echo ${CDK_REQUIRE_APPROVAL}
@@ -113,10 +117,9 @@ jobs:
 #        environment:
 #          PIPENV_VENV_IN_PROJECT: true
     steps:
-      - checkout
-      - restore_cache:
-          keys:
-            - v1-venv-{{ checksum "Pipfile.lock" }}
+      # Reuse the workspace from the build job
+      - attach_workspace:
+          at: .
       - run:
           name: Integration tests
           command: pipenv run pytest -v tests/integration --junitxml integration-test-results.xml

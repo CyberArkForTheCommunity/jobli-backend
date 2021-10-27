@@ -125,7 +125,9 @@ workflows:
     # Inside the workflow, you define the jobs you want to run.
     jobs:
       - build-and-test:
-          context: jobli-context
+          context:
+            - jobli-context
+            - jobli-aws-context
 #      - setup:
 #          filters:
 #            branches:
@@ -133,7 +135,9 @@ workflows:
 #                - master
 #                - /^issues\/\d+$/
       - deploy:
-          context: jobli-context
+          context:
+            - jobli-context
+            - jobli-aws-context
           requires:
             - build-and-test
       - integration-tests:

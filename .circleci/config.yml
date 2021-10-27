@@ -63,6 +63,7 @@ jobs:
           key: venv-{{ checksum "Pipfile.lock" }}
           paths:
             - .venv
+            - .env
       - run:
           name: Unit tests
           command: pipenv run pytest -v tests/unit --junitxml unit-test-results.xml

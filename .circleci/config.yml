@@ -57,31 +57,26 @@ jobs:
             # when this file is changed, this key will fail
             - v2-venv-{{ checksum "Pipfile.lock" }}
       - run:
-          name: create venv and install dependencies
-          command: |
-            python -m venv .venv
-            . .venv/bin/activate
-            pipenv sync --dev
-#      - run:
-#          name: Install Dependencies
-#          command: pipenv sync --dev
+          name: Install Dependencies
+          command: pipenv sync --dev
       - save_cache:
           key: v2-venv-{{ checksum "Pipfile.lock" }}
           paths:
             - .venv
       - run:
           name: Unit tests
-          command: pytest -v tests/unit --junitxml unit-test-results.xml
+          command: pipenv run pytest -v tests/unit --junitxml unit-test-results.xml
       - store_test_results:
           path: unit-test-results.xml
       - run:
           name: Build Lambda
-          command: ./build.py
+          command: pipenv run ./build.py
       # Save workspace for subsequent jobs (i.e. integration test / deploy)
       - persist_to_workspace:
           root: .
           paths:
             - .build
+            - .venv
             - .env
       - run:
           name: "What was my custom environment variable?"
@@ -100,11 +95,6 @@ jobs:
       # Reuse the workspace from the build job
       - attach_workspace:
           at: .
-      - run:
-          name: create and activate venv
-          command: |
-            python -m venv .venv
-            . .venv/bin/activate
       - run: node --version
       - run: npm --version
       - run:
@@ -112,11 +102,14 @@ jobs:
           command: npm install --prefix=$HOME/.local --global aws-cdk
       - run: cdk --version
       - run:
+          name: Install Dependencies
+          command: pipenv sync --dev
+      - run:
           name: Deploy
-          command: ./deploy.py --no-build --region ${AWS_DEFAULT_REGION} --require-approval ${CDK_REQUIRE_APPROVAL}
+          command: pipenv run ./deploy.py --no-build --region ${AWS_DEFAULT_REGION} --require-approval ${CDK_REQUIRE_APPROVAL}
       - run:
           name: Integration tests
-          command: pytest -v tests/integration --junitxml integration-test-results.xml
+          command: pipenv run pytest -v tests/integration --junitxml integration-test-results.xml
       - store_test_results:
           path: integration-test-results.xml
 

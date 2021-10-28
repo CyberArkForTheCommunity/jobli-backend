@@ -57,13 +57,18 @@ jobs:
             # when this file is changed, this key will fail
             - v2-venv-{{ checksum "Pipfile.lock" }}
       - run:
-          name: Install Dependencies
-          command: pipenv sync --dev
+          name: create venv and install dependencies
+          command: |
+            python -m venv .venv
+            . .venv/bin/activate
+            pipenv sync --dev
+#      - run:
+#          name: Install Dependencies
+#          command: pipenv sync --dev
       - save_cache:
           key: v2-venv-{{ checksum "Pipfile.lock" }}
           paths:
             - .venv
-      - run: python -m venv .venv
       - run:
           name: Unit tests
           command: pytest -v tests/unit --junitxml unit-test-results.xml
@@ -95,7 +100,11 @@ jobs:
       # Reuse the workspace from the build job
       - attach_workspace:
           at: .
-      - run: python -m venv .venv
+      - run:
+          name: create and activate venv
+          command: |
+            python -m venv .venv
+            . .venv/bin/activate
       - run: node --version
       - run: npm --version
       - run:

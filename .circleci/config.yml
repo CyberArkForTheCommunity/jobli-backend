@@ -63,14 +63,15 @@ jobs:
           key: v2-venv-{{ checksum "Pipfile.lock" }}
           paths:
             - .venv
+      - run: python -m venv .venv
       - run:
           name: Unit tests
-          command: pipenv run pytest -v tests/unit --junitxml unit-test-results.xml
+          command: pytest -v tests/unit --junitxml unit-test-results.xml
       - store_test_results:
           path: unit-test-results.xml
       - run:
           name: Build Lambda
-          command: pipenv run ./build.py
+          command: ./build.py
       # Save workspace for subsequent jobs (i.e. integration test / deploy)
       - persist_to_workspace:
           root: .
@@ -94,6 +95,7 @@ jobs:
       # Reuse the workspace from the build job
       - attach_workspace:
           at: .
+      - run: python -m venv .venv
       - run: node --version
       - run: npm --version
       - run:
@@ -102,10 +104,10 @@ jobs:
       - run: cdk --version
       - run:
           name: Deploy
-          command: pipenv run ./deploy.py --no-build --region ${AWS_DEFAULT_REGION} --require-approval ${CDK_REQUIRE_APPROVAL}
+          command: ./deploy.py --no-build --region ${AWS_DEFAULT_REGION} --require-approval ${CDK_REQUIRE_APPROVAL}
       - run:
           name: Integration tests
-          command: pipenv run pytest -v tests/integration --junitxml integration-test-results.xml
+          command: pytest -v tests/integration --junitxml integration-test-results.xml
       - store_test_results:
           path: integration-test-results.xml
 

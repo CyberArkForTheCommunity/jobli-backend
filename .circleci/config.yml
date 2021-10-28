@@ -55,12 +55,12 @@ jobs:
           keys:
             # Find a cache corresponding to this specific Pipfile.lock checksum
             # when this file is changed, this key will fail
-            - v1-venv-{{ checksum "Pipfile.lock" }}
+            - v2-venv-{{ checksum "Pipfile.lock" }}
       - run:
           name: Install Dependencies
           command: pipenv sync --dev
       - save_cache:
-          key: v1-venv-{{ checksum "Pipfile.lock" }}
+          key: v2-venv-{{ checksum "Pipfile.lock" }}
           paths:
             - .venv
       - run:
@@ -75,7 +75,8 @@ jobs:
       - persist_to_workspace:
           root: .
           paths:
-            - .
+            - .build
+            - .env
       - run:
           name: "What was my custom environment variable?"
           command: echo ${CDK_REQUIRE_APPROVAL}
@@ -85,6 +86,16 @@ jobs:
       - run:
           name: "context environment variable"
           command: echo ${MY_SECRET}
+
+  deploy:
+    executor: 'default'
+    steps:
+      - checkout
+      # Reuse the workspace from the build job
+      - attach_workspace:
+          at: .
+      - run: node --version
+      - run: npm --version
       - run:
           name: install AWS CDK
           command: npm install --prefix=$HOME/.local --global aws-cdk
@@ -98,33 +109,16 @@ jobs:
       - store_test_results:
           path: integration-test-results.xml
 
-  deploy:
-    docker:
-      - image: cimg/python:3.8.12-node
-        environment:
-          CDK_REQUIRE_APPROVAL: never
-    steps:
-      - checkout
-      - run: node --version
-      - run: npm --version
-#      - run:
-#          name: install AWS CDK
-#          command: npm install -g aws-cdk
-#      - run: cdk --version
-#      - run:
-#          name: Deploy
-#          command: pipenv run ./deploy.py --no-build --region << pipeline.parameters.region >> --require-approval ${CDK_REQUIRE_APPROVAL}
-
   integration-tests:
     executor: 'default'
-#    docker:
-#      - image: cimg/python:3.8
-#        environment:
-#          PIPENV_VENV_IN_PROJECT: true
     steps:
+      - checkout
       # Reuse the workspace from the build job
       - attach_workspace:
           at: .
+      - run:
+          name: print restore files from workspace
+          command: ls -a
 #      - run:
 #          name: Integration tests
 #          command: pipenv run pytest -v tests/integration --junitxml integration-test-results.xml
@@ -140,7 +134,6 @@ workflows:
       - build-and-test:
           context:
             - jobli-context
-            - jobli-aws-context
 #      - setup:
 #          filters:
 #            branches:

@@ -95,6 +95,9 @@ jobs:
       # Reuse the workspace from the build job
       - attach_workspace:
           at: .
+      - run:
+          name: print restore files from workspace
+          command: ls -a
       - run: node --version
       - run: npm --version
       - run:

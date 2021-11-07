@@ -114,7 +114,7 @@ jobs:
           name: Integration tests
           command: pipenv run pytest -v tests/integration --junitxml integration-test-results.xml
       - store_test_results:
-          path: integration-test-results.
+          path: integration-test-results.xml
       - run:
           name: destroy created environemnt
           when: always

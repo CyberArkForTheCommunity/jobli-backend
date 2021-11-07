@@ -1,11 +1,23 @@
 #!/usr/bin/env python
 # pylint: disable = print-used
 import os
-from dotenv import load_dotenv
+import boto3
+from jobli_service_cdk.service_stack.jobli_construct import get_stack_name
 
-# pylint: disable=invalid-name
-load_dotenv()
-rc = os.system(f"cdk destroy")
-if rc != 0:
-    print(f"cdk destroy failed with return code: {rc}")
-    exit(1)
+
+def destroy():
+    """
+    Asynchronously delete the stack
+    """
+    # if 'PROJECT_DIR' environment variable is not defined, this value will be used to search for local GIT repo
+    if 'PROJECT_DIR' not in os.environ:
+        project_path: str = os.path.abspath(os.path.dirname(__file__))
+        os.environ['PROJECT_DIR'] = project_path
+    client = boto3.client("cloudformation")
+    stack_name = get_stack_name()
+    print(f"Deleting stack {stack_name}")
+    client.delete_stack(StackName=f"{stack_name}")
+
+
+if __name__ == '__main__':
+    destroy()

@@ -115,37 +115,41 @@ jobs:
           command: pipenv run pytest -v tests/integration --junitxml integration-test-results.xml
       - store_test_results:
           path: integration-test-results.
-
-  integration-tests:
-    executor: 'default'
-    steps:
-      - checkout
-      # Reuse the workspace from the build job
-      - attach_workspace:
-          at: .
       - run:
-          name: print restore files from workspace
-          command: ls -a
+          name: destroy created environemnt
+          when: always
+          command: pipenv run ./env_destroy.py
+
+#  integration-tests:
+#    executor: 'default'
+#    steps:
+#      - checkout
+#      # Reuse the workspace from the build job
+#      - attach_workspace:
+#          at: .
+#      - run:
+#          name: print restore files from workspace
+#          command: ls -a
 #      - run:
 #          name: Integration tests
 #          command: pipenv run pytest -v tests/integration --junitxml integration-test-results.xml
 #      - store_test_results:
 #          path: integration-test-results.xml
 
-  env-destroy:
-    executor: 'default'
-    steps:
-      - checkout
-      # Reuse the workspace from the build job
-      - attach_workspace:
-          at: .
-      - run:
-          name: Install Dependencies
-          command: pipenv sync --dev
-      - run:
-          name: destroy created environemnt
-          when: always
-          command: pipenv run ./env_destroy.py
+#  env-destroy:
+#    executor: 'default'
+#    steps:
+#      - checkout
+#      # Reuse the workspace from the build job
+#      - attach_workspace:
+#          at: .
+#      - run:
+#          name: Install Dependencies
+#          command: pipenv sync --dev
+#      - run:
+#          name: destroy created environemnt
+#          when: always
+#          command: pipenv run ./env_destroy.py
 
 # Invoke jobs via workflows
 # See: https://circleci.com/docs/2.0/configuration-reference/#workflows
@@ -156,6 +160,10 @@ workflows:
       - build-and-test:
           context:
             - jobli-context
+          filters:
+            branches:
+              only:
+                - elad
 #      - setup:
 #          filters:
 #            branches:
@@ -168,17 +176,21 @@ workflows:
             - jobli-aws-context
           requires:
             - build-and-test
-      - integration-tests:
-          context: jobli-context
-          requires:
-            - deploy
-      - env-destroy:
-          context:
-            - jobli-context
-            - jobli-aws-context
-          requires:
-            - deploy
-            - integration-tests
           filters:
             branches:
-              ignore: main
+              only:
+                - elad
+#      - integration-tests:
+#          context: jobli-context
+#          requires:
+#            - deploy
+#      - env-destroy:
+#          context:
+#            - jobli-context
+#            - jobli-aws-context
+#          requires:
+#            - deploy
+#            - integration-tests
+#          filters:
+#            branches:
+#              ignore: main

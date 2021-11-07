@@ -32,13 +32,7 @@ jobs:
         run: pipenv sync --dev
 
       - name: Run unit tests
-        run: pipenv run pytest -v tests/unit --junitxml unit-test-results.xml
-
-      - name: Publish unit Test Results
-        uses: EnricoMi/publish-unit-test-result-action@v1
-        if: always()
-        with:
-          files: unit-test-results.xml
+        run: pipenv run pytest -v tests/unit --junitxml test-results/unit-test-results.xml
 
       - name: Build lambda
         run: pipenv run ./build.py
@@ -63,13 +57,13 @@ jobs:
 
       - name: Integration tests
         run: |
-          pipenv run pytest -v tests/integration --junitxml integration-test-results.xml
+          pipenv run pytest -v tests/integration --junitxml test-results/integration-test-results.xml
 
-      - name: Publish Integration Test Results
+      - name: Publish Test Results
         uses: EnricoMi/publish-unit-test-result-action@v1
         if: always()
         with:
-          files: integration-test-results.xml
+          files: test-results/**/*.xml
 
       - name: destroy created environemnt
         run: pipenv run ./env_destroy.py

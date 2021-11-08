@@ -28,7 +28,6 @@ jobs:
           path: ~/.local/share/virtualenvs
           key: ${{ runner.os }}-python-${{ steps.setup-python.outputs.python-version }}-pipenv-${{ hashFiles('Pipfile.lock') }}
 
-
       - name: Install dependencies
         if: steps.cache-pipenv.outputs.cache-hit != 'true'
         run: |
@@ -39,7 +38,9 @@ jobs:
         run: pipenv run pytest -v tests/unit --junitxml test-results/unit-test-results.xml
 
       - name: Build lambda
-        run: pipenv run ./build.py
+        run: |
+          pwd
+          pipenv run python -m ./build.py
 
       - name: Setup node.js (for AWS CDK)
         uses: actions/setup-node@v1

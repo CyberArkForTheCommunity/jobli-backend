@@ -7,6 +7,7 @@ jobs:
       AWS_REGION: 'eu-west-1'
       AWS_DEFAULT_REGION: 'eu-west-1'
       CDK_REQUIRE_APPROVAL: 'never'
+      PIPENV_VENV_IN_PROJECT: true
 
     steps:
       - name: Check out repository code
@@ -25,20 +26,20 @@ jobs:
       - uses: actions/cache@v2
         id: cache-pipenv
         with:
-          path: ~/.local/share/virtualenvs
-          key: ${{ runner.os }}-python-${{ steps.setup-python.outputs.python-version }}-pipenv-${{ hashFiles('Pipfile.lock') }}
+          path: .venv
+          key: ${{ runner.os }}-python-${{ steps.setup-python.outputs.python-version }}-venv-${{ hashFiles('Pipfile.lock') }}
 
       - name: Install dependencies
         if: steps.cache-pipenv.outputs.cache-hit != 'true'
-        run: |
-          pipenv sync --dev
-          pipenv run pip list
+        run: pipenv sync --dev
 
       - name: Run unit tests
         run: pipenv run pytest -v tests/unit --junitxml test-results/unit-test-results.xml
 
       - name: Build lambda
-        run: pipenv run ./build.py
+        run: |
+          pipenv run pip list
+          pipenv run ./build.py
 
       - name: Setup node.js (for AWS CDK)
         uses: actions/setup-node@v1

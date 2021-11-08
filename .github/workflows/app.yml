@@ -37,10 +37,7 @@ jobs:
         run: pipenv run pytest -v tests/unit --junitxml test-results/unit-test-results.xml
 
       - name: Build lambda
-        run: |
-          pipenv sync --dev
-          pipenv run pip list
-          pipenv run python ./build.py
+        run: pipenv run python ./build.py
 
       - name: Setup node.js (for AWS CDK)
         uses: actions/setup-node@v1
@@ -58,7 +55,7 @@ jobs:
 
       - name: Deploy
         run: |
-          pipenv run ./deploy.py --no-build --region ${AWS_DEFAULT_REGION} --require-approval ${CDK_REQUIRE_APPROVAL}
+          pipenv run python ./deploy.py --no-build --region ${AWS_DEFAULT_REGION} --require-approval ${CDK_REQUIRE_APPROVAL}
 
       - name: Integration tests
         run: |

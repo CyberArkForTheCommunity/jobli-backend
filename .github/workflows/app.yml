@@ -38,8 +38,9 @@ jobs:
 
       - name: Build lambda
         run: |
+          pipenv install docker --dev
           pipenv run pip list
-          pipenv run build.py
+          pipenv run ./build.py
 
       - name: Setup node.js (for AWS CDK)
         uses: actions/setup-node@v1

@@ -53,9 +53,19 @@ jobs:
       - name: Install AWS CDK
         run: npm install -g aws-cdk
 
+      - name: What is my repository secret?
+        env:
+          MY_SECRET: ${{ secrets.MY_SECRET }}
+        run: echo "$MY_SECRET"
+
       - name: Deploy
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
+          GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
         run: |
-          pipenv run python ./deploy.py --no-build --region ${AWS_DEFAULT_REGION} --require-approval ${CDK_REQUIRE_APPROVAL}
+          pipenv run python ./deploy.py --no-build --region ${{ env.AWS_DEFAULT_REGION }} --require-approval ${{ env.CDK_REQUIRE_APPROVAL}}
 
       - name: Integration tests
         run: |
@@ -67,5 +77,5 @@ jobs:
         with:
           files: test-results/**/*.xml
 
-      - name: destroy created environemnt
-        run: pipenv run ./env_destroy.py
+#      - name: destroy created environemnt
+#        run: pipenv run ./env_destroy.py

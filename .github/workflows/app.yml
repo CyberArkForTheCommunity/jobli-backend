@@ -36,38 +36,38 @@ jobs:
       - name: Run unit tests
         run: pipenv run pytest -v tests/unit --junitxml test-results/unit-test-results.xml
 
-#      - name: Build lambda
-#        run: |
-#          pipenv run pip list
-#          pipenv run build.py
-#
-#      - name: Setup node.js (for AWS CDK)
-#        uses: actions/setup-node@v1
-#        with:
-#          node-version: "12"
-#
-#      - name: Check node version
-#        run: node --version
-#
-#      - name: Check npm version
-#        run: npm --version
-#
-#      - name: Install AWS CDK
-#        run: npm install -g aws-cdk
-#
-#      - name: Deploy
-#        run: |
-#          pipenv run ./deploy.py --no-build --region ${AWS_DEFAULT_REGION} --require-approval ${CDK_REQUIRE_APPROVAL}
-#
-#      - name: Integration tests
-#        run: |
-#          pipenv run pytest -v tests/integration --junitxml test-results/integration-test-results.xml
-#
-#      - name: Publish Test Results
-#        uses: EnricoMi/publish-unit-test-result-action@v1
-#        if: always()
-#        with:
-#          files: test-results/**/*.xml
-#
-#      - name: destroy created environemnt
-#        run: pipenv run ./env_destroy.py
+      - name: Build lambda
+        run: |
+          pipenv run pip list
+          pipenv run build.py
+
+      - name: Setup node.js (for AWS CDK)
+        uses: actions/setup-node@v1
+        with:
+          node-version: "12"
+
+      - name: Check node version
+        run: node --version
+
+      - name: Check npm version
+        run: npm --version
+
+      - name: Install AWS CDK
+        run: npm install -g aws-cdk
+
+      - name: Deploy
+        run: |
+          pipenv run ./deploy.py --no-build --region ${AWS_DEFAULT_REGION} --require-approval ${CDK_REQUIRE_APPROVAL}
+
+      - name: Integration tests
+        run: |
+          pipenv run pytest -v tests/integration --junitxml test-results/integration-test-results.xml
+
+      - name: Publish Test Results
+        uses: EnricoMi/publish-unit-test-result-action@v1
+        if: always()
+        with:
+          files: test-results/**/*.xml
+
+      - name: destroy created environemnt
+        run: pipenv run ./env_destroy.py

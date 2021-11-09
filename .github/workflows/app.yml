@@ -1,5 +1,8 @@
 name: Jobli pipeline
-on: push
+on:
+  push:
+    branches-ignore:
+      - main
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest

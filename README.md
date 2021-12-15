@@ -50,15 +50,19 @@ In order to deploy infra-library CloudFormation stack resources for example: KMS
 ```shell script
 python deploy.py
 ```
+You can also deploy faster if dependencies were not changed by running the following:
+```shell script
+python deploy.py --skip-deps
+```
 
 ### Configure Google App credentials
-Running python deploy.py will fail on missing enviroment variables. Do the following steps to fix this
+Running python deploy.py will fail on missing environment variables. Do the following steps to fix this
 1. Go to: https://console.cloud.google.com/apis/credentials/oauthclient/909417432201-gkh6vpm1vdel1kq95j2pd3chtu3o8vua.apps.googleusercontent.com?authuser=1&project=jobliapp1&supportedpurview=project
-1. Sign in google account with email & password provided by Cyberark
-1. Go to created .env file and add (replace XXXX with actual Client ID & Secret shown in link above):
+2. Sign in Jobli google account with jobli.akim@gmail.com user & password (you can also extract it from git secrets if you have permission)
+3. Go to created .env file under the project home directory and add (replace XXXX with actual Client ID & Secret shown in link above):
 GOOGLE_CLIENT_ID=XXXX
 GOOGLE_CLIENT_SECRET=XXXX
-1. run again: python deploy.py
+4. run again: python deploy.py
 
 ### Run tests
 In order to run unit tests
@@ -80,50 +84,27 @@ In order to delete the CloudFormation stack deployed in the last step:
 python env_destroy.py
 ```
 
-### NOTES
- - In handler.py file there is a constant of USER_ID = "11111" until Authorization token will be supported on the client
-side. This is the only user that is used hard coded until it will be taken from the auth token.
-   When authorization token will be available, please search for all "user_id = USER_ID" and remove the remark as below:
-
- # TODO user_id = event.request_context.authorizer.claims["sub"]
- user_id = USER_ID
- 
-remove the user_id = USER_ID line and use user_id = event.request_context.authorizer.claims["sub"] 
-
- - Enable the authorizer in jobli_construct.py by replacing this code at the end of the file
-   ```shell script
-   @staticmethod
-    def __add_resource_method(resource: apigw.Resource, http_method: str, integration: apigw.LambdaIntegration,
-                              authorizer: apigw.CfnAuthorizer) -> None:
-        method = resource.add_method(
-            http_method=http_method,
-            integration=integration
-        )
-   ```
-   
-   with this
-   ```shell script
-     @staticmethod
-     def __add_resource_method(resource: apigw.Resource, http_method: str, integration: apigw.LambdaIntegration,
-                               authorizer: apigw.CfnAuthorizer) -> None:
-         method = resource.add_method(
-             http_method=http_method,
-             integration=integration,
-             authorization_type=apigw.AuthorizationType.COGNITO,
-         )
-         method_resource: apigw.Resource = method.node.find_child("Resource")
-         method_resource.add_property_override("AuthorizerId", {"Ref": authorizer.logical_id})
-   ```
-   After you run deploy.py it will set the authorizer for all APIs in the API GW.
-
-
 ### One time Google app configuration
 Steps in creating a google application for authentication in jobli after login with google account credentials: https://console.cloud.google.com/apis
 1. Create a project with Google Account ("Jobli")
 2. Configure Oauth consent page: https://console.cloud.google.com/apis/credentials/consent?authuser=2&project=jobli-328707:
-a. Configure application as "External" and add support email to be presented in Consent Page
-b. As long "Publishing status" is in Testing status, in order to to authenticate with app using google account, you must add your email to the Test Users
+   * Configure application as "External" and add support email to be presented in Consent Page
+   * As long "Publishing status" is in Testing status, in order to to authenticate with app using google account, you must add your email to the Test Users
 3. Create an API application by going to "Credentials" section: https://console.cloud.google.com/apis/credentials?authuser=2&project=jobli-328707:
-a. Give Name for for API Client (for internal use, not displayed to users).
-b. Add under "Authorized JavaScript origins our cognito custom domain: https://<joblimain>.auth.<eu-west-1>.amazoncognito.com
-c. Add under "Authorized JavaScript redirect URIs the cognito redirect URI: https://<joblimain>.auth.<eu-west-1>.amazoncognito.com/oauth2/idpresponse
+   * Give Name for for API Client (for internal use, not displayed to users).
+   * Add under "Authorized JavaScript origins our cognito custom domain: https://<joblimain>.auth.<eu-west-1>.amazoncognito.com
+   * Add under "Authorized JavaScript redirect URIs the cognito redirect URI: https://<joblimain>.auth.<eu-west-1>.amazoncognito.com/oauth2/idpresponse
+
+### Deleting a seeker user data
+For debug purpose, you will be able to delete yours seeker user data by creating a DELETE request via postman
+You shall login to the system via the client application, get the jwt authorization token, pass it as an 'Authorization' header of a 
+DELETE /api/seeker
+without body. After you get successful result, reload the client application and start over as a new seeker.
+
+### Development Notes:
+Project additional dependencies can be added in Pipfile
+- Runtime dependencies under [packages] section
+- Development only dependencies under [dev-packages] section
+
+Deployment of this project is done via AWS CDK tools. If you want to add/remove AWS resources, please update the following file:
+- /cdk/jobli_service_cdk/service_stack/jobli_construct.py

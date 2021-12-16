@@ -113,10 +113,6 @@ Before data upload the system components must be installed on AWS (```python dep
 
 Triggering file upload: <br /> ```pytest tests/integration/test_jobli_employers_it.py::test_create_jobli_employer_and_jobs_from_file```
 
-
-
-
-
 ### Development Notes:
 Project additional dependencies can be added in Pipfile
 - Runtime dependencies under [packages] section

@@ -51,7 +51,7 @@ def get_employer_by_name(business_name: str, existing_employers: List[Employer])
     return None
 
 
-# @pytest.mark.skip(reason="This test is to fill employer_and_jobs_from_file")
+@pytest.mark.skip(reason="This test is to fill employer_and_jobs_from_file")
 def test_create_jobli_employer_and_jobs_from_file(endpoint_url, auth_headers):
     try:
         project_dir: str = os.getenv('PROJECT_DIR')

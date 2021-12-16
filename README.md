@@ -103,7 +103,7 @@ without body. After you get successful result, reload the client application and
 
 ### Jobs and Employers upload for tests purposes
 In order to upload a test data, update the test/resources/Jobli_jobs.json file with employers and jobs.
-The file is loaded into the system, by running the ```test_create_jobli_employer_and_jobs_from_file``` integration test.
+The file is loaded into the system, by running the ```tests/integration/test_jobli_employers_it.py - test_create_jobli_employer_and_jobs_from_file``` integration test.
 <br />Few notes about the upload file process:
 * Only new employers will be created. If the upload process find in file an employer that already exists in the system (by the business name)
 that employer won't be loaded again
@@ -111,6 +111,7 @@ that employer won't be loaded again
 
 Before data upload the system components must be installed on AWS (```python deploy.py``` see above)
 
+Uncomment the @pytest.mark.skip annotation
 Triggering file upload: <br /> ```pytest tests/integration/test_jobli_employers_it.py::test_create_jobli_employer_and_jobs_from_file```
 
 ### Development Notes:

@@ -109,7 +109,7 @@ The file is loaded into the system, by running the ```test_create_jobli_employer
 that employer won't be loaded again
 * Following employer values are hard coded in the upload test: address, employer_email, employer_terms and business_website
 
-before data upload the system components must be installed on AWS (```python deploy.py``` see above)
+Before data upload the system components must be installed on AWS (```python deploy.py``` see above)
 
 Triggering file upload: <br /> ```pytest tests/integration/test_jobli_employers_it.py::test_create_jobli_employer_and_jobs_from_file```
 

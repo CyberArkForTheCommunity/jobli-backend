@@ -1,4 +1,5 @@
 name: Jobli pipeline
+on: push
 
 jobs:
   build-and-deploy:

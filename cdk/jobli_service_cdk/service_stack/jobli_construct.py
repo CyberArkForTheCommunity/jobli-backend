@@ -14,7 +14,6 @@ sys.path.append(os.getcwd())
 
 
 def read_git_branch() -> str:
-
     project_path = os.environ['PROJECT_DIR']
     # load git branch name in development environment
     repo = Repo(project_path)

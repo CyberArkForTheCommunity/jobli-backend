@@ -25,6 +25,7 @@ def get_stack_name() -> str:
     # stack_name: str = f"{getpass.getuser().capitalize().replace('.','')}{BASE_NAME}{branch_name}"
     return stack_name
 
+
 def get_stack_output(stack_name, output_name) -> Optional[str]:
     cloudformation = boto3.client('cloudformation')
     try:

@@ -45,19 +45,8 @@ jobs:
         with:
           node-version: "12"
 
-      - name: Check node version
-        run: node --version
-
-      - name: Check npm version
-        run: npm --version
-
       - name: Install AWS CDK
         run: npm install -g aws-cdk
-
-      - name: What is my repository secret?
-        env:
-          MY_SECRET: ${{ secrets.MY_SECRET }}
-        run: echo "$MY_SECRET"
 
       - name: Deploy
         env:

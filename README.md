@@ -1,6 +1,5 @@
 # jobli-service
 
-
 ## Prerequisite installation
 You should install the following tools before starting to work
 1. Install Python 3.8.+
